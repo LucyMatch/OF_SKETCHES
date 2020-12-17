@@ -1,3 +1,6 @@
+#repo specific
+/Previous_Particle_Code_IGNOREDBYREPO
+
 #openframeworks 
 /of_v0.10.1_osx_release
 /of_v0.11.0_vs2017_release
