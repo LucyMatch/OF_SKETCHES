@@ -1,0 +1,64 @@
+#openframeworks 
+/of_v0.10.1_osx_release
+/of_v0.11.0_vs2017_release
+/of_*
+
+# OF-specific ignore patterns
+openFrameworks.a
+openFrameworksDebug.a
+openFrameworksUniversal.a
+
+
+# Some general ignore patterns
+[Bb]uild/
+[Oo]bj/
+*.o
+*.iobj
+*.ipdb
+[Dd]ebug*/
+[Rr]elease*/
+*.mode*
+*.app/
+*.pyc
+.svn/
+*.log
+*.dll
+*.exp
+*.exe
+*.lib
+*.bag
+Thumbs.db
+
+# IDE-specific ignore patterns
+
+#XCode
+*.pbxuser
+*.perspective
+*.perspectivev3
+*.mode1v3
+*.mode2v3
+#XCode 4
+xcuserdata
+*.xcworkspace
+
+#OSX
+.DS_Store
+*.swp
+*~.nib
+# Thumbnails
+._*
+
+#Linux
+.AppleDouble
+
+#Visual Studio
+*.sdf
+*.opensdf
+*.suo
+*.pdb
+*.ilk
+*.aps
+ipch/
+*.VC.db
+*.VC.VC.opendb
+.vs/
