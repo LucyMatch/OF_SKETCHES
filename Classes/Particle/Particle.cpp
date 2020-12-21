@@ -1,25 +1,35 @@
 #include "Particle.h"
 
-Particle::Particle(ofVec2f _location, int _r) {
+float Particle::seekLimit = 10.0;
+float Particle::speedLimit = 5.0;
+float Particle::massBase = 10.0;
+ofColor Particle::color = ofColor(0, 0, 0, 100);
+int Particle::r = 1;
 
-    //all this stuff should be on GUI..
+Particle::Particle() {
 
-    speedLimit = 5;
-    seekLimit = 10;
-    mass = 10.0 / _r;
+    dead = false;
+    mass = massBase / r;
     velocity.set(0, 0);
     acceleration.set(0.0, 0.00);
-    location = _location;
+    location = ofVec2f(0,0);
+    home_location = location;
 
     //limit the magnitude of a vector
     velocity.limit(speedLimit);
-    r = _r;
+
+}
+
+Particle::Particle(ofVec2f _location) {
     dead = false;
-    
-    y_origin = location.y;
+    mass = massBase / r;
+    velocity.set(0, 0);
+    acceleration.set(0.0, 0.00);
+    location = _location;
+    home_location = location;
 
-    color = ofColor(255, 255, 255, 255);
-
+    //limit the magnitude of a vector
+    velocity.limit(speedLimit);
 }
 
 void Particle::update() {
@@ -70,22 +80,19 @@ void Particle::seek(ofVec2f target) {
 
 }
 
-void Particle::checkEdges(ofVec2f x_dims) {
-
-    //this will just bounce them for now... 
-    //obvi not what we want... 
-    //if (location.x < 0) {
-    //    location.x = 0;
-    //    velocity.x *= -1;
-    //}
-    //else if (location.x > ofGetWidth()) {
-    //    location.x = ofGetWidth();
-    //    velocity.x *= -1;
-    //}
-
-    if (location.x < x_dims.x) {
-        dead = true;
+void Particle::checkEdges(glm::vec4 dims) {
+    if (location.x < dims.x || location.x >(dims.x + dims.z)) {
+        kill();
     }
+    if (location.y < dims.y || location.y >(dims.y + dims.w)) {
+        kill();
+    }
+}
 
+void Particle::kill() {
+    dead = true;
+}
 
+void Particle::setHome(ofVec2f loc) {
+    home_location = loc;
 }

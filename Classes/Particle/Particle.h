@@ -6,26 +6,30 @@ class Particle {
 
 public: 
 
-    Particle(ofVec2f _location, int _r);
-    void update();
-    void draw();
+    Particle();
+    Particle(ofVec2f _location);
+    virtual void update();
+    virtual void draw();
+    void setHome(ofVec2f loc);
     void applyforce(ofVec2f force);
     void seek(ofVec2f target);
-    void checkEdges(ofVec2f dims);
+    void checkEdges(glm::vec4 dims);
+    void kill();
 
     ofVec2f location;
     ofVec2f velocity;
     ofVec2f acceleration;
+    ofVec2f home_location;
 
-    float y_origin;
-    float seekLimit;
-    int r;
-    float speedLimit;
-    float mass;
     bool dead;
+    float mass;
 
-    ofColor color;
+    static float seekLimit, speedLimit, massBase;
+    static ofColor color;
+    static int r;
 
 private: 
+
+    
 
 };
