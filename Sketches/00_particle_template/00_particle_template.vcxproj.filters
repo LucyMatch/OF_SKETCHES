@@ -118,10 +118,13 @@
     <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxLibwebsockets\libs\ofxLibwebsockets\src\Util.cpp">
       <Filter>addons\ofxLibwebsockets\libs\ofxLibwebsockets\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Classes\Particle\Particle.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Classes\Forces\Forces.cpp">
+      <Filter>src\External Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Classes\Particle\Particle.cpp">
+      <Filter>src\External Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Block.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -218,6 +221,9 @@
     </Filter>
     <Filter Include="addons\ofxLibwebsockets\libs\openssl\include\openssl">
       <UniqueIdentifier>{C3694B6E-D2BB-EDB4-C834-BD6F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\External Classes">
+      <UniqueIdentifier>{2213ae84-80d5-4b30-8e48-8ed8433b7e60}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -596,13 +602,19 @@
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxLibwebsockets\libs\openssl\include\openssl\x509_vfy.h">
       <Filter>addons\ofxLibwebsockets\libs\openssl\include\openssl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Classes\Forces\Forces.h">
+      <Filter>src\External Classes</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Classes\Particle\Particle.h">
-      <Filter>src</Filter>
+      <Filter>src\External Classes</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Classes\Particle\ParticleManager.h">
+      <Filter>src\External Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Block.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Classes\Forces\Forces.h">
+    <ClInclude Include="src\BlockManager.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

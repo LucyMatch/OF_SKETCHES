@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxRemoteUIServer.h"
-#include "ParticleManager.h"
+#include "BlockManager.h"
 
 
 class ofApp : public ofBaseApp{
@@ -11,11 +11,15 @@ class ofApp : public ofBaseApp{
 		void setup();
 		void update();
 		void draw();
+		void drawDebug();
+
+		void initGrid();
+		void initParticle();
+		void spawn();
 
 		void logger();
 		void framerate();
 		void gui();
-
 
 		void keyPressed(int key);
 		void keyReleased(int key);
@@ -28,5 +32,13 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+
+		vector<BlockManager> pman;
+
+		float canvas_margin, cell_margin;
+		int rows, cols;
+		ofRectangle canvas;
+		vector<ofRectangle> cells;
+		ofColor background;
 		
 };

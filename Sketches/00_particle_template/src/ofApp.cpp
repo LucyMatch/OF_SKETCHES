@@ -5,24 +5,111 @@
 void ofApp::setup(){
 	logger();
 
-	ofSetWindowShape(800, 800);
+	ofSetWindowShape(1000, 1000);
 	ofSetFrameRate(60);
 	ofSetVerticalSync(false);
 	ofSetCircleResolution(100);
 	ofEnableSmoothing();
 	ofEnableAlphaBlending();
+	ofSetBackgroundColor(255);
+	ofSetBackgroundAuto(false);
+
+	//@TODO: move to GUI
+	//& have a listener that reinits the grid
+	//&reinits the block managers
+	canvas_margin = 0.15;
+	cell_margin = 0.12;
+	rows = 1;
+	cols = 3;
+
+	initGrid();
+	initParticle();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+	spawn();
+	spawn();
+	spawn();
+	spawn();
 	framerate();
-
+	for (auto& p : pman) { p.update(); }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 
+	ofPushStyle();
+	ofSetColor(237,237,230, 100);
+	ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+	ofPopStyle();
+
+	//drawDebug();
+
+	for (auto& p : pman) { p.draw();}
+
+}
+
+//--------------------------------------------------------------
+void ofApp::drawDebug() {
+
+	for (auto& c : cells) {
+		ofPushStyle();
+		ofSetColor(171, 196, 237);
+		ofDrawRectangle(c.x, c.y, c.width, c.height);
+		ofPopStyle();
+	}
+
+	for (auto& p : pman) { p.drawDebug(); }
+
+
+}
+
+//--------------------------------------------------------------
+void ofApp::initGrid() {
+
+	cells.clear();
+
+	//create "grid" coordinates
+	//canvas
+	auto width_margin = ofGetWidth() * canvas_margin;
+	auto height_margin = ofGetHeight() * canvas_margin;
+	auto w = ofGetWidth() - (2 * width_margin);
+	auto h = ofGetHeight() - (2 * height_margin);
+	canvas.set(width_margin, height_margin, w, h);
+	//cells
+	auto cell_w = ((1.0 / float(cols)) * float(w));
+	auto cell_h = ((1.0 / float(rows)) * float(h));
+	auto cell_w_m = cell_w * cell_margin;
+	auto cell_h_m = cell_h * cell_margin;
+	ofVec2f cell((cell_w - (2 * cell_w_m)), (cell_h - (2 * cell_h_m)));
+
+	//save the cells
+	for (int x = 0; x < cols; x++) {
+		for (int y = 0; y < rows; y++) {
+			auto x_step = (canvas.x + cell_w_m) + (x * cell_w);
+			auto y_step = (canvas.y + cell_h_m) + (y * cell_h);
+			ofRectangle c(x_step, y_step, cell.x, cell.y);
+			cells.push_back(c);
+		}
+	}
+
+}
+
+//--------------------------------------------------------------
+void ofApp::initParticle() {
+	for (auto& c : cells) {
+		BlockManager p(2000);
+		p.setup(glm::vec4(c.x, c.y,c.width, c.height));
+		pman.push_back(p);
+	}
+}
+
+//--------------------------------------------------------------
+void ofApp::spawn() {
+	for (auto& p : pman) {
+		p.simpleSpawn();
+	}
 }
 
 //--------------------------------------------------------------
@@ -36,7 +123,7 @@ void ofApp::gui() {
 	//RUI_SHARE_PARAM_WCN("Draw Debug", drawDebug);
 	//RUI_SHARE_COLOR_PARAM_WCN("void colour", interactive.void_color);
 
-	//RUI_NEW_GROUP("BLOB");
+	//RUI_NEW_GROUP("GRID");
 	//RUI_SHARE_PARAM_WCN("Blob Min Radius", Blob::r_min, 0, 1000);
 	//RUI_SHARE_PARAM_WCN("Blob Max Radius", Blob::r_max, 0, 1000);
 	//RUI_SHARE_PARAM_WCN("Blob Die Increment", Blob::die_rate, 0.0, 100);
@@ -78,11 +165,26 @@ void ofApp::framerate() {
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 
+
+
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-
+	switch (key) {
+	case 's' :
+		spawn();
+		break;
+	case 't':
+		for (auto& p : pman) {
+			auto mid_x = p.draw_dims.x + (p.draw_dims.z / 2);
+			auto mid_y = p.draw_dims.y + (p.draw_dims.w / 2);
+			p.applySeek(ofVec2f(mid_x, (p.draw_dims.y + p.draw_dims.w)));
+		}
+		break;
+	default :
+		break;
+	}
 }
 
 //--------------------------------------------------------------

@@ -190,6 +190,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\Classes\Forces\Forces.cpp" />
     <ClCompile Include="..\..\Classes\Particle\Particle.cpp" />
+    <ClCompile Include="src\Block.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxOsc\src\ofxOscBundle.cpp" />
@@ -232,6 +233,8 @@
     <ClInclude Include="..\..\Classes\Forces\Forces.h" />
     <ClInclude Include="..\..\Classes\Particle\Particle.h" />
     <ClInclude Include="..\..\Classes\Particle\ParticleManager.h" />
+    <ClInclude Include="src\Block.h" />
+    <ClInclude Include="src\BlockManager.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxOsc\src\ofxOsc.h" />
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxOsc\src\ofxOscArg.h" />
