@@ -80,17 +80,24 @@ void Particle::seek(ofVec2f target) {
 
 }
 
-void Particle::checkEdges(glm::vec4 dims) {
-    if (location.x < dims.x || location.x >(dims.x + dims.z)) {
-        kill();
+void Particle::checkEdges(glm::vec4 dims, bool _kill) {
+    bool _x = false, _y = false;
+    if (location.x < dims.x || location.x >(dims.x + dims.z)) _x = true;
+    if (location.y < dims.y || location.y >(dims.y + dims.w)) _y = true;
+    if (_x || _y) {
+        if (_kill)kill();
+        else bounce(_x, _y);
     }
-    if (location.y < dims.y || location.y >(dims.y + dims.w)) {
-        kill();
-    }
+
 }
 
 void Particle::kill() {
     dead = true;
+}
+
+void Particle::bounce(bool _x, bool _y) {
+    if (_x)velocity.x *= -1;
+    if (_y)velocity.y *= -1;
 }
 
 void Particle::setHome(ofVec2f loc) {

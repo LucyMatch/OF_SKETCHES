@@ -21,26 +21,30 @@ public:
 	//--------------------------------------------------------------
 	virtual void simpleSpawn() {
 
-		//start with a default force
-		ofVec2f gravity(ofRandom(-1, 1), ofRandom(-1,1));
+		if (enable_limit && p.size() < limit) {
+			//start with a default force
+			ofVec2f gravity(ofRandom(-1, 1), ofRandom(-1, 1));
 
-		ofVec2f _loc;
-		_loc.set(ofRandom(draw_dims.x, (draw_dims.x + draw_dims.z)), ofRandom(draw_dims.y, (draw_dims.y + draw_dims.w)));
+			ofVec2f _loc;
+			_loc.set(ofRandom(draw_dims.x, (draw_dims.x + draw_dims.z)), ofRandom(draw_dims.y, (draw_dims.y + draw_dims.w)));
 
-		Particle _p(_loc);
+			Particle _p(_loc);
 
-		_p.applyforce(gravity);
+			_p.applyforce(gravity);
 
-		p.push_back(_p);
+			p.push_back(_p);
+		}
 	};
 
 	//--------------------------------------------------------------
 	virtual void multiSpawn( int amount ) {
-		for (int i = 0; i < amount; i++) {
-			ofVec2f _loc;
-			_loc.set(ofRandom(draw_dims.x, (draw_dims.x + draw_dims.z)), ofRandom(draw_dims.y, (draw_dims.y + draw_dims.w)));
-			Particle _p(_loc);
-			p.push_back(_p);
+		if (enable_limit && p.size() < limit) {
+			for (int i = 0; i < amount; i++) {
+				ofVec2f _loc;
+				_loc.set(ofRandom(draw_dims.x, (draw_dims.x + draw_dims.z)), ofRandom(draw_dims.y, (draw_dims.y + draw_dims.w)));
+				Particle _p(_loc);
+				p.push_back(_p);
+			}
 		}
 
 	};
@@ -52,7 +56,7 @@ public:
 
 			p[i].update();
 
-			p[i].checkEdges(draw_dims);
+			p[i].checkEdges(draw_dims, true);
 
 			//erase dead
 			if (p[i].dead) {
@@ -109,8 +113,10 @@ public:
 
 	//vars
 	//--------------------------------------------------------------
-	 vector<Particle> p;
+	vector<Particle> p;
 	glm::vec4 draw_dims;
+	bool enable_limit = true;
+	int limit = 100;
 
 
 private: 
