@@ -7,27 +7,32 @@ class Particle {
 public: 
 
     Particle();
-    Particle(ofVec2f _location);
+    Particle(ofVec2f &_location);
+    ~Particle();
+
     virtual void update();
     virtual void draw();
-    void setHome(ofVec2f loc);
-    void applyforce(ofVec2f force);
-    void seek(ofVec2f target);
-    void checkEdges(glm::vec4 dims, bool _kill);
+
+    void setHome(ofVec2f &loc);
+    void applyforce(ofVec2f &force);
     void kill();
+
+    void seek(ofVec2f &target);
+    void arrive(ofVec2f& target);
+
+    void checkEdges(glm::vec4 dims, bool _kill);
     void bounce(bool _x, bool _y);
 
-    ofVec2f location;
-    ofVec2f velocity;
-    ofVec2f acceleration;
-    ofVec2f home_location;
+    ofVec2f location, velocity, acceleration, home_location;
+    vector<ofVec2f> history;
 
     bool dead;
     float mass;
 
-    static float seekLimit, speedLimit, massBase;
-    static ofColor color;
-    static int r;
+    static float seekLimit, speedLimit, massBase, trail_wgt;
+    static ofColor pcolor, tcolor;
+    static int r, arrive_cap, history_length;
+    static bool trail, arrive_on, seek_on;
 
 private: 
 
