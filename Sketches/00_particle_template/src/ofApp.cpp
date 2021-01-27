@@ -29,9 +29,9 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
 	spawn();
-	spawn();
-	spawn();
-	spawn();
+	//spawn();
+	//spawn();
+	//spawn();
 	framerate();
 	for (auto& p : pman) { p.update(); }
 }
