@@ -14,7 +14,7 @@ int Block::arrive_cap = 100;
 ofColor Block::pcolor = ofColor(0, 0, 0, 100);
 ofColor Block::tcolor = ofColor(0,0,0,100);
 float Block::trail_wgt = 5.0;
-int Block::history_length = 10;
+int Block::history_length = 3;
 int Block::r = 5;
 
 Block::Block() {
@@ -75,16 +75,18 @@ void Block::update() {
 	acceleration = acceleration * 0;
 
 	//for trail / history
-	history.push_back(location);
-	int diff = history.size() - history_length;
-	if (history.size() > history_length) {
-		for (int i = 0; i < diff; i++) {
-			history.erase(history.begin()+i);
+	if (trail) {
+		history.push_back(location);
+		int diff = history.size() - history_length;
+		if (history.size() > history_length) {
+			for (int i = 0; i < diff; i++) {
+				history.erase(history.begin() + i);
+			}
+			//for trails that originate from home pt
+			//for (int i = 1; i < diff; i++) {
+			//	history.erase(history.begin() + i);
+			//}
 		}
-		//for trails that originate from home pt
-		//for (int i = 1; i < diff; i++) {
-		//	history.erase(history.begin() + i);
-		//}
 	}
 }
 

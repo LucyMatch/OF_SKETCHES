@@ -19,13 +19,13 @@ void ofApp::setup(){
 	//&reinits the block managers
 	canvas_margin = 0.15;
 	cell_margin = 0.12;
-	rows = 3;
-	cols = 3;
+	rows = 1;
+	cols = 1;
 
-	spawning_active = true;
+	spawning_active = false;
 
-	initGrid();
-	initParticle();
+	initCanvasGrid();
+	initParticleMans();
 }
 
 //--------------------------------------------------------------
@@ -65,7 +65,7 @@ void ofApp::drawDebug() {
 }
 
 //--------------------------------------------------------------
-void ofApp::initGrid() {
+void ofApp::initCanvasGrid() {
 
 	cells.clear();
 
@@ -96,7 +96,7 @@ void ofApp::initGrid() {
 }
 
 //--------------------------------------------------------------
-void ofApp::initParticle() {
+void ofApp::initParticleMans() {
 	for (auto& c : cells) {
 		BlockManager p(2000);
 		p.setup(glm::vec4(c.x, c.y,c.width, c.height));
@@ -174,6 +174,11 @@ void ofApp::keyReleased(int key){
 	switch (key) {
 	case 's' :
 		spawning_active = !spawning_active;
+		break;
+	case 'a':
+		for (auto& p : pman) {
+			p.gridSpawn(10, 5);
+		}
 		break;
 	case 't':
 		for (auto& p : pman) {

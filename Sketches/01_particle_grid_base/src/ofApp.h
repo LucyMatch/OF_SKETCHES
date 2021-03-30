@@ -13,8 +13,8 @@ class ofApp : public ofBaseApp{
 		void draw();
 		void drawDebug();
 
-		void initGrid();
-		void initParticle();
+		void initCanvasGrid();
+		void initParticleMans();
 		void spawn();
 
 		void logger();
