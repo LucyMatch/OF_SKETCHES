@@ -9,18 +9,25 @@ public:
 
 	Forces();
 
+	void init();
 	void display();
 	void update();
 	void update(ofVec2f loc);
 	void update(ofVec2f loc, float _r);
 
 	/// GETTERS
-	bool inRange(Particle* p);
-	virtual ofVec2f force(Particle* p);
+	bool inRange(Particle const& p);
+	virtual ofVec2f force(Particle const& p);
 
 	ofVec2f location;
-	float radius;
-	static float mass, G, C, minDis, maxDis, rmod;
+	float radius = 20;
+	//static float mass, G, C, minDis, maxDis, rmod;
+	//gonna update this so itsone gui panel 
+	//and we can update the settings per instance
+
+	ofParameterGroup force_ctrl;
+	ofParameter<float> mass, G, C, min_dis, max_dis, rmod;
+	ofParameter<ofColor> display_color;
 
 private:
 
@@ -34,8 +41,9 @@ public:
 
 	Repel();
 
-	virtual ofVec2f force(Particle* p);
-	static float mass, G, C, minDis, maxDis, rmod;
+	virtual ofVec2f force(Particle const& p);
+	//static float mass, G, C, minDis, maxDis, rmod;
+	//float radius = 20;
 
 private:
 
@@ -49,8 +57,9 @@ public:
 
 	Friction();
 
-	virtual ofVec2f force(Particle* p);
-	static float mass, G, C, minDis, maxDis, rmod;
+	virtual ofVec2f force(Particle const& p);
+	//static float mass, G, C, minDis, maxDis, rmod;
+	//float radius = 20;
 
 private:
 
@@ -64,8 +73,9 @@ public:
 
 	Drag();
 
-	virtual ofVec2f force(Particle* p);
-	static float mass, G, C, minDis, maxDis, rmod;
+	virtual ofVec2f force(Particle const& p);
+	//static float mass, G, C, minDis, maxDis, rmod;
+	//float radius = 20;
 
 private:
 
@@ -79,8 +89,9 @@ public:
 
 	Attract();
 
-	virtual ofVec2f force(Particle* p);
-	static float mass, G, C, minDis, maxDis, rmod;
+	virtual ofVec2f force(Particle const& p);
+	//static float mass, G, C, minDis, maxDis, rmod;
+	//float radius = 20;
 
 private:
 

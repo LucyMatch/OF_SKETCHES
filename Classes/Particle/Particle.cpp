@@ -1,13 +1,13 @@
 #include "Particle.h"
 
 //behavior
-float Particle::seekLimit = 10.0;
+float Particle::seekLimit = 2.0;
 float Particle::speedLimit = 5.0;
 float Particle::massBase = 10.0;
 bool Particle::arrive_on = true;
 bool Particle::seek_on = true;
 bool Particle::trail = true;
-int Particle::arrive_cap = 100;
+int Particle::arrive_cap = 300;
 
 //asethetic
 ofColor Particle::pcolor = ofColor(0, 0, 0, 100);

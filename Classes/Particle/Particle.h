@@ -17,8 +17,8 @@ public:
     void applyforce(ofVec2f &force);
     void kill();
 
-    void seek(ofVec2f &target);
-    void arrive(ofVec2f& target);
+    virtual void seek(ofVec2f &target);
+    virtual void arrive(ofVec2f& target);
 
     void checkEdges(glm::vec4 dims, bool _kill);
     void bounce(bool _x, bool _y);
