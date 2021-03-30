@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<B_L_O_C_K__P>
+	<color>255, 135, 125, 255</color>
+	<trail_color>255, 255, 255, 0</trail_color>
+	<radius>14</radius>
+	<mass_base>100</mass_base>
+	<speed_limit>0.5</speed_limit>
+	<seek_on>0</seek_on>
+	<seek_limit>0.25</seek_limit>
+	<arrive_on>1</arrive_on>
+	<arrive_cap>250</arrive_cap>
+	<trail_on>0</trail_on>
+	<trail_weight>2.8</trail_weight>
+	<history_length>10</history_length>
+</B_L_O_C_K__P>

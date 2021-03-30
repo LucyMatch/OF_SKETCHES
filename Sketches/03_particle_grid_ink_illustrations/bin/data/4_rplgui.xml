@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<R_E_P_E_L>
+	<group>
+		<G>25</G>
+		<C>25</C>
+		<mass>50</mass>
+		<min_distance>5</min_distance>
+		<max_distance>714.286</max_distance>
+		<radius_modifer>32.449</radius_modifer>
+		<display_color>209, 255, 225, 0</display_color>
+	</group>
+	<repel_enable>0</repel_enable>
+</R_E_P_E_L>

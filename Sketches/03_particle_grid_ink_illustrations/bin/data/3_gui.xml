@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<P_R_I_M_A_R_Y>
+	<background>247, 255, 226, 255</background>
+	<debug_background>254, 239, 255, 255</debug_background>
+	<draw_debug>0</draw_debug>
+	<particle_grid_w>17</particle_grid_w>
+	<particle_grid_h>4</particle_grid_h>
+	<group>
+		<image_alpha>255</image_alpha>
+	</group>
+</P_R_I_M_A_R_Y>
