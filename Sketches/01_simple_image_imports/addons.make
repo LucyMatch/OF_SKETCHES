@@ -1,3 +1,0 @@
-ofxAnimatable
-ofxGui
-ofxThreadedImageLoader
