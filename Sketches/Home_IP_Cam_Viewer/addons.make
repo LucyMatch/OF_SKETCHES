@@ -1,0 +1,3 @@
+ofxPoco
+ofxHttpUtils
+ofxIpVideoGrabber
