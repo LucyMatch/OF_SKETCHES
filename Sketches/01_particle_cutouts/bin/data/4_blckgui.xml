@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<P>
+	<color>0, 0, 0, 0</color>
+	<trail_color>0, 0, 0, 0</trail_color>
+	<radius>15</radius>
+	<mass_base>31.5</mass_base>
+	<speed_limit>1.25</speed_limit>
+	<seek_on>0</seek_on>
+	<seek_limit>50</seek_limit>
+	<arrive_on>0</arrive_on>
+	<arrive_cap>100</arrive_cap>
+	<trail_on>1</trail_on>
+	<trail_weight>5</trail_weight>
+	<history_length>3</history_length>
+	<uniform_size>1</uniform_size>
+	<true_size>0</true_size>
+	<trail_include_home>1</trail_include_home>
+</P>

@@ -1,0 +1,10 @@
+ofxAnimatable
+ofxOpenCv
+ofxCv
+ofxGui
+ofxJsonSettings
+ofxXmlSettings
+ofxHttpUtils
+ofxRectangleUtils
+ofxPoco
+ofxIpVideoGrabber
