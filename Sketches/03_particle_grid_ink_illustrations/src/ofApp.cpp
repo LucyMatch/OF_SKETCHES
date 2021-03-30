@@ -85,7 +85,7 @@ void ofApp::draw(){
 	//update to draw particles on their own fbo - for blending properties....
 		for (auto& p : pman) { p.draw(); }
 
-		//rings_man.getImageLayer().draw(0, 0, ofGetWidth(), ofGetHeight());
+		rings_man.getImageLayer().draw(0, 0, ofGetWidth(), ofGetHeight());
 
 	//ofPopStyle();
 
