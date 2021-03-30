@@ -10,6 +10,8 @@ IGNOREDBYREPO/
 openFrameworks.a
 openFrameworksDebug.a
 openFrameworksUniversal.a
+*.sln
+*.vcxproj*
 
 
 # Some general ignore patterns
