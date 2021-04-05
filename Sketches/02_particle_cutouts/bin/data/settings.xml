@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<I_M_G___1__P_M_A_N />
+<P_R_I_M_A_R_Y>
+	<background>255, 228, 246, 255</background>
+	<draw_debug>0</draw_debug>
+	<debug_background>171, 196, 237, 255</debug_background>
+	<enable_simple_spawning>0</enable_simple_spawning>
+	<canvas_margin>0.2</canvas_margin>
+	<cell_margin>0.12</cell_margin>
+	<cell_rows>1</cell_rows>
+	<cell_cols>1</cell_cols>
+	<particle_grid_w>14</particle_grid_w>
+	<particle_grid_h>50</particle_grid_h>
+</P_R_I_M_A_R_Y>

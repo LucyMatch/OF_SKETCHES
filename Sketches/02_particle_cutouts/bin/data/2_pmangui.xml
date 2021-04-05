@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<I_M_G___1__P_M_A_N>
+	<debug_background>251, 240, 255, 24</debug_background>
+	<p_limit_enable>1</p_limit_enable>
+	<p_limit>250</p_limit>
+	<enable_kill>1</enable_kill>
+	<enable_bounce>0</enable_bounce>
+	<randomize_assets>1</randomize_assets>
+</I_M_G___1__P_M_A_N>
