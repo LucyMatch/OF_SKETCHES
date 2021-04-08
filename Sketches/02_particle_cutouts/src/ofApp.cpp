@@ -28,7 +28,10 @@ void ofApp::update(){
 
 	framerate();
 
-	for (auto& p : pman) { p.update(); }
+	for (auto& p : pman) { 
+		if(enable_varying_gravity)p.applyVaryingGravity(v_gravity_min, v_gravity_max, v_gravity_direction);
+		p.update(); 
+	}
 
 }
 
@@ -115,8 +118,7 @@ void ofApp::initParticleMans() {
 //--------------------------------------------------------------
 void ofApp::spawn() {
 	for (auto& p : pman) {
-		p.simpleSpawn(0);
-		p.applyVaryingGravity(0.5, 5); 
+		p.simpleSpawn(pman_direction);
 	}
 }
 
@@ -158,6 +160,15 @@ void ofApp::initGui(){
 	//@TODO: - put these vals in ImageParticleManager ofPanel
 	gui.add(grid_spawn_w.set("particle grid w", 4, 1, 100));
 	gui.add(grid_spawn_h.set("particle grid h", 50, 1, 100));
+
+	//for particle manager direction
+	//eventually will want other things to play with
+	gui.add(pman_direction.set("pman spawn direction", 0, 0, 3));
+	gui.add(enable_varying_gravity.set("enable varying gravity", false));
+	gui.add(v_gravity_direction.set("gravity direction", 0, 0, 3));
+	gui.add(v_gravity_min.set("gravity min", 0.5, 0.5, 25));
+	gui.add(v_gravity_max.set("gravity max", 10, 0.5, 25));
+
 
 	particleGui.setup("P");
 	particleGui.add(ImageParticle::pcolor.set("color", ofColor(0, 0, 0, 100), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
@@ -242,28 +253,28 @@ void ofApp::keyPressed(int key){
 		pmanGui.saveToFile("1_pmangui.xml");
 		particleGui.saveToFile("1_blckgui.xml");
 		repelGui.saveToFile("1_rplgui.xml");
-		attractGui.loadFromFile("1_attractgui.xml");
+		attractGui.saveToFile("1_attractgui.xml");
 		break;
 	case '2':
 		gui.saveToFile("2_gui.xml");
 		pmanGui.saveToFile("2_pmangui.xml");
 		particleGui.saveToFile("2_blckgui.xml");
 		repelGui.saveToFile("2_rplgui.xml");
-		attractGui.loadFromFile("2_attractgui.xml");
+		attractGui.saveToFile("2_attractgui.xml");
 		break;
 	case '3':
 		gui.saveToFile("3_gui.xml");
 		pmanGui.saveToFile("3_pmangui.xml");
 		particleGui.saveToFile("3_blckgui.xml");
 		repelGui.saveToFile("3_rplgui.xml");
-		attractGui.loadFromFile("3_attractgui.xml");
+		attractGui.saveToFile("3_attractgui.xml");
 		break;
 	case '4':
 		gui.saveToFile("4_gui.xml");
 		pmanGui.saveToFile("4_pmangui.xml");
 		particleGui.saveToFile("4_blckgui.xml");
 		repelGui.saveToFile("4_rplgui.xml");
-		attractGui.loadFromFile("4_attractgui.xml");
+		attractGui.saveToFile("4_attractgui.xml");
 		break;
 	case 'q':
 		gui.loadFromFile("1_gui.xml");
@@ -298,28 +309,28 @@ void ofApp::keyPressed(int key){
 		pmanGui.saveToFile("001_pmangui.xml");
 		particleGui.saveToFile("001_blckgui.xml");
 		repelGui.saveToFile("001_rplgui.xml");
-		attractGui.loadFromFile("001_attractgui.xml");
+		attractGui.saveToFile("001_attractgui.xml");
 		break;
 	case '8':
 		gui.saveToFile("002_gui.xml");
 		pmanGui.saveToFile("002_pmangui.xml");
 		particleGui.saveToFile("002_blckgui.xml");
 		repelGui.saveToFile("002_rplgui.xml");
-		attractGui.loadFromFile("002_attractgui.xml");
+		attractGui.saveToFile("002_attractgui.xml");
 		break;
 	case '9':
 		gui.saveToFile("003_gui.xml");
 		pmanGui.saveToFile("003_pmangui.xml");
 		particleGui.saveToFile("003_blckgui.xml");
 		repelGui.saveToFile("003_rplgui.xml");
-		attractGui.loadFromFile("003_attractgui.xml");
+		attractGui.saveToFile("003_attractgui.xml");
 		break;
 	case '0':
 		gui.saveToFile("004_gui.xml");
 		pmanGui.saveToFile("004_pmangui.xml");
 		particleGui.saveToFile("004_blckgui.xml");
 		repelGui.saveToFile("004_rplgui.xml");
-		attractGui.loadFromFile("004_attractgui.xml");
+		attractGui.saveToFile("004_attractgui.xml");
 		break;
 	case 'u':
 		gui.loadFromFile("001_gui.xml");

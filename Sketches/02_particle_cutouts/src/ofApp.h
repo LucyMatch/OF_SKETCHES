@@ -47,10 +47,12 @@ class ofApp : public ofBaseApp{
 
 		ofxPanel gui;
 		ofParameter<ofColor> background;
-		ofParameter<bool> enable_debug, enable_attract, enable_repel, enable_simple_spawn;
+		ofParameter<bool> enable_debug, enable_attract, enable_repel, enable_simple_spawn, enable_varying_gravity;
 		ofParameter<float> canvas_margin, cell_margin;
 		ofParameter<int> rows, cols;
 		ofParameter<int> grid_spawn_w, grid_spawn_h;
+		ofParameter<int> pman_direction, v_gravity_direction;
+		ofParameter<float> v_gravity_min, v_gravity_max;
 
 		ofxPanel repelGui;
 		ofxPanel attractGui;

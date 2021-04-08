@@ -22,8 +22,9 @@ public:
 
 	//start pos / 0 = x random y = 0 / 1 = x 0 y random / 2 x rand y max / 3 x max y rand
 	virtual void simpleSpawn(int start_pos);
-	virtual void applySeek();
-	virtual void applySeek(ofVec2f loc);
+	//virtual void applySeek();
+	//virtual void applySeek(ofVec2f loc);
+	virtual void applyVaryingGravity(float min, float max, int direction);
 
 	void gridSpawn(int colResolution, int rowResolution);
 	void imgSpawn();
