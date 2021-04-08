@@ -11,6 +11,7 @@ public:
 	//--------------------------------------------------------------
 	ParticleManager() {
 		draw_dims = { 0, 0, ofGetWidth(), ofGetHeight() };
+		fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 	};
 
 	//--------------------------------------------------------------
@@ -37,7 +38,7 @@ public:
 	};
 
 	//--------------------------------------------------------------
-	virtual void multiSpawn( int amount ) {
+	void multiSpawn( int amount ) {
 		if (enable_limit && p.size() < limit) {
 			for (int i = 0; i < amount; i++) {
 				ofVec2f _loc;
@@ -73,7 +74,7 @@ public:
 	};
 
 	//--------------------------------------------------------------
-	void applyVaryingGravity(float min, float max) {
+	virtual void applyVaryingGravity(float min, float max) {
 		for (int i = 0; i < p.size(); i++) {
 			ofVec2f gravity(ofRandom(min, max), 0);
 			p[i].applyforce(gravity);
@@ -82,14 +83,14 @@ public:
 
 	//applies to home lcoation by default
 	//--------------------------------------------------------------
-	virtual void applySeek() {
+	void applySeek() {
 		for (int i = 0; i < p.size(); i++) {
 			p[i].seek(p[i].home_location);
 		}
 	};
 
 	//--------------------------------------------------------------
-	virtual void applySeek( ofVec2f loc) {
+	void applySeek( ofVec2f loc) {
 		for (int i = 0; i < p.size(); i++) {
 			p[i].seek(loc);
 		}
@@ -101,6 +102,24 @@ public:
 		    p[i].draw();
 		}	
 	};
+
+	//--------------------------------------------------------------
+	void drawFbo(int bg_alpha) {
+		fbo.begin();
+
+			ofPushStyle();
+			ofSetColor(255, 255, 255, bg_alpha);
+			ofDrawRectangle(0,0,ofGetWidth(),ofGetHeight());
+			ofPopStyle();
+
+			draw();
+
+		fbo.end();
+	};
+
+	ofFbo& getFbo() {
+		return fbo;
+	}
 
 	//--------------------------------------------------------------
 	void drawDebug() {
@@ -117,6 +136,7 @@ public:
 	glm::vec4 draw_dims;
 	bool enable_limit = true;
 	int limit = 100;
+	ofFbo fbo;
 
 
 private: 
