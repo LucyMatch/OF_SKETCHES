@@ -4,6 +4,7 @@ ofParameter<int> ImageParticleManager::limit = 100;
 //@TODO: fully integrate enable_limit / limit
 ofParameter<bool> ImageParticleManager::enable_limit = true;
 ofParameter<bool> ImageParticleManager::enable_kill = true;
+ofParameter<bool> ImageParticleManager::enable_kill_on_leave_screen = true;
 ofParameter<bool> ImageParticleManager::enable_bounce = false;
 ofParameter<bool> ImageParticleManager::randomize_assets = true;
 ofParameter<ofColor> ImageParticleManager::debug_c = ofColor(0, 0, 0, 100);
@@ -32,16 +33,16 @@ void ImageParticleManager::assetsLoad(string path) {
 
 //@TODO: add more toggles here
 //--------------------------------------------------------------
-void ImageParticleManager::simpleSpawn() {
+void ImageParticleManager::simpleSpawn(int start_pos) {
 	if ((enable_limit && p.size() < limit) || !enable_limit) {
 		ofVec2f _loc;
-		_loc.set(ofRandom(draw_dims.x, (draw_dims.x + draw_dims.z)), ofRandom(draw_dims.y, (draw_dims.y + draw_dims.w)));
-		//_loc.set(ofRandom(draw_dims.x, (draw_dims.x + draw_dims.z)), draw_dims.y);
+
+		if(start_pos == 0)_loc.set(ofRandom(draw_dims.x, (draw_dims.x + draw_dims.z)), draw_dims.y);
+		if (start_pos == 1)_loc.set(draw_dims.x, ofRandom(draw_dims.y, (draw_dims.y + draw_dims.w)));
+		if (start_pos == 2)_loc.set(ofRandom(draw_dims.x, (draw_dims.x + draw_dims.z)), draw_dims.y + draw_dims.w);
+		if (start_pos == 3)_loc.set(draw_dims.x + draw_dims.z, ofRandom(draw_dims.y, (draw_dims.y + draw_dims.w)));
 
 		ImageParticle _p(_loc, &images[getImgIndex()]);
-
-		ofVec2f gravity(0, ofRandom(3, 5));
-		_p.applyforce(gravity);
 
 		p.push_back(_p);
 	}
@@ -125,16 +126,17 @@ void ImageParticleManager::update() {
 
 		p[i].update();
 
-		if (enable_bounce) {
-			//bounce
+		if (enable_bounce) 
 			p[i].checkEdges(draw_dims, false);
-		}
-		else {
-			//mark as dead
+	
+		if(enable_kill)
 			p[i].checkEdges(draw_dims, true);
-			//erase dead
-			if(p[i].dead && enable_kill)p.erase(p.begin() + i);
-		}
+
+		if (enable_kill_on_leave_screen) 
+			p[i].checkEdges(glm::vec4(0,ofGetWidth(), 0, ofGetHeight()), true);
+
+		if (p[i].dead)
+			p.erase(p.begin() + i);
 
 	}
 

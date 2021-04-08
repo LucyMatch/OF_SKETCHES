@@ -12,13 +12,16 @@ public:
 
 	ImageParticleManager();
 
+	//@TODO: create image manager external class - this load them & shares reference
+	//		that way they are not reloaded per pman
+	//		and all image functionality can happen else where
 	void assetsLoad(string path);
 
 	virtual void update();
 	virtual void draw();
 
-	virtual void simpleSpawn();
-
+	//start pos / 0 = x random y = 0 / 1 = x 0 y random / 2 x rand y max / 3 x max y rand
+	virtual void simpleSpawn(int start_pos);
 	virtual void applySeek();
 	virtual void applySeek(ofVec2f loc);
 
@@ -38,7 +41,7 @@ public:
 	
 
 	static ofParameter<int> limit;
-	static ofParameter<bool> enable_limit, enable_kill , enable_bounce , randomize_assets;
+	static ofParameter<bool> enable_limit, enable_kill , enable_bounce , randomize_assets, enable_kill_on_leave_screen;
 	static ofParameter<ofColor> debug_c;
 
 private:

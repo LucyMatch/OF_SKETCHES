@@ -24,7 +24,6 @@ void ofApp::update(){
 
 	if (enable_simple_spawn) {
 		spawn();
-		for (auto& p : pman) { p.applyVaryingGravity(0.5, 5); }
 	}
 
 	framerate();
@@ -104,7 +103,10 @@ void ofApp::initParticleMans() {
 		ImageParticleManager p;
 		std::cout << "[ pman set up ] X : " << c.x <<" Y : "<<c.y << " W : " << c.width << " H : " << c.height << std::endl;
 		p.setup(glm::vec4(c.x, c.y, c.width, c.height));
-		p.assetsLoad("images/rings");
+		//p.assetsLoad("images/rings");
+		p.assetsLoad("images/rocks");
+		//p.assetsLoad("images/eyes");
+		//p.assetsLoad("images/mouths");
 		pman.push_back(p);
 	}
 
@@ -113,7 +115,8 @@ void ofApp::initParticleMans() {
 //--------------------------------------------------------------
 void ofApp::spawn() {
 	for (auto& p : pman) {
-		p.simpleSpawn();
+		p.simpleSpawn(0);
+		p.applyVaryingGravity(0.5, 5); 
 	}
 }
 
@@ -189,6 +192,7 @@ void ofApp::initGui(){
 	pmanGui.add(ImageParticleManager::enable_limit.set("p limit enable", false));
 	pmanGui.add(ImageParticleManager::limit.set("p limit", 100, 1, 5000));
 	pmanGui.add(ImageParticleManager::enable_kill.set("enable kill", true));
+	pmanGui.add(ImageParticleManager::enable_kill_on_leave_screen.set("enable kill on leave screen", true));
 	pmanGui.add(ImageParticleManager::enable_bounce.set("enable bounce", false));
 	pmanGui.add(ImageParticleManager::randomize_assets.set("randomize assets", true));
 
