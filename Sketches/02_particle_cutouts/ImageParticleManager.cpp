@@ -143,18 +143,32 @@ void ImageParticleManager::update() {
 };
 
 //--------------------------------------------------------------
-void ImageParticleManager::applySeek() {
+void ImageParticleManager::applyVaryingGravity(float min, float max, int direction) {
 	for (int i = 0; i < p.size(); i++) {
-		p[i].seek(p[i].home_location);
+
+		ofVec2f gravity;
+		if (direction == 0)gravity.set(ofRandom(min, max), 0);
+		if (direction == 1)gravity.set( 0, ofRandom(min, max));
+		if (direction == 2)gravity.set(-ofRandom(min, max), 0);
+		if (direction == 3)gravity.set(0, -ofRandom(min, max));
+
+		p[i].applyforce(gravity);
 	}
 };
 
 //--------------------------------------------------------------
-void ImageParticleManager::applySeek(ofVec2f loc) {
-	for (int i = 0; i < p.size(); i++) {
-		p[i].seek(loc);
-	}
-};
+//void ImageParticleManager::applySeek() {
+//	for (int i = 0; i < p.size(); i++) {
+//		p[i].seek(p[i].home_location);
+//	}
+//};
+
+//--------------------------------------------------------------
+//void ImageParticleManager::applySeek(ofVec2f loc) {
+//	for (int i = 0; i < p.size(); i++) {
+//		p[i].seek(loc);
+//	}
+//};
 
 //--------------------------------------------------------------
 int ImageParticleManager::getImgIndex() {
