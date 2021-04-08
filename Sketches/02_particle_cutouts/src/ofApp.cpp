@@ -31,6 +31,7 @@ void ofApp::update(){
 	for (auto& p : pman) { 
 		if(enable_varying_gravity)p.applyVaryingGravity(v_gravity_min, v_gravity_max, v_gravity_direction);
 		p.update(); 
+		p.drawFbo(pman_bg_alpha);
 	}
 
 }
@@ -49,11 +50,18 @@ void ofApp::draw(){
 		if (enable_debug)drawDebug();
 	ofPopStyle();
 
-	for (auto& p : pman) { p.draw(); }
+	//for (auto& p : pman) { p.draw(); }
+
+	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+	for (auto& p : pman) { p.getFbo().draw(0, 0); }
+
 
 	main_draw.end();
 
 	main_draw.draw(0, 0);
+
+
+	
 
 }
 
@@ -199,6 +207,7 @@ void ofApp::initGui(){
 	attractGui.add(attract.force_ctrl);
 
 	pmanGui.setup("I M G   1  P M A N");
+	pmanGui.add(pman_bg_alpha.set("bg alpha", 25, 0, 255));
 	pmanGui.add(ImageParticleManager::debug_c.set("debug background", ofColor(171, 196, 237), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 	pmanGui.add(ImageParticleManager::enable_limit.set("p limit enable", false));
 	pmanGui.add(ImageParticleManager::limit.set("p limit", 100, 1, 5000));

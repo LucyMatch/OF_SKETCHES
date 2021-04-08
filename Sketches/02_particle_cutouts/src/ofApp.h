@@ -52,7 +52,7 @@ class ofApp : public ofBaseApp{
 		ofParameter<int> rows, cols;
 		ofParameter<int> grid_spawn_w, grid_spawn_h;
 		ofParameter<int> pman_direction, v_gravity_direction;
-		ofParameter<float> v_gravity_min, v_gravity_max;
+		ofParameter<float> v_gravity_min, v_gravity_max, pman_bg_alpha;
 
 		ofxPanel repelGui;
 		ofxPanel attractGui;
