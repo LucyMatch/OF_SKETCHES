@@ -58,6 +58,10 @@ void ofApp::draw(){
 
 	main_draw.end();
 
+	//lets draw the bg outside maindraw fbo 
+	//or create another fbo 
+	//so we can have interesting blend functions of main_fbo + bg
+
 	main_draw.draw(0, 0);
 
 
