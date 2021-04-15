@@ -223,3 +223,42 @@ GUI :
 
 * Yes for Particles / Blocks /Forces / Grid controls
 
+### 02_particle_cutouts 
+
+<img src="https://github.com/LucyMatch/OF_SKETCHES/blob/master/screen_grabs/02_particle_cutouts.PNG?raw=true" width="200" height="200">
+
+External Classes
+
+* Forces
+* Particle
+* ParticleManager
+* ImageHandler
+
+Functionality
+
+* Image Handler
+  * loads image sets from directory
+* ImageParticleManager
+  * constructor takes array of tex
+  * sizing control
+  * Image control - uniform - mixed
+  * grid spawn
+  * Image set spawn
+  * Simple spawn
+  * varying gravity
+  * kills / erases on leaving bound
+* Pman now draws to properly blended FBO - so there can be trail control w/out effecting bg
+* Generates a cell based grid -> each cell then becomes it's own ImageParticleManager( polymorphed Particle System )
+* Repel / Attract Force controlled by mouse moved
+* keypress 'd' to spawn a particle per unique img in image set
+* keypress 'a' to re init grid spawn ( uses gui vals to set p grid)
+* keypress 's' to force spawn 
+* keypress 'x' to re-init cell grid of particle managers
+* keypress 1-4 /7-0 to save gui files
+* keypress q-r / u-p to load gui files
+* keypress "enter" to save screen shot
+
+GUI : 
+
+* Yes for Particles / Blocks /Forces / Grid controls
+
