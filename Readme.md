@@ -225,7 +225,7 @@ GUI :
 
 ### 02_particle_cutouts 
 
-<img src="https://github.com/LucyMatch/OF_SKETCHES/blob/master/screen_grabs/02_particle_cutouts.PNG?raw=true" width="200" height="200">
+<img src="https://github.com/LucyMatch/OF_SKETCHES/blob/master/screen_grabs/02_particle_cutouts.png?raw=true" width="200" height="200">
 
 External Classes
 
