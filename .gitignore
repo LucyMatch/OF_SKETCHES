@@ -10,8 +10,11 @@ IGNOREDBYREPO/
 openFrameworks.a
 openFrameworksDebug.a
 openFrameworksUniversal.a
-*.sln
-*.vcxproj*
+
+# I want to push these to the repo 
+# In hopes we can easily keep ext classes configured to project
+#*.sln
+#*.vcxproj*
 
 
 # Some general ignore patterns
