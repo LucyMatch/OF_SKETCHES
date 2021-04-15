@@ -10,26 +10,10 @@ ofParameter<bool> ImageParticleManager::randomize_assets = true;
 ofParameter<ofColor> ImageParticleManager::debug_c = ofColor(0, 0, 0, 100);
 
 //--------------------------------------------------------------
-ImageParticleManager::ImageParticleManager() {
+ImageParticleManager::ImageParticleManager( vector<ofTexture> &img ) {
 	draw_dims = { 0, 0, ofGetWidth(), ofGetHeight() };
+	images = img;
 };
-
-//--------------------------------------------------------------
-void ImageParticleManager::assetsLoad(string path) {
-	ofDirectory dir;
-	dir.listDir(path);
-	dir.allowExt("png");
-	dir.sort();
-
-	int amt = (int)dir.size();
-
-	images.assign(amt, ofTexture());
-
-	for (int i = 0; i < amt; i++) {
-		ofLoadImage(images[i], dir.getPath(i));
-		std::cout << "[ IMG MAN ] LOADED FILE: " << dir.getName(i) << std::endl;
-	}
-}
 
 //@TODO: add more toggles here
 //--------------------------------------------------------------
@@ -155,20 +139,6 @@ void ImageParticleManager::applyVaryingGravity(float min, float max, int directi
 		p[i].applyforce(gravity);
 	}
 };
-
-//--------------------------------------------------------------
-//void ImageParticleManager::applySeek() {
-//	for (int i = 0; i < p.size(); i++) {
-//		p[i].seek(p[i].home_location);
-//	}
-//};
-
-//--------------------------------------------------------------
-//void ImageParticleManager::applySeek(ofVec2f loc) {
-//	for (int i = 0; i < p.size(); i++) {
-//		p[i].seek(loc);
-//	}
-//};
 
 //--------------------------------------------------------------
 int ImageParticleManager::getImgIndex() {

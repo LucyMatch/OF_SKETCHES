@@ -13,6 +13,7 @@ void ofApp::setup(){
 
 	main_draw.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 
+	initImages();
 	initCanvasGrid();
 	initParticleMans();
 
@@ -63,10 +64,19 @@ void ofApp::draw(){
 	//so we can have interesting blend functions of main_fbo + bg
 
 	main_draw.draw(0, 0);
+}
 
-
-	
-
+//--------------------------------------------------------------
+/*
+*   init the ImageHandlers
+*	doing manually at this point so I can identify them
+*/
+//--------------------------------------------------------------
+void ofApp::initImages() {
+	rings = new ImageHandler("images/rings");
+	rocks = new ImageHandler("images/rocks");
+	eyes = new ImageHandler("images/eyes");
+	mouthes = new ImageHandler("images/mouths");
 }
 
 //--------------------------------------------------------------
@@ -75,7 +85,8 @@ void ofApp::draw(){
 *	we can use this grid to create "canvas" cells
 *	i.e. pass these to particle manager to make a particle grid per cell.... 
 * 
-*	@TODO: create a class for different grid utility functions?
+*	@TODO: create a class for different grid utility functions 
+	-> we will want different pman organisation approaches
 */
 //--------------------------------------------------------------
 void ofApp::initCanvasGrid() {
@@ -112,16 +123,11 @@ void ofApp::initCanvasGrid() {
 //--------------------------------------------------------------
 void ofApp::initParticleMans() {
 	pman.clear();
-
+	//@TODO: add in toggles / gui controlls for updating which img sets get passed to p man
 	for (auto& c : cells) {
-		/*ImageParticleManager p(500);*/
-		ImageParticleManager p;
+		ImageParticleManager p( rocks->getImages() );
 		std::cout << "[ pman set up ] X : " << c.x <<" Y : "<<c.y << " W : " << c.width << " H : " << c.height << std::endl;
 		p.setup(glm::vec4(c.x, c.y, c.width, c.height));
-		//p.assetsLoad("images/rings");
-		p.assetsLoad("images/rocks");
-		//p.assetsLoad("images/eyes");
-		//p.assetsLoad("images/mouths");
 		pman.push_back(p);
 	}
 

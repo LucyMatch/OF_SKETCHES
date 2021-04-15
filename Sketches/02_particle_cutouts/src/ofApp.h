@@ -4,6 +4,7 @@
 #include "ofxGui.h"
 #include "Forces.h"
 #include "ImageParticleManager.h"
+#include "ImageHandler.h"
 
 class ofApp : public ofBaseApp{
 
@@ -13,6 +14,7 @@ class ofApp : public ofBaseApp{
 		void draw();
 		void drawDebug();
 
+		void initImages();
 		void initCanvasGrid();
 		void initParticleMans();
 
@@ -39,6 +41,9 @@ class ofApp : public ofBaseApp{
 
 		ofRectangle canvas;
 		vector<ofRectangle> cells;
+
+		//vector<ImageHandler> imgman;
+		ImageHandler *rings, *rocks, *eyes, *mouthes;
 
 		vector<ImageParticleManager> pman;
 
