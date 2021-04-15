@@ -117,7 +117,7 @@ void ImageParticleManager::update() {
 			p[i].checkEdges(draw_dims, true);
 
 		if (enable_kill_on_leave_screen) 
-			p[i].checkEdges(glm::vec4(0,ofGetWidth(), 0, ofGetHeight()), true);
+			p[i].checkEdges(glm::vec4( 0, 0, ofGetWidth(), ofGetHeight() ), true);
 
 		if (p[i].dead)
 			p.erase(p.begin() + i);

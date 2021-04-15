@@ -6,8 +6,8 @@
 		<C>25</C>
 		<mass>50</mass>
 		<min_distance>5</min_distance>
-		<max_distance>1000</max_distance>
-		<radius_modifer>250</radius_modifer>
+		<max_distance>100</max_distance>
+		<radius_modifer>173.061</radius_modifer>
 		<display_color>255, 255, 255, 0</display_color>
 	</group>
 </R_E_P_E_L>

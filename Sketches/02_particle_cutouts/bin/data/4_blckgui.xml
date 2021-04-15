@@ -2,17 +2,17 @@
 <P>
 	<color>0, 0, 0, 0</color>
 	<trail_color>255, 255, 255, 0</trail_color>
-	<radius>261</radius>
+	<radius>186</radius>
 	<uniform_size>0</uniform_size>
 	<true_size>0</true_size>
-	<mass_base>500</mass_base>
-	<speed_limit>0.25</speed_limit>
+	<mass_base>100</mass_base>
+	<speed_limit>3.5</speed_limit>
 	<seek_on>1</seek_on>
 	<seek_limit>50</seek_limit>
 	<arrive_on>1</arrive_on>
 	<arrive_cap>100</arrive_cap>
 	<trail_on>0</trail_on>
-	<trail_include_home>0</trail_include_home>
+	<trail_include_home>1</trail_include_home>
 	<trail_weight>10</trail_weight>
-	<history_length>5</history_length>
+	<history_length>50</history_length>
 </P>

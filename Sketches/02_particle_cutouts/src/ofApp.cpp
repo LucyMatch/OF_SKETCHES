@@ -9,7 +9,9 @@ void ofApp::setup(){
 	ofSetCircleResolution(100);
 	ofEnableSmoothing();
 	ofEnableAlphaBlending();
-	ofSetBackgroundAuto(false);
+
+	ofSetBackgroundAuto(true);
+	ofBackground(255, 255, 255);
 
 	main_draw.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 
@@ -77,6 +79,7 @@ void ofApp::initImages() {
 	rocks = new ImageHandler("images/rocks");
 	eyes = new ImageHandler("images/eyes");
 	mouthes = new ImageHandler("images/mouths");
+	misc = new ImageHandler("images/misc");
 }
 
 //--------------------------------------------------------------
@@ -125,7 +128,7 @@ void ofApp::initParticleMans() {
 	pman.clear();
 	//@TODO: add in toggles / gui controlls for updating which img sets get passed to p man
 	for (auto& c : cells) {
-		ImageParticleManager p( rocks->getImages() );
+		ImageParticleManager p( misc->getImages() );
 		std::cout << "[ pman set up ] X : " << c.x <<" Y : "<<c.y << " W : " << c.width << " H : " << c.height << std::endl;
 		p.setup(glm::vec4(c.x, c.y, c.width, c.height));
 		pman.push_back(p);
@@ -192,10 +195,10 @@ void ofApp::initGui(){
 	particleGui.add(ImageParticle::pcolor.set("color", ofColor(0, 0, 0, 100), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 	particleGui.add(ImageParticle::tcolor.set("trail color", ofColor(0, 0, 0, 100), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 
-	particleGui.add(ImageParticle::r.set("radius", 10, 0, 300));
+	particleGui.add(ImageParticle::r.set("radius", 10, 0, 1000));
 	particleGui.add(ImageParticle::enable_uniform_size.set("uniform size", true));
 	particleGui.add(ImageParticle::enable_true_size.set("true size", true));
-	particleGui.add(ImageParticle::mass_base.set("mass base", 11.0, 0.0, 100.0));
+	particleGui.add(ImageParticle::mass_base.set("mass base", 11.0, 0.0, 500.0));
 	particleGui.add(ImageParticle::speed_limit.set("speed limit", 20.0, 0.0, 50.0));
 
 	particleGui.add(ImageParticle::seek_on.set("seek on", true));

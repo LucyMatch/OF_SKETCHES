@@ -43,7 +43,7 @@ class ofApp : public ofBaseApp{
 		vector<ofRectangle> cells;
 
 		//vector<ImageHandler> imgman;
-		ImageHandler *rings, *rocks, *eyes, *mouthes;
+		ImageHandler *rings, *rocks, *eyes, *mouthes, *misc;
 
 		vector<ImageParticleManager> pman;
 

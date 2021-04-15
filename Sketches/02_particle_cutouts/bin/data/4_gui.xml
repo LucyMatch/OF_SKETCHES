@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <P_R_I_M_A_R_Y>
-	<background>251, 255, 248, 255</background>
-	<draw_debug>1</draw_debug>
+	<background>255, 255, 255, 255</background>
+	<draw_debug>0</draw_debug>
 	<enable_simple_spawning>0</enable_simple_spawning>
-	<canvas_margin>0.515</canvas_margin>
-	<cell_margin>0.085</cell_margin>
+	<canvas_margin>0.43</canvas_margin>
+	<cell_margin>0.03</cell_margin>
 	<cell_rows>1</cell_rows>
 	<cell_cols>1</cell_cols>
 	<particle_grid_w>100</particle_grid_w>
@@ -13,5 +13,5 @@
 	<enable_varying_gravity>0</enable_varying_gravity>
 	<gravity_direction>1</gravity_direction>
 	<gravity_min>0.5</gravity_min>
-	<gravity_max>1.725</gravity_max>
+	<gravity_max>0.99</gravity_max>
 </P_R_I_M_A_R_Y>
