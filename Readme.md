@@ -32,6 +32,8 @@ These are very simple "Sketches" to be copied to start new projects
 
 ### 00_particle_template
 
+ <img src="https://github.com/LucyMatch/OF_SKETCHES/blob/master/screen_grabs/00_particle_template.PNG?raw=true" width="200" height="200">
+
 External Classes
 
 * Forces
@@ -50,6 +52,8 @@ GUI :
 * None
 
 ### 01_particle_grid_base
+
+<img src="https://github.com/LucyMatch/OF_SKETCHES/blob/master/screen_grabs/01_particle_grid_base.PNG?raw=true" width="200" height="200">
 
 External Classes
 
@@ -72,6 +76,8 @@ GUI :
 * None
 
 ### 02_particle_grid_ink_illustrations_prep
+
+<img src="https://github.com/LucyMatch/OF_SKETCHES/blob/master/screen_grabs/02_particle_grid_ink_illustration_prep.PNG?raw=true" width="200" height="200">
 
 External Classes
 
@@ -96,6 +102,8 @@ GUI :
 * Yes for Particles / Blocks /Forces
 
 ### 03_particle_grid_ink_illustrations 
+
+<img src="https://github.com/LucyMatch/OF_SKETCHES/blob/master/screen_grabs/02_particle_grid_ink_illustration.PNG?raw=true" width="200" height="200">
 
 External Classes
 
@@ -124,6 +132,8 @@ GUI :
 
 ### Home_IP_Cam_viewer
 
+<img src="https://github.com/LucyMatch/OF_SKETCHES/blob/master/screen_grabs/Home_IP_Cam_Viewer.PNG?raw=true" width="200" height="200">
+
 External Classes
 
 * /
@@ -142,6 +152,9 @@ GUI :
 * /
 
 ### 00_cv_color_palette 
+
+<img src="https://github.com/LucyMatch/OF_SKETCHES/blob/master/screen_grabs/00_cv_color_palette_01.PNG?raw=true" width="200" height="200">
+<img src="https://github.com/LucyMatch/OF_SKETCHES/blob/master/screen_grabs/00_cv_color_palette_02.PNG?raw=true" width="200" height="200">
 
 External Classes
 
@@ -162,6 +175,8 @@ GUI :
 
 ### 00_simple_image_imports
 
+<img src="https://github.com/LucyMatch/OF_SKETCHES/blob/master/screen_grabs/00_simple_image_imports.PNG?raw=true" width="200" height="200">
+
 External Classes
 
 * /
@@ -178,6 +193,8 @@ GUI :
 * general & img alpha
 
 ### 01_particle_cutouts 
+
+<img src="https://github.com/LucyMatch/OF_SKETCHES/blob/master/screen_grabs/01_particle_cutouts.PNG?raw=true" width="200" height="200">
 
 External Classes
 
@@ -197,6 +214,45 @@ Functionality
 * Repel / Attract Force controlled by mouse moved
 * keypress 'a' to re init grid spawn ( uses gui vals to set p grid)
 * keypress 's' to force spawn ( not working)
+* keypress 'x' to re-init cell grid of particle managers
+* keypress 1-4 /7-0 to save gui files
+* keypress q-r / u-p to load gui files
+* keypress "enter" to save screen shot
+
+GUI : 
+
+* Yes for Particles / Blocks /Forces / Grid controls
+
+### 02_particle_cutouts 
+
+<img src="https://github.com/LucyMatch/OF_SKETCHES/blob/master/screen_grabs/02_particle_cutouts.png?raw=true" width="200" height="200">
+
+External Classes
+
+* Forces
+* Particle
+* ParticleManager
+* ImageHandler
+
+Functionality
+
+* Image Handler
+  * loads image sets from directory
+* ImageParticleManager
+  * constructor takes array of tex
+  * sizing control
+  * Image control - uniform - mixed
+  * grid spawn
+  * Image set spawn
+  * Simple spawn
+  * varying gravity
+  * kills / erases on leaving bound
+* Pman now draws to properly blended FBO - so there can be trail control w/out effecting bg
+* Generates a cell based grid -> each cell then becomes it's own ImageParticleManager( polymorphed Particle System )
+* Repel / Attract Force controlled by mouse moved
+* keypress 'd' to spawn a particle per unique img in image set
+* keypress 'a' to re init grid spawn ( uses gui vals to set p grid)
+* keypress 's' to force spawn 
 * keypress 'x' to re-init cell grid of particle managers
 * keypress 1-4 /7-0 to save gui files
 * keypress q-r / u-p to load gui files
