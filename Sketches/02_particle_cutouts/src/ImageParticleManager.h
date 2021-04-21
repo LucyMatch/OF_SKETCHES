@@ -33,7 +33,7 @@ public:
 	int curr_asset = 0;			//used for uniform asset across p's
 	
 
-	static ofParameter<int> limit;
+	static ofParameter<int> limit, b_mode_selector;
 	static ofParameter<bool> enable_limit, enable_kill , enable_bounce , randomize_assets, enable_kill_on_leave_screen;
 	static ofParameter<ofColor> debug_c;
 

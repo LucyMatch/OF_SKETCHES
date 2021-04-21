@@ -1,13 +1,18 @@
 <?xml version="1.0"?>
 <P_R_I_M_A_R_Y>
-	<background>251, 255, 248, 255</background>
+	<background>24, 0, 0, 255</background>
 	<draw_debug>1</draw_debug>
-	<enable_simple_spawning>0</enable_simple_spawning>
-	<canvas_margin>0.31</canvas_margin>
+	<enable_simple_spawning>1</enable_simple_spawning>
+	<canvas_margin>0.135</canvas_margin>
 	<cell_margin>0.13</cell_margin>
 	<cell_rows>1</cell_rows>
 	<cell_cols>1</cell_cols>
-	<particle_grid_w>70</particle_grid_w>
-	<particle_grid_h>74</particle_grid_h>
+	<particle_grid_w>39</particle_grid_w>
+	<particle_grid_h>50</particle_grid_h>
 	<pman_spawn_direction>0</pman_spawn_direction>
+	<blend_modes>3</blend_modes>
+	<enable_varying_gravity>0</enable_varying_gravity>
+	<gravity_direction>1</gravity_direction>
+	<gravity_min>0.5</gravity_min>
+	<gravity_max>0.99</gravity_max>
 </P_R_I_M_A_R_Y>

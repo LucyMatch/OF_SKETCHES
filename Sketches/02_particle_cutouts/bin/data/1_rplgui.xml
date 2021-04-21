@@ -7,7 +7,7 @@
 		<mass>50</mass>
 		<min_distance>5</min_distance>
 		<max_distance>100</max_distance>
-		<radius_modifer>89.4898</radius_modifer>
+		<radius_modifer>250</radius_modifer>
 		<display_color>255, 255, 255, 0</display_color>
 	</group>
 </R_E_P_E_L>

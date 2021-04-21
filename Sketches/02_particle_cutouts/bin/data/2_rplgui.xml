@@ -3,8 +3,8 @@
 	<repel_enable>1</repel_enable>
 	<group>
 		<G>25</G>
-		<C>4.08163</C>
-		<mass>15.5612</mass>
+		<C>25</C>
+		<mass>50</mass>
 		<min_distance>5</min_distance>
 		<max_distance>1000</max_distance>
 		<radius_modifer>250</radius_modifer>

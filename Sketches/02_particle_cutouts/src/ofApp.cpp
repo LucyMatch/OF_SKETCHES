@@ -44,19 +44,14 @@ void ofApp::draw(){
 
 	main_draw.begin();
 
-	ofPushStyle();
-		ofSetColor(background);
-		ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-	ofPopStyle();
+		ofPushStyle();
+			if (enable_debug)drawDebug();
+		ofPopStyle();
 
-	ofPushStyle();
-		if (enable_debug)drawDebug();
-	ofPopStyle();
+		//for (auto& p : pman) { p.draw(); }
 
-	//for (auto& p : pman) { p.draw(); }
-
-	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-	for (auto& p : pman) { p.getFbo().draw(0, 0); }
+		//glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+		for (auto& p : pman) { p.getFbo().draw(0, 0); }
 
 
 	main_draw.end();
@@ -65,7 +60,19 @@ void ofApp::draw(){
 	//or create another fbo 
 	//so we can have interesting blend functions of main_fbo + bg
 
+	ofPushStyle();
+	ofEnableBlendMode(blends[b_mode_selector]);
+
+	
+		ofSetColor(background);
+		ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+	
+
 	main_draw.draw(0, 0);
+
+	ofEnableAlphaBlending();
+
+	ofPopStyle();
 }
 
 //--------------------------------------------------------------
@@ -128,7 +135,7 @@ void ofApp::initParticleMans() {
 	pman.clear();
 	//@TODO: add in toggles / gui controlls for updating which img sets get passed to p man
 	for (auto& c : cells) {
-		ImageParticleManager p( misc->getImages() );
+		ImageParticleManager p( rocks->getImages() );
 		std::cout << "[ pman set up ] X : " << c.x <<" Y : "<<c.y << " W : " << c.width << " H : " << c.height << std::endl;
 		p.setup(glm::vec4(c.x, c.y, c.width, c.height));
 		pman.push_back(p);
@@ -171,6 +178,7 @@ void ofApp::initGui(){
 	gui.add(background.set("background", ofColor(255, 228, 246, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 	gui.add(enable_debug.set("draw debug", true));
 	gui.add(enable_simple_spawn.set("enable simple spawning", false));
+	gui.add(b_mode_selector.set("blend modes", 1, 0, blends.size()-1));
 	
 	//grid controls
 	gui.add(canvas_margin.set("canvas margin", 0.2 , 0.0, 1.0));
@@ -194,6 +202,7 @@ void ofApp::initGui(){
 	particleGui.setup("P");
 	particleGui.add(ImageParticle::pcolor.set("color", ofColor(0, 0, 0, 100), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 	particleGui.add(ImageParticle::tcolor.set("trail color", ofColor(0, 0, 0, 100), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+	//particleGui.add(ImageParticle::b_mode_selector.set("blend Mode Selector", 1, 0, blends.size() - 1));
 
 	particleGui.add(ImageParticle::r.set("radius", 10, 0, 1000));
 	particleGui.add(ImageParticle::enable_uniform_size.set("uniform size", true));
@@ -221,6 +230,9 @@ void ofApp::initGui(){
 
 	pmanGui.setup("I M G   1  P M A N");
 	pmanGui.add(pman_bg_alpha.set("bg alpha", 25, 0, 255));
+
+	pmanGui.add(ImageParticleManager::b_mode_selector.set("blend Mode Selector", 1, 0, blends.size() - 1));
+
 	pmanGui.add(ImageParticleManager::debug_c.set("debug background", ofColor(171, 196, 237), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 	pmanGui.add(ImageParticleManager::enable_limit.set("p limit enable", false));
 	pmanGui.add(ImageParticleManager::limit.set("p limit", 100, 1, 5000));

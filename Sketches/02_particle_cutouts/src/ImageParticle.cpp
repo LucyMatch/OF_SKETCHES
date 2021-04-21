@@ -8,6 +8,7 @@ ofParameter<bool> ImageParticle::arrive_on = true;
 ofParameter<bool> ImageParticle::seek_on = true;
 ofParameter<bool> ImageParticle::trail = true;
 ofParameter<int> ImageParticle::arrive_cap = 100;
+ofParameter<int> ImageParticle::b_mode_selector = 1;
 
 //asethetic
 ofParameter<ofColor> ImageParticle::pcolor = ofColor(0, 0, 0, 100);
@@ -55,22 +56,24 @@ ImageParticle::ImageParticle(ofVec2f  _location, ofTexture* _img) {
 	velocity.limit(speed_limit);
 }
 
-//@TODO :
-//			draw to fbo
-//			alpha and colour effects
-//			blend effects
 void ImageParticle::draw() {
+
+	//ofPushStyle();
+	//ofEnableBlendMode(blends[b_mode_selector]);
+	//attempting to to get the particles to blend mode w/ each other.. not working.
+
 		if (trail) {
-			ofPushStyle();
+			//ofPushStyle();
 			for (int i = 1; i < history.size(); i++) {
 				img->draw(history[i].x - (w / 2), history[i].y - (h / 2), w, h);
 			}
-			ofPopStyle();
+			//ofPopStyle();
 		}
 
-		ofPushStyle();
+		//ofPushStyle();
 		img->draw((location.x - (w / 2)), (location.y - h / 2), w, h);
-		ofPopStyle();
+		//ofPopStyle();
+	//ofPopStyle();
 }
 
 void ImageParticle::update() {

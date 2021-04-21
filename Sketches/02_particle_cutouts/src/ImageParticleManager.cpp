@@ -1,6 +1,7 @@
 #include "ImageParticleManager.h"
 
 ofParameter<int> ImageParticleManager::limit = 100;
+ofParameter<int> ImageParticleManager::b_mode_selector = 1;
 //@TODO: fully integrate enable_limit / limit
 ofParameter<bool> ImageParticleManager::enable_limit = true;
 ofParameter<bool> ImageParticleManager::enable_kill = true;
@@ -85,9 +86,12 @@ void ImageParticleManager::imgSpawn() {
 
 //--------------------------------------------------------------
 void ImageParticleManager::draw() {
+	ofPushStyle();
+	ofEnableBlendMode(blends[b_mode_selector]);
 	for (auto& _p : p) {
 		_p.draw();
 	}
+	ofPopStyle();
 }
 
 //--------------------------------------------------------------

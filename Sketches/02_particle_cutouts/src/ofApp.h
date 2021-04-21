@@ -42,7 +42,15 @@ class ofApp : public ofBaseApp{
 		ofRectangle canvas;
 		vector<ofRectangle> cells;
 
-		//vector<ImageHandler> imgman;
+		std::map<int, ofBlendMode> blends{
+			{0, OF_BLENDMODE_DISABLED },
+			{1, OF_BLENDMODE_ALPHA },
+			{2, OF_BLENDMODE_ADD },
+			{3, OF_BLENDMODE_SUBTRACT },
+			{4, OF_BLENDMODE_MULTIPLY },
+			{5, OF_BLENDMODE_SCREEN },
+		};
+
 		ImageHandler *rings, *rocks, *eyes, *mouthes, *misc;
 
 		vector<ImageParticleManager> pman;
@@ -58,6 +66,7 @@ class ofApp : public ofBaseApp{
 		ofParameter<int> grid_spawn_w, grid_spawn_h;
 		ofParameter<int> pman_direction, v_gravity_direction;
 		ofParameter<float> v_gravity_min, v_gravity_max, pman_bg_alpha;
+		ofParameter<int> b_mode_selector;
 
 		ofxPanel repelGui;
 		ofxPanel attractGui;

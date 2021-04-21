@@ -18,7 +18,7 @@ public:
 	static ofParameter<ofColor> pcolor, tcolor;
 	static ofParameter<int> arrive_cap, history_length;
 	static ofParameter<bool> trail, arrive_on, seek_on;
-	static ofParameter<int> r;
+	static ofParameter<int> r, b_mode_selector;
 	static ofParameter<bool> enable_uniform_size, enable_true_size, enable_home_in_history;
 
 	ofTexture *img;

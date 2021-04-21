@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <P_R_I_M_A_R_Y>
-	<background>255, 227, 214, 255</background>
+	<background>253, 255, 223, 255</background>
 	<draw_debug>1</draw_debug>
 	<enable_simple_spawning>0</enable_simple_spawning>
 	<canvas_margin>0.135</canvas_margin>
@@ -10,4 +10,9 @@
 	<particle_grid_w>39</particle_grid_w>
 	<particle_grid_h>50</particle_grid_h>
 	<pman_spawn_direction>0</pman_spawn_direction>
+	<blend_modes>5</blend_modes>
+	<enable_varying_gravity>0</enable_varying_gravity>
+	<gravity_direction>1</gravity_direction>
+	<gravity_min>0.5</gravity_min>
+	<gravity_max>0.99</gravity_max>
 </P_R_I_M_A_R_Y>
