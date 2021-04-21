@@ -31,11 +31,10 @@ public:
 
     static float seekLimit, speedLimit, massBase, trail_wgt;
     static ofColor pcolor, tcolor;
-    static int r, arrive_cap, history_length;
+    static int r, arrive_cap, history_length, b_mode_selector;
     static bool trail, arrive_on, seek_on;
+    static std::map<int, ofBlendMode> blends;
 
 private: 
-
-    
 
 };

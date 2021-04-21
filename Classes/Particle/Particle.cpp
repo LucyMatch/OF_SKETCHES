@@ -8,6 +8,15 @@ bool Particle::arrive_on = true;
 bool Particle::seek_on = true;
 bool Particle::trail = true;
 int Particle::arrive_cap = 300;
+int Particle::b_mode_selector = 1;
+std::map<int, ofBlendMode> Particle::blends{
+    {0, OF_BLENDMODE_DISABLED },
+    { 1, OF_BLENDMODE_ALPHA },
+    { 2, OF_BLENDMODE_ADD },
+    { 3, OF_BLENDMODE_SUBTRACT },
+    { 4, OF_BLENDMODE_MULTIPLY },
+    { 5, OF_BLENDMODE_SCREEN },
+};
 
 //asethetic
 ofColor Particle::pcolor = ofColor(0, 0, 0, 100);
@@ -62,24 +71,29 @@ void Particle::update() {
 }
 
 void Particle::draw() {
-    if (!dead) {
 
-        if (trail) {
-            ofPushStyle();
-            ofSetColor(tcolor);
-            ofSetLineWidth(trail_wgt);
-            for (int i = 1; i < history.size(); i++) 
-                ofDrawLine(history[i - 1].x, history[i - 1].y, history[i].x, history[i].y);
-            ofPopStyle();
+    ofPushStyle();
+    ofEnableBlendMode(blends[b_mode_selector]);
+
+        if (!dead) {
+
+            if (trail) {
+                ofPushStyle();
+                ofSetColor(tcolor);
+                ofSetLineWidth(trail_wgt);
+                for (int i = 1; i < history.size(); i++) 
+                    ofDrawLine(history[i - 1].x, history[i - 1].y, history[i].x, history[i].y);
+                ofPopStyle();
+            }
+
+           ofPushStyle();
+            ofSetColor(pcolor);
+            ofFill();
+            ofDrawRectangle(location.x, location.y, r, r);
+           ofPopStyle();
+
         }
-
-       ofPushStyle();
-        ofSetColor(pcolor);
-        ofFill();
-        ofDrawRectangle(location.x, location.y, r, r);
-       ofPopStyle();
-
-    }
+    ofPopStyle();
 }
 
 void Particle::applyforce(ofVec2f &force) {

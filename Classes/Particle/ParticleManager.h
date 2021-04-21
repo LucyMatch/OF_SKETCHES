@@ -98,6 +98,9 @@ public:
 
 	//--------------------------------------------------------------
 	virtual void draw() {
+
+		ofEnableBlendMode(blends[b_mode_selector]);
+
 		for (int i = 0; i < p.size(); i++) {
 		    p[i].draw();
 		}	
@@ -136,6 +139,8 @@ public:
 	glm::vec4 draw_dims;
 	bool enable_limit = true;
 	int limit = 100;
+	int b_mode_selector = 1;
+	std::map<int, ofBlendMode> blends = Particle::blends;
 	ofFbo fbo;
 
 
