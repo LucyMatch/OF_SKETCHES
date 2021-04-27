@@ -21,13 +21,16 @@ public:
 
 	ofVec2f location;
 	float radius = 20;
-	//static float mass, G, C, minDis, maxDis, rmod;
-	//gonna update this so itsone gui panel 
-	//and we can update the settings per instance
+
+	//for dealing with diff shaped forces
+	ofRectangle r;
+	float triangleArea(glm::vec2& a, glm::vec2& b, glm::vec2& c);
+	bool isInsideTriangle(glm::vec2& p, glm::vec2& a, glm::vec2& b, glm::vec2& c);
 
 	ofParameterGroup force_ctrl;
 	ofParameter<float> mass, G, C, min_dis, max_dis, rmod;
 	ofParameter<ofColor> display_color;
+	ofParameter<int> shape_option;
 
 private:
 
@@ -42,8 +45,6 @@ public:
 	Repel();
 
 	virtual ofVec2f force(Particle const& p);
-	//static float mass, G, C, minDis, maxDis, rmod;
-	//float radius = 20;
 
 private:
 
@@ -58,8 +59,6 @@ public:
 	Friction();
 
 	virtual ofVec2f force(Particle const& p);
-	//static float mass, G, C, minDis, maxDis, rmod;
-	//float radius = 20;
 
 private:
 
@@ -74,8 +73,6 @@ public:
 	Drag();
 
 	virtual ofVec2f force(Particle const& p);
-	//static float mass, G, C, minDis, maxDis, rmod;
-	//float radius = 20;
 
 private:
 
@@ -90,8 +87,6 @@ public:
 	Attract();
 
 	virtual ofVec2f force(Particle const& p);
-	//static float mass, G, C, minDis, maxDis, rmod;
-	//float radius = 20;
 
 private:
 

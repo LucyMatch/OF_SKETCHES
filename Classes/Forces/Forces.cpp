@@ -1,4 +1,5 @@
 #include "Forces.h"
+#include <cmath>
 
 //creating ofparams for these - disabling static for now - 
 //i want to control per instance.. not per class
@@ -19,12 +20,31 @@ void Forces::init() {
 	force_ctrl.add(max_dis.set("max distance", 100.0, 0.0, 1000.0));
 	force_ctrl.add(rmod.set("radius modifer", 2.0, -10.0, 250));
 	force_ctrl.add(display_color.set("display color", ofColor(255,255,255,255), ofColor(0,0,0,0), ofColor(255,255,255,255)));
+	force_ctrl.add(shape_option.set("force shape", 0, 0, 2));
 }
 void Forces::display() {
+	glm::vec2 a, b, c;
 	ofPushStyle();
 	ofFill();
 	ofSetColor(display_color);
-	ofDrawCircle(location, radius*rmod);	
+	switch (shape_option) {
+	case 0:
+		ofDrawCircle(location, radius * rmod);
+		break;
+	case 1:
+		r.setFromCenter(location, radius * rmod, radius * rmod);
+		ofDrawRectangle(r);
+		break;
+	case 2:
+		a = glm::vec2(location.x, location.y + (sqrt(3) / 3) * (radius * rmod));
+		b = glm::vec2(location.x - (radius * rmod)/2, location.y - (sqrt(3) / 6) * (radius * rmod));
+		c = glm::vec2(location.x + (radius * rmod) / 2, location.y - (sqrt(3) / 6) * (radius * rmod));
+		ofDrawTriangle( a, b, c );
+		break;
+	default:
+		break;
+	}
+	
 	ofPopStyle();
 }
 void Forces::update() {
@@ -38,13 +58,42 @@ void Forces::update(ofVec2f loc, float _r) {
 	radius = _r;
 }
 bool Forces::inRange(Particle const& p) {
-	float dist = location.distance(p.location);
-	if (dist < (radius * rmod)) {return true;}
-	else {return false;}
+	switch (shape_option) {
+	case 0:
+		//circle
+		if (location.distance(p.location) < (radius * rmod)) { return true; }
+		else { return false; }
+		break;
+	case 1:
+		//square
+		r.setFromCenter(location, radius * rmod, radius * rmod);
+		cout << "square mode - is inside? " << r.inside(p.location) << endl;
+		return r.inside(p.location);
+		break;
+	case 2:
+		//	triangle?
+
+
+
+		break;
+	default:
+		break;
+	}
+
 }
 ofVec2f Forces::force(Particle const& p) {
 	ofVec2f f(0.0, 0.0);
 	return f;
+}
+float Forces::triangleArea(glm::vec2& a, glm::vec2& b, glm::vec2& c) {
+	return abs((a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) / 2.0);
+}
+bool Forces::isInsideTriangle(glm::vec2& p, glm::vec2& a, glm::vec2& b, glm::vec2& c) {
+	float A = triangleArea(a,b,c);
+	float A1 = triangleArea(p,b,c);
+	float A2 = triangleArea(a,p,c);
+	float A3 = triangleArea(a,b,p);
+	return (A == A1 + A2 + A3);
 }
 
 #pragma mark REPEL
