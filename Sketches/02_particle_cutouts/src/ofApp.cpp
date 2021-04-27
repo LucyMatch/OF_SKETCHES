@@ -10,8 +10,8 @@ void ofApp::setup(){
 	ofEnableSmoothing();
 	ofEnableAlphaBlending();
 
-	ofSetBackgroundAuto(true);
-	ofBackground(255, 255, 255);
+	//ofSetBackgroundAuto(true);
+	//ofBackground(255, 255, 255);
 
 	main_draw.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 
@@ -25,9 +25,12 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
 
-	if (enable_simple_spawn) {
+	if (enable_simple_spawn)
 		spawn();
-	}
+
+	//for static force ctrl
+	if (enable_static_force)
+		forceCtrl();
 
 	framerate();
 
@@ -43,36 +46,22 @@ void ofApp::update(){
 void ofApp::draw(){
 
 	main_draw.begin();
-
 		ofPushStyle();
 			if (enable_debug)drawDebug();
 		ofPopStyle();
 
-		//for (auto& p : pman) { p.draw(); }
-
 		//glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 		for (auto& p : pman) { p.getFbo().draw(0, 0); }
-
-
 	main_draw.end();
-
-	//lets draw the bg outside maindraw fbo 
-	//or create another fbo 
-	//so we can have interesting blend functions of main_fbo + bg
 
 	ofPushStyle();
 	ofEnableBlendMode(blends[b_mode_selector]);
-
-	
 		ofSetColor(background);
 		ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-	
-
-	main_draw.draw(0, 0);
+		main_draw.draw(0, 0);
+	ofPopStyle();
 
 	ofEnableAlphaBlending();
-
-	ofPopStyle();
 }
 
 //--------------------------------------------------------------
@@ -87,6 +76,9 @@ void ofApp::initImages() {
 	eyes = new ImageHandler("images/eyes");
 	mouthes = new ImageHandler("images/mouths");
 	misc = new ImageHandler("images/misc");
+	sky_only = new ImageHandler("images/sky_partial");
+	cloud_only = new ImageHandler("images/clouds_partial");
+	mixed_sky = new ImageHandler("images/mixed_sky");
 }
 
 //--------------------------------------------------------------
@@ -135,12 +127,11 @@ void ofApp::initParticleMans() {
 	pman.clear();
 	//@TODO: add in toggles / gui controlls for updating which img sets get passed to p man
 	for (auto& c : cells) {
-		ImageParticleManager p( rocks->getImages() );
+		ImageParticleManager p( cloud_only->getImages() );
 		std::cout << "[ pman set up ] X : " << c.x <<" Y : "<<c.y << " W : " << c.width << " H : " << c.height << std::endl;
 		p.setup(glm::vec4(c.x, c.y, c.width, c.height));
 		pman.push_back(p);
 	}
-
 }
 
 //--------------------------------------------------------------
@@ -154,6 +145,42 @@ void ofApp::spawn() {
 void ofApp::gridSpawn() {
 	for (auto& p : pman) {
 		p.gridSpawn(grid_spawn_w, grid_spawn_h);
+	}
+}
+
+//--------------------------------------------------------------
+void ofApp::forceCtrl(glm::vec2 loc) {
+
+	bool update = false;
+	if (loc != glm::vec2(-1, -1))
+		update = true;
+
+	if (enable_repel) {
+		//update force
+		if(update)repel.update(loc);
+
+		for (auto& p : pman) {
+			for (auto& _p : p.p) {
+				if (repel.inRange(_p)) {
+					_p.applyforce(repel.force(_p));
+				}
+
+			}
+		}
+	}
+
+	if (enable_attract) {
+		//update force
+		if(update)attract.update(loc);
+
+		for (auto& p : pman) {
+			for (auto& _p : p.p) {
+				if (attract.inRange(_p)) {
+					_p.applyforce(attract.force(_p));
+				}
+
+			}
+		}
 	}
 }
 
@@ -178,6 +205,9 @@ void ofApp::initGui(){
 	gui.add(background.set("background", ofColor(255, 228, 246, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 	gui.add(enable_debug.set("draw debug", true));
 	gui.add(enable_simple_spawn.set("enable simple spawning", false));
+	gui.add(enable_mouse_spawn.set("enable mouse spawning", false));
+	gui.add(enable_mouse_force.set("enable mouse force", false));
+	gui.add(enable_static_force.set("enable static force", false));
 	gui.add(b_mode_selector.set("blend modes", 1, 0, blends.size()-1));
 	
 	//grid controls
@@ -202,7 +232,7 @@ void ofApp::initGui(){
 	particleGui.setup("P");
 	particleGui.add(ImageParticle::pcolor.set("color", ofColor(0, 0, 0, 100), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 	particleGui.add(ImageParticle::tcolor.set("trail color", ofColor(0, 0, 0, 100), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
-	//particleGui.add(ImageParticle::b_mode_selector.set("blend Mode Selector", 1, 0, blends.size() - 1));
+	particleGui.add(ImageParticle::b_mode_selector.set("blend Mode Selector", 1, 0, blends.size() - 1));
 
 	particleGui.add(ImageParticle::r.set("radius", 10, 0, 1000));
 	particleGui.add(ImageParticle::enable_uniform_size.set("uniform size", true));
@@ -423,39 +453,54 @@ void ofApp::mouseMoved(int x, int y ){
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
 
-	//simple force
-	//im going to ignore the pman for now.. lazy ass coding
+	//mouse spawn
+	if (enable_mouse_spawn) {
+		//we could add in all pmen.... 
+		for (auto &p : pman)
+			p.spawn(ofVec2f(x, y));
 
-	if (enable_repel) {
-		//update force
-		repel.update(ofVec2f(x, y));
-
-		for (auto& p : pman) {
-			for (auto& _p : p.p) {
-				//repel for now
-				if (repel.inRange(_p)) {
-					_p.applyforce(repel.force(_p));
-				}
-
-			}
-		}
+		//or just first...
+		//pman[0].spawn(ofVec2f(x, y));
 	}
 
-	if (enable_attract) {
-		//update force
-		attract.update(ofVec2f(x, y));
+	//force ctrl
+	if (enable_mouse_force || enable_static_force) {
 
-		for (auto& p : pman) {
-			for (auto& _p : p.p) {
-				//repel for now
-				if (attract.inRange(_p)) {
-					_p.applyforce(attract.force(_p));
-				}
+		forceCtrl(glm::vec2(x, y));
 
-			}
-		}
+		//simple force
+		//im going to ignore the pman for now.. lazy ass coding
+
+		//if (enable_repel) {
+		//	//update force
+		//	repel.update(ofVec2f(x, y));
+
+		//	for (auto& p : pman) {
+		//		for (auto& _p : p.p) {
+		//			//repel for now
+		//			if (repel.inRange(_p)) {
+		//				_p.applyforce(repel.force(_p));
+		//			}
+
+		//		}
+		//	}
+		//}
+
+		//if (enable_attract) {
+		//	//update force
+		//	attract.update(ofVec2f(x, y));
+
+		//	for (auto& p : pman) {
+		//		for (auto& _p : p.p) {
+		//			//repel for now
+		//			if (attract.inRange(_p)) {
+		//				_p.applyforce(attract.force(_p));
+		//			}
+
+		//		}
+		//	}
+		//}
 	}
-
 }
 
 //--------------------------------------------------------------

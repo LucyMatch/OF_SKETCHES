@@ -58,8 +58,8 @@ ImageParticle::ImageParticle(ofVec2f  _location, ofTexture* _img) {
 
 void ImageParticle::draw() {
 
-	//ofPushStyle();
-	//ofEnableBlendMode(blends[b_mode_selector]);
+	ofPushStyle();
+	ofEnableBlendMode(blends[b_mode_selector]);
 	//attempting to to get the particles to blend mode w/ each other.. not working.
 
 		if (trail) {
@@ -73,7 +73,7 @@ void ImageParticle::draw() {
 		//ofPushStyle();
 		img->draw((location.x - (w / 2)), (location.y - h / 2), w, h);
 		//ofPopStyle();
-	//ofPopStyle();
+	ofPopStyle();
 }
 
 void ImageParticle::update() {

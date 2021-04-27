@@ -2,12 +2,13 @@
 <R_E_P_E_L>
 	<repel_enable>1</repel_enable>
 	<group>
-		<G>25</G>
-		<C>25</C>
-		<mass>50</mass>
+		<G>1</G>
+		<C>1</C>
+		<mass>1</mass>
 		<min_distance>5</min_distance>
 		<max_distance>100</max_distance>
-		<radius_modifer>250</radius_modifer>
-		<display_color>255, 255, 255, 0</display_color>
+		<radius_modifer>13.8776</radius_modifer>
+		<display_color>158, 255, 255, 255</display_color>
+		<force_shape>2</force_shape>
 	</group>
 </R_E_P_E_L>

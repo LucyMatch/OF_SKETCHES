@@ -7,7 +7,8 @@
 		<mass>1</mass>
 		<min_distance>5</min_distance>
 		<max_distance>100</max_distance>
-		<radius_modifer>2</radius_modifer>
-		<display_color>255, 255, 255, 0</display_color>
+		<radius_modifer>1.93878</radius_modifer>
+		<display_color>255, 249, 0, 0</display_color>
+		<force_shape>1</force_shape>
 	</group>
 </A_T_T_R_A_C_T>

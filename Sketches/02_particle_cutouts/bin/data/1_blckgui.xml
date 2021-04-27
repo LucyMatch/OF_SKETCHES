@@ -1,18 +1,19 @@
 <?xml version="1.0"?>
 <P>
-	<color>0, 0, 0, 0</color>
-	<trail_color>255, 255, 255, 0</trail_color>
-	<radius>43</radius>
-	<uniform_size>0</uniform_size>
-	<true_size>0</true_size>
-	<mass_base>11</mass_base>
-	<speed_limit>0.5</speed_limit>
+	<color>0, 0, 0, 100</color>
+	<trail_color>0, 0, 0, 100</trail_color>
+	<radius>10</radius>
+	<uniform_size>1</uniform_size>
+	<true_size>1</true_size>
+	<mass_base>500</mass_base>
+	<speed_limit>14</speed_limit>
 	<seek_on>1</seek_on>
 	<seek_limit>50</seek_limit>
 	<arrive_on>1</arrive_on>
 	<arrive_cap>100</arrive_cap>
-	<trail_on>0</trail_on>
-	<trail_include_home>1</trail_include_home>
-	<trail_weight>10</trail_weight>
-	<history_length>37</history_length>
+	<trail_on>1</trail_on>
+	<trail_include_home>0</trail_include_home>
+	<trail_weight>5</trail_weight>
+	<history_length>50</history_length>
+	<blend_Mode_Selector>1</blend_Mode_Selector>
 </P>

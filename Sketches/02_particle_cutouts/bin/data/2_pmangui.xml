@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <I_M_G___1__P_M_A_N>
-	<debug_background>255, 231, 0, 0</debug_background>
+	<debug_background>171, 196, 237, 255</debug_background>
 	<p_limit_enable>1</p_limit_enable>
-	<p_limit>225</p_limit>
+	<p_limit>100</p_limit>
 	<enable_kill>0</enable_kill>
 	<enable_bounce>0</enable_bounce>
 	<randomize_assets>1</randomize_assets>
 	<enable_kill_on_leave_screen>1</enable_kill_on_leave_screen>
-	<bg_alpha>0</bg_alpha>
-	<blend_Mode_Selector>5</blend_Mode_Selector>
+	<bg_alpha>86.7</bg_alpha>
+	<blend_Mode_Selector>2</blend_Mode_Selector>
 </I_M_G___1__P_M_A_N>

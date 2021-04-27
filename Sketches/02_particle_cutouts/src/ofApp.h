@@ -20,6 +20,7 @@ class ofApp : public ofBaseApp{
 
 		void gridSpawn();
 		void spawn();
+		void forceCtrl(glm::vec2 loc = glm::vec2(-1, -1));
 
 		void framerate();
 		void initGui();
@@ -51,7 +52,7 @@ class ofApp : public ofBaseApp{
 			{5, OF_BLENDMODE_SCREEN },
 		};
 
-		ImageHandler *rings, *rocks, *eyes, *mouthes, *misc;
+		ImageHandler *rings, *rocks, *eyes, *mouthes, *misc, *sky_only, *cloud_only, *mixed_sky;
 
 		vector<ImageParticleManager> pman;
 
@@ -67,6 +68,7 @@ class ofApp : public ofBaseApp{
 		ofParameter<int> pman_direction, v_gravity_direction;
 		ofParameter<float> v_gravity_min, v_gravity_max, pman_bg_alpha;
 		ofParameter<int> b_mode_selector;
+		ofParameter<bool> enable_mouse_spawn, enable_mouse_force, enable_static_force;
 
 		ofxPanel repelGui;
 		ofxPanel attractGui;
