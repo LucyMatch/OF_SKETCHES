@@ -1,6 +1,7 @@
 #repo specific
 IGNOREDBYREPO/
 */prev
+.vscode
 
 #openframeworks 
 /of_v0.10.1_osx_release
