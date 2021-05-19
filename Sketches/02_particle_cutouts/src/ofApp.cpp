@@ -50,7 +50,7 @@ void ofApp::draw(){
 			if (enable_debug)drawDebug();
 		ofPopStyle();
 
-		//glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 		for (auto& p : pman) { p.getFbo().draw(0, 0); }
 	main_draw.end();
 
@@ -77,8 +77,11 @@ void ofApp::initImages() {
 	mouthes = new ImageHandler("images/mouths");
 	misc = new ImageHandler("images/misc");
 	sky_only = new ImageHandler("images/sky_partial");
-	cloud_only = new ImageHandler("images/clouds_partial");
-	mixed_sky = new ImageHandler("images/mixed_sky");
+	//cloud_only = new ImageHandler("images/clouds_partial");
+	//mixed_sky = new ImageHandler("images/mixed_sky");
+
+	cloud_only = new ImageHandler("images/water");
+	mixed_sky = new ImageHandler("images/bluem");
 }
 
 //--------------------------------------------------------------
@@ -127,7 +130,7 @@ void ofApp::initParticleMans() {
 	pman.clear();
 	//@TODO: add in toggles / gui controlls for updating which img sets get passed to p man
 	for (auto& c : cells) {
-		ImageParticleManager p( cloud_only->getImages() );
+		ImageParticleManager p(mixed_sky->getImages());
 		std::cout << "[ pman set up ] X : " << c.x <<" Y : "<<c.y << " W : " << c.width << " H : " << c.height << std::endl;
 		p.setup(glm::vec4(c.x, c.y, c.width, c.height));
 		pman.push_back(p);
