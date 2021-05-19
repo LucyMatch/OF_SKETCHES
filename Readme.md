@@ -151,7 +151,7 @@ GUI :
 
 * /
 
-### 00_cv_color_palette 
+### 00_cv_color_palette - wip
 
 <img src="https://github.com/LucyMatch/OF_SKETCHES/blob/master/screen_grabs/00_cv_color_palette_01.PNG?raw=true" width="200" height="200">
 <img src="https://github.com/LucyMatch/OF_SKETCHES/blob/master/screen_grabs/00_cv_color_palette_02.PNG?raw=true" width="200" height="200">
@@ -223,7 +223,7 @@ GUI :
 
 * Yes for Particles / Blocks /Forces / Grid controls
 
-### 02_particle_cutouts 
+### 02_particle_cutouts - wip
 
 <img src="https://github.com/LucyMatch/OF_SKETCHES/blob/master/screen_grabs/02_particle_cutouts.png?raw=true" width="200" height="200">
 
@@ -262,3 +262,16 @@ GUI :
 
 * Yes for Particles / Blocks /Forces / Grid controls
 
+### 00_Image_Cut - wip
+
+External Classes
+
+* ImageHandler
+
+Functionality
+
+* 
+
+GUI : 
+
+* 
