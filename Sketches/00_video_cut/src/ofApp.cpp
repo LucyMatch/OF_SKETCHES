@@ -8,8 +8,6 @@ void ofApp::setup(){
 	ofEnableSmoothing();
 	ofEnableAlphaBlending();
 
-	ofSetCircleResolution(1000);
-
 	//set the mask fbo settings
 	mask_fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 	mask_fbo.getTexture().setSwizzle(GL_TEXTURE_SWIZZLE_A, GL_RED);
@@ -17,6 +15,9 @@ void ofApp::setup(){
 	//init vid manager
 	video.setDims(glm::vec2(1280,720));
 	video.setup(); //also here we would define - ip / webcam / local
+
+	//init cut manager
+	cut_man.setup();
 
 	//init gui
 	initGui();
@@ -35,10 +36,13 @@ void ofApp::update(){
 
 	//@TODO: for cuts class
 	//hard coded for now
-	simple_shape.clear();
-	simple_shape.ellipse(mouseX, mouseY, ss_w, ss_h);
+	//simple_shape.clear();
+	//simple_shape.ellipse(mouseX, mouseY, ss_w, ss_h);
 	//simple_shape.circle(mouseX, mouseY, ss_w);
-	simple_shape.close();
+	//simple_shape.close();
+
+	//live update cut manager w/ mouse position
+	cut_man.update(mouseX, mouseY);
 
 	ofPushStyle();
 	mask_fbo.begin();
@@ -47,13 +51,14 @@ void ofApp::update(){
 		ofSetColor(0,0,0,255);
 		ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 
-		ofSetColor(255, 255, 255, 255);
+		cut_man.draw();
 
-		simple_shape.draw();
+		//ofSetColor(255, 255, 255, 255);
+		//simple_shape.draw();
 
-		if (enable_multi_cut_view)
-			for (auto& c : cuts)
-				c.draw();
+		//if (enable_multi_cut_view)
+		//	for (auto& c : cuts)
+		//		c.draw();
 
 	mask_fbo.end();
 	ofPopStyle();
@@ -88,9 +93,9 @@ void ofApp::draw(){
 
 //@TODO: for "cuts" class
 //--------------------------------------------------------------
-void ofApp::saveCut() {
-	cuts.push_back(simple_shape);
-}
+//void ofApp::saveCut() {
+//	cuts.push_back(simple_shape);
+//}
 
 //--------------------------------------------------------------
 //void ofApp::setImg() {
@@ -150,7 +155,7 @@ void ofApp::drawDebug() {
 
 	mask_fbo.draw(0,0,ofGetWidth(),ofGetHeight());
 
-	simple_shape.draw();
+	//simple_shape.draw();
 
 	//if(enable_save_debug)save_fbo.draw(0,0, save_fbo.getWidth(), save_fbo.getHeight());
 
@@ -171,9 +176,9 @@ void ofApp::initGui() {
 	gui.add(bg_c.set("background", ofColor(255, 228, 246, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 	gui.add(enable_debug.set("enable debug", false));
 	//gui.add(enable_save_debug.set("enable save fbo debug", false));
-	gui.add(enable_multi_cut_view.set("enable multi cut display", false));
-	gui.add(ss_w.set("simple cut width", 100, 1, 1000));
-	gui.add(ss_h.set("simple cut height", 100, 1, 1000));
+	//gui.add(enable_multi_cut_view.set("enable multi cut display", false));
+	//gui.add(ss_w.set("simple cut width", 100, 1, 1000));
+	//gui.add(ss_h.set("simple cut height", 100, 1, 1000));
 	//gui.add(save_pad.set("crop img save padding", 4, -20, 20));
 	gui.add(enable_orig.set("enable orig", true));
 	//gui.add(b_mode_selector.set("blend modes", 1, 0, blends.size() - 1));
@@ -181,6 +186,10 @@ void ofApp::initGui() {
 	//gui.add(curr_c.set("cut img colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 
 	gui.add(video.gui);
+
+	//you may need to think more about this flow
+	//you likely want something closer to how FORCES class works
+	gui.add(cut_man.gui);
 
 }
 
@@ -204,7 +213,7 @@ void ofApp::keyPressed(int key) {
 		break;
 	case 'x':
 		//clear saved cuts
-		cuts.clear();
+		cut_man.clearCuts();
 		break;
 	case '1':
 		gui.saveToFile("1_gui.xml");
@@ -259,7 +268,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-	saveCut();
+	cut_man.saveCut();
 }
 
 //--------------------------------------------------------------

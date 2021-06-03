@@ -1,3 +1,4 @@
+/*VideoHandler v1*/
 #pragma once
 
 #include "ofMain.h"
@@ -19,7 +20,7 @@
 //			-->create an ipcam class that this class pulls in if ip is enabled
 //mimap?
 
-class VideoHandler : public ofBaseApp {
+class VideoHandler {
 
 	public :
 

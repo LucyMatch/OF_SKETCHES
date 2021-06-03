@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxGui.h"
 #include "VideoHandler.h"
+#include "CutManager.h"
 
 class ofApp : public ofBaseApp{
 
@@ -19,7 +20,7 @@ class ofApp : public ofBaseApp{
 
 		//"cuts" functions
 		//eventually to be its own class
-		void saveCut();
+		//void saveCut();
 		//void undoCut();
 		//void clearCuts();
 		//void setCutMode(int mode);
@@ -45,6 +46,8 @@ class ofApp : public ofBaseApp{
 		ofTexture live_cut_tex;
 		//vector<ofTexture> cut_tex;
 
+		CutManager cut_man;
+
 		//ImageHandler *input_imgs;
 		//ofTexture curr_img, orig_img;
 		//int curr_index = 0;
@@ -54,8 +57,8 @@ class ofApp : public ofBaseApp{
 		ofFbo mask_fbo; //save_fbo
 
 		//"cuts" vars
-		ofPath simple_shape;
-		vector<ofPath> cuts;
+		//ofPath simple_shape;
+		//vector<ofPath> cuts;
 
 		std::map<int, ofBlendMode> blends{
 			{0, OF_BLENDMODE_DISABLED },
@@ -66,6 +69,7 @@ class ofApp : public ofBaseApp{
 			{5, OF_BLENDMODE_SCREEN },
 		};
 
+		//@TODO: clean this
 		ofxPanel gui;
 		ofParameter<ofColor> bg_c, orig_c, curr_c;
 		ofParameter<bool> enable_debug, enable_save_debug, enable_orig, enable_multi_cut_view;
