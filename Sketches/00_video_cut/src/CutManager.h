@@ -19,12 +19,15 @@ class CutManager {
 
 		void saveCut();
 		void clearCuts();
-		//void undoCut();
-		//void exportCuts();
+		void undoCut();
+		void exportCuts( ofTexture *tex, bool individual = true );
 		//void exportCurrCut();
+
+		ofFbo save_fbo;
 
 		ofParameterGroup gui;
 		ofParameter<bool> enable_multi_cut_view;
+		ofParameter<float> save_pad;
 
 	private :
 

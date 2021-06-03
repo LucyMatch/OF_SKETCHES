@@ -122,9 +122,9 @@ void ofApp::drawGui(ofEventArgs& args) {
 void ofApp::keyPressed(int key) {
 
 	switch (key) {
-	//case 's':
-	//	saveImg();
-	//	break;
+	case 's':
+		cut_man.exportCuts(video.getFrameTex());
+		break;
 	case '.':
 		video.nxtFeed();
 		break;

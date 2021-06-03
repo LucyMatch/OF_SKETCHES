@@ -2,22 +2,23 @@
 <P_R_I_M_A_R_Y>
 	<background>255, 228, 246, 255</background>
 	<enable_debug>0</enable_debug>
-	<enable_orig>1</enable_orig>
-	<cut_img_colour>141, 234, 255, 148</cut_img_colour>
+	<enable_orig>0</enable_orig>
+	<cut_img_colour>255, 255, 255, 255</cut_img_colour>
 	<video_controls>
-		<video_colour>255, 255, 255, 45</video_colour>
-		<video_bg_colour>255, 18, 0, 91</video_bg_colour>
+		<video_colour>255, 255, 255, 255</video_colour>
+		<video_bg_colour>255, 255, 255, 255</video_bg_colour>
 		<enable_video_bg>0</enable_video_bg>
 	</video_controls>
 	<cut_manager>
 		<enable_multi_cut_display>1</enable_multi_cut_display>
 		<shape_controls>
 			<colour>255, 255, 255, 255</colour>
-			<cut_shape>4</cut_shape>
-			<cut_radius>43.0237</cut_radius>
+			<cut_shape>0</cut_shape>
+			<cut_radius>100</cut_radius>
 			<cut_width>100</cut_width>
 			<cut_height>100</cut_height>
 			<circle_resolution>250</circle_resolution>
 		</shape_controls>
+		<save_padding>5</save_padding>
 	</cut_manager>
 </P_R_I_M_A_R_Y>
