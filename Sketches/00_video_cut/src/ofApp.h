@@ -41,7 +41,7 @@ class ofApp : public ofBaseApp{
 		void mouseExited(int x, int y);
 		void windowResized(int w, int h);
 
-		VideoHandler* video;
+		VideoHandler video;
 		ofTexture live_cut_tex;
 		//vector<ofTexture> cut_tex;
 
@@ -51,8 +51,9 @@ class ofApp : public ofBaseApp{
 
 		//save_fbo for drawing to before save img
 		//mask_fbo for drawing the shape we want to cut out
-		ofFbo save_fbo, mask_fbo;
+		ofFbo mask_fbo; //save_fbo
 
+		//"cuts" vars
 		ofPath simple_shape;
 		vector<ofPath> cuts;
 

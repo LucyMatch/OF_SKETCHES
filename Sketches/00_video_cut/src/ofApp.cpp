@@ -11,19 +11,15 @@ void ofApp::setup(){
 	ofSetCircleResolution(1000);
 
 	//set the mask fbo settings
-	//mask_fbo.allocate( ofGetWidth(), ofGetHeight(), GL_LUMINANCE );	//this didn't give trans bg
 	mask_fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 	mask_fbo.getTexture().setSwizzle(GL_TEXTURE_SWIZZLE_A, GL_RED);
 
-	
+	//init vid manager
+	video.setDims(glm::vec2(1280,720));
+	video.setup(); //also here we would define - ip / webcam / local
+
 	//init gui
 	initGui();
-
-	//import images 
-	//input_imgs = new ImageHandler("input_images");
-
-	//set img objects
-	//setImg();
 
 }
 
@@ -31,9 +27,17 @@ void ofApp::setup(){
 void ofApp::update(){
 	framerate();
 
+	//update video for new frame
+	video.update();
+
+	//assign new frame to texture for cutting display
+	live_cut_tex = *(video.getFrameTex());
+
+	//@TODO: for cuts class
 	//hard coded for now
 	simple_shape.clear();
 	simple_shape.ellipse(mouseX, mouseY, ss_w, ss_h);
+	//simple_shape.circle(mouseX, mouseY, ss_w);
 	simple_shape.close();
 
 	ofPushStyle();
@@ -54,36 +58,38 @@ void ofApp::update(){
 	mask_fbo.end();
 	ofPopStyle();
 
-	//curr_img.setAlphaMask(mask_fbo.getTexture());
+	live_cut_tex.setAlphaMask(mask_fbo.getTexture());
 
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-	//ofPushStyle();
-		ofSetColor(bg_c);
-		ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-	//ofPopStyle();
+	ofSetColor(bg_c);
+	ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 
-	//draw "uncut" img 
+	//draw "uncut" texture 
 	if (enable_orig) {
-		//ofPushStyle();
-			//@TODO: is this where we want the blend?
-			//add a blend
-			ofEnableBlendMode(blends[b_mode_selector]);
-			ofSetColor(orig_c);
-			//orig_img.draw(0, 0, orig_img.getWidth(), orig_img.getHeight());
-		//ofPopStyle();
+		//@TODO: figure out blending...
+		//ofEnableBlendMode(blends[b_mode_selector]);
+		ofSetColor(orig_c);
+		video.getFrameTex()->draw(0, 0, video.getDims().x, video.getDims().y);
 	}
 	
 	//draw the cut img...
 	ofEnableAlphaBlending();
 	ofSetColor(curr_c);
-	//curr_img.draw(0,0, curr_img.getWidth(), curr_img.getHeight());
+	live_cut_tex.draw( 0, 0, video.getDims().x, video.getDims().y);
 
 
 	if (enable_debug)drawDebug();
+
+}
+
+//@TODO: for "cuts" class
+//--------------------------------------------------------------
+void ofApp::saveCut() {
+	cuts.push_back(simple_shape);
 }
 
 //--------------------------------------------------------------
@@ -137,9 +143,17 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::drawDebug() {
+
+	ofPushStyle();
+		video.draw();
+	ofPopStyle();
+
 	mask_fbo.draw(0,0,ofGetWidth(),ofGetHeight());
+
 	simple_shape.draw();
-	if(enable_save_debug)save_fbo.draw(0,0, save_fbo.getWidth(), save_fbo.getHeight());
+
+	//if(enable_save_debug)save_fbo.draw(0,0, save_fbo.getWidth(), save_fbo.getHeight());
+
 }
 
 //--------------------------------------------------------------
@@ -166,7 +180,7 @@ void ofApp::initGui() {
 	//gui.add(orig_c.set("orig img colour", ofColor(255, 228, 246, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 	//gui.add(curr_c.set("cut img colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 
-	gui.add(video->gui);
+	gui.add(video.gui);
 
 }
 
@@ -182,16 +196,12 @@ void ofApp::keyPressed(int key) {
 	//case 's':
 	//	saveImg();
 	//	break;
-	//case '.':
-	//	curr_index++;
-	//	curr_index = curr_index % input_imgs->getImages().size();
-	//	setImg();
-	//	break;
-	//case ',':
-	//	curr_index--;
-	//	curr_index = curr_index % input_imgs->getImages().size();
-	//	setImg();
-	//	break;
+	case '.':
+		video.nxtFeed();
+		break;
+	case ',':
+		video.prevFeed();
+		break;
 	case 'x':
 		//clear saved cuts
 		cuts.clear();
@@ -249,7 +259,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-
+	saveCut();
 }
 
 //--------------------------------------------------------------

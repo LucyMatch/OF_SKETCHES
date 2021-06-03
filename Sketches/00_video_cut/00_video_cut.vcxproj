@@ -193,6 +193,7 @@
     <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src\ofxSliderGroup.cpp" />
     <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src\ofxToggle.cpp" />
     <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxRectangleUtils\src\ofxRectangleUtils.cpp" />
+    <ClCompile Include="src\VideoHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h" />
@@ -212,6 +213,7 @@
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxRectangleUtils\src\ofBaseOnlineRectanglePacker.h" />
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxRectangleUtils\src\ofRectanglePacker.h" />
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxRectangleUtils\src\ofxRectangleUtils.h" />
+    <ClInclude Include="src\VideoHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
