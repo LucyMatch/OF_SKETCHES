@@ -180,6 +180,7 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\CutManager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src\ofxBaseGui.cpp" />
@@ -196,6 +197,8 @@
     <ClCompile Include="src\VideoHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\CutManager.h" />
+    <ClInclude Include="src\Cuts.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src\ofxBaseGui.h" />
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src\ofxButton.h" />

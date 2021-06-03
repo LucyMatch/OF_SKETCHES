@@ -48,10 +48,10 @@ class BaseCut {
 				shape.ellipse( x, y, w, h );
 				break;
 			case 2 :
-				shape.rectRounded( x, y, w, h, r );
+				shape.rectRounded( x - (w / 2), y - (h / 2), w, h, r );
 				break;
 			case 3 :
-				shape.rectangle( x, y, w, h );
+				shape.rectangle( x - (w/2), y - (h/2), w, h );
 				break;
 			case 4 :
 				//equilateral triangle w/ x & y in middle
@@ -76,7 +76,6 @@ class BaseCut {
 			gui.add(w.set("cut width", 100, 1, 1000));
 			gui.add(h.set("cut height", 100, 1, 1000));
 			gui.add(circle_reso.set("circle resolution", 250, 1, 1000));
-
 		}
 
 		//vars
