@@ -75,13 +75,13 @@ void ofApp::initImages() {
 	rocks = new ImageHandler("images/rocks");
 	eyes = new ImageHandler("images/eyes");
 	mouthes = new ImageHandler("images/mouths");
-	misc = new ImageHandler("images/misc");
 	sky_only = new ImageHandler("images/sky_partial");
-	//cloud_only = new ImageHandler("images/clouds_partial");
-	//mixed_sky = new ImageHandler("images/mixed_sky");
+	cloud_only = new ImageHandler("images/clouds_partial");
+	mixed_sky = new ImageHandler("images/mixed_sky");
 
-	cloud_only = new ImageHandler("images/water");
-	mixed_sky = new ImageHandler("images/bluem");
+	//misc = new ImageHandler("images/misc");
+	misc = new ImageHandler("images/lucy-eyes");
+
 }
 
 //--------------------------------------------------------------
@@ -130,7 +130,7 @@ void ofApp::initParticleMans() {
 	pman.clear();
 	//@TODO: add in toggles / gui controlls for updating which img sets get passed to p man
 	for (auto& c : cells) {
-		ImageParticleManager p(mixed_sky->getImages());
+		ImageParticleManager p(misc->getImages());
 		std::cout << "[ pman set up ] X : " << c.x <<" Y : "<<c.y << " W : " << c.width << " H : " << c.height << std::endl;
 		p.setup(glm::vec4(c.x, c.y, c.width, c.height));
 		pman.push_back(p);
