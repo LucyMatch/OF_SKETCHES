@@ -20,8 +20,10 @@ class CutManager {
 		void saveCut();
 		void clearCuts();
 		void undoCut();
-		void exportCuts( ofTexture *tex, bool individual = true );
+		void exportCuts( ofTexture *tex );
 		//void exportCurrCut();
+
+		ofTexture getCutTexture( BaseCut c, ofTexture* tex );
 
 		ofFbo save_fbo;
 

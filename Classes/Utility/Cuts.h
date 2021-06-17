@@ -24,7 +24,19 @@ class BaseCut {
 			initGui();
 		}
 
-		void setup() {}
+		//set the bounding box / size & pos of this cut + store it
+		void set() {
+
+			ofRectangle bounding;
+
+			if (shape.getOutline().size() > 0)
+				bounding = shape.getOutline()[0].getBoundingBox();
+			else
+				return;
+
+			pos = bounding.getPosition();
+			size = glm::vec2(bounding.getWidth(), bounding.getHeight());
+		}
 
 		void draw() {
 			ofPushStyle();
@@ -78,8 +90,17 @@ class BaseCut {
 			gui.add(circle_reso.set("circle resolution", 250, 1, 1000));
 		}
 
+		glm::vec2 getPos() {
+			return pos;
+		}
+
+		glm::vec2 getSize() {
+			return size;
+		}
+
 		//vars
 		ofPath shape;
+		glm::vec2 pos, size;
 		glm::vec2 a, b, c;	//for triangle points
 
 		ofParameterGroup gui;

@@ -40,6 +40,7 @@ void CutManager::initGui(){
 
 //--------------------------------------------------------------
 void CutManager::saveCut(){
+	curr_cut.set();
 	cuts.push_back(curr_cut);
 }
 
@@ -63,75 +64,52 @@ void CutManager::undoCut() {
 			maybe it's own class on a seperate thread actually?
 */
 //--------------------------------------------------------------
-void CutManager::exportCuts( ofTexture *tex, bool individual ) {
+void CutManager::exportCuts(ofTexture* tex) {
 
 	//duplicate cuts - so we aren't using raw cuts
 	//raw cuts container can be updated - this would cause buffer issues
 	vector<BaseCut> _cuts = cuts;
 
-	//our texture
-	ofTexture temp_tex = *tex;
-	
-	//fbo for drawing masks
-	//@TODO: may wanna size this to the texture
-	ofFbo temp_fbo;
-	temp_fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
-	temp_fbo.getTexture().setSwizzle(GL_TEXTURE_SWIZZLE_A, GL_RED);
+	for (auto i = 0; i < _cuts.size(); ++i) {
 
-	//found shape bounding boxes
-	ofRectangle bounding;
-
-	//if not doing individual draw to the mask now
-	if (!individual) {
-		ofPushStyle();
-			temp_fbo.begin();
-				ofSetColor(0, 0, 0, 255);
-				ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-				for (auto& c : _cuts)
-					c.draw();
-			temp_fbo.end();
-		ofPopStyle();
-		temp_tex.setAlphaMask(temp_fbo.getTexture());
-	}
-
-	for( auto i = 0; i < _cuts.size(); ++i){
-
-		////draw to the mask individually
-		if (individual) {
-			ofPushStyle();
-				temp_fbo.begin();
-					ofSetColor(0, 0, 0, 255);
-					ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-					_cuts[i].draw();
-				temp_fbo.end();
-			ofPopStyle();
-			temp_tex.setAlphaMask(temp_fbo.getTexture());
-		}
-
-
-		////get resize info
-		if (_cuts[i].shape.getOutline().size() > 0)
-			bounding = _cuts[i].shape.getOutline()[0].getBoundingBox();
-
-		
-		////this may need work - with the pad / positioning.... 
-		glm::vec2 pos = bounding.getPosition();
-		glm::vec2 size( bounding.getWidth() + save_pad, bounding.getHeight() + save_pad );
-
-		////draw subsection of texture to save fbo
-		save_fbo.clear();
-		save_fbo.allocate( size.x, size.y, GL_RGBA );
-		save_fbo.begin();
-			temp_tex.drawSubsection( 0, 0, size.x, size.y, pos.x, pos.y );
-		save_fbo.end();
-
+		glm::vec2 size = _cuts[i].getSize();
 		////export
 		ofPixels tmp_pix;
-		save_fbo.getTexture().readToPixels( tmp_pix );
+		getCutTexture(_cuts[i], tex).readToPixels(tmp_pix);
 		ofImage new_img(tmp_pix);
 		new_img.allocate(int(size.x), int(size.y), OF_IMAGE_COLOR_ALPHA);
 		new_img.save("outputs/cuts_" + ofToString(i) + "_" + ofToString(ofGetMonth()) + "_" + ofToString(ofGetDay()) + "_" + ofToString(ofGetYear()) + "_" + ofToString(ofGetHours()) + "_" + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png", OF_IMAGE_QUALITY_BEST);
 
 	}
+}
 
+ofTexture CutManager::getCutTexture(BaseCut c, ofTexture * tex) {
+		//our texture
+		ofTexture temp_tex = *tex;
+
+		//fbo for drawing masks
+		//@TODO: may wanna size this to the texture
+		ofFbo temp_fbo, save_fbo;
+		temp_fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
+		temp_fbo.getTexture().setSwizzle(GL_TEXTURE_SWIZZLE_A, GL_RED);
+
+		ofPushStyle();
+			temp_fbo.begin();
+				ofSetColor(0, 0, 0, 255);
+				ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+				c.draw();
+			temp_fbo.end();
+		ofPopStyle();	
+
+		temp_tex.setAlphaMask(temp_fbo.getTexture());
+
+		glm::vec2 pos = c.getPos();
+		glm::vec2 size = c.getSize();
+
+		save_fbo.allocate( size.x, size.y, GL_RGBA );
+		save_fbo.begin();
+			temp_tex.drawSubsection( 0, 0, size.x, size.y, pos.x, pos.y );
+		save_fbo.end();
+
+		return save_fbo.getTexture();
 }
