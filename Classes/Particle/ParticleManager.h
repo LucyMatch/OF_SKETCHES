@@ -19,7 +19,7 @@ public:
 		draw_dims = dims;
 	};
 
-	void spawn(ofVec2f loc) {
+	virtual void spawn(ofVec2f loc) {
 		Particle _p(loc);
 		p.push_back(_p);
 	};

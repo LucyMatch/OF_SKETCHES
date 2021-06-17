@@ -184,6 +184,7 @@
     <ClCompile Include="..\..\Classes\Particle\Particle.cpp" />
     <ClCompile Include="..\..\Classes\Utility\CutManager.cpp" />
     <ClCompile Include="..\..\Classes\Utility\VideoHandler.cpp" />
+    <ClCompile Include="src\CutParticle.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxAnimatable\src\ofxAnimatable.cpp" />
@@ -214,6 +215,8 @@
     <ClInclude Include="..\..\Classes\Utility\CutManager.h" />
     <ClInclude Include="..\..\Classes\Utility\Cuts.h" />
     <ClInclude Include="..\..\Classes\Utility\VideoHandler.h" />
+    <ClInclude Include="src\CutParticle.h" />
+    <ClInclude Include="src\CutParticleManager.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxAnimatable\src\ofxAnimatable.h" />
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxAnimatable\src\ofxAnimatableFloat.h" />

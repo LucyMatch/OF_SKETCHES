@@ -4,6 +4,7 @@
 #include "ofxGui.h"
 #include "VideoHandler.h"
 #include "CutManager.h"
+#include "CutParticleManager.h"
 
 class ofApp : public ofBaseApp {
 
@@ -32,9 +33,28 @@ public:
 	ofTexture live_cut_tex;
 
 	CutManager cut_man;
+	vector<CutParticleManager> p_man;
 
 	//mask_fbo for drawing the shape we want to cut out
 	ofFbo mask_fbo;
+
+	ofxPanel gui;
+	ofParameter<ofColor> bg_c, curr_c;
+	ofParameter<bool> enable_debug, enable_orig;
+	
+
+	//@todo
+	// 
+	// 
+	// 
+	// 	   //ofParameter<int> b_mode_selector;
+	//ofParameter<int> v_gravity_direction;
+	//ofParameter<float> v_gravity_min, v_gravity_max;
+
+	//enable_spawn_on_cut // - do we even need this
+	//enable_auto_spawning
+	//
+	//key press trigger for spawn one particle for each cut
 
 	//std::map<int, ofBlendMode> blends{
 	//	{0, OF_BLENDMODE_DISABLED },
@@ -44,10 +64,4 @@ public:
 	//	{4, OF_BLENDMODE_MULTIPLY },
 	//	{5, OF_BLENDMODE_SCREEN },
 	//};
-
-	ofxPanel gui;
-	ofParameter<ofColor> bg_c, curr_c;
-	ofParameter<bool> enable_debug, enable_orig;
-	//ofParameter<int> b_mode_selector;
-
 };
