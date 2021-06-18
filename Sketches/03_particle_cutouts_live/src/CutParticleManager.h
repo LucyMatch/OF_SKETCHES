@@ -2,6 +2,7 @@
 
 #include "ParticleManager.h"
 #include "CutParticle.h"
+#include "Cuts.h"
 
 //A PARTICLE MAN PER CUT?
 // -- going this way for now
@@ -22,13 +23,19 @@ class CutParticleManager : public ParticleManager {
 
 public:
 	CutParticleManager() { 
-		orig_location = ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight()));
+		orig_location = glm::vec2(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight()));
 		setLocation(orig_location);
 	};
 
-	CutParticleManager( ofVec2f loc) { 
+	CutParticleManager( glm::vec2 loc) { 
 		orig_location = loc;
 		setLocation(loc);
+	};
+
+	CutParticleManager( BaseCut c ) {
+		cut = c;
+		orig_location = c.getPos();
+		setLocation(orig_location);
 	};
 
 	virtual void update() {
@@ -46,11 +53,11 @@ public:
 		}
 	}
 
-	virtual void update(ofTexture* _img) {
+	virtual void update(ofTexture _img) {
 		frame = _img;
 		//do we want to do this seperate from above?
 		for(auto& _p : p)
-			_p.updateFrame(frame);
+			_p.updateFrame( &frame );
 	}
 
 	virtual void draw() {
@@ -59,34 +66,40 @@ public:
 	}
 
 	virtual void spawn() {
-		spawn(curr_location);
+		CutParticle _p(&frame, curr_location);
+		p.push_back(_p);
 	}
 
-	virtual void spawn(ofVec2f loc) {
-		CutParticle _p(loc, frame);
+	virtual void spawn(glm::vec2 loc) {
+		CutParticle _p( &frame, loc );
 		p.push_back(_p);
 	}
 	
 	virtual void applyVaryingGravity(float min, float max, int direction) {
 		for (auto &_p : p) {
-			ofVec2f gravity;
-			if (direction == 0)gravity.set(ofRandom(min, max), 0);
-			if (direction == 1)gravity.set(0, ofRandom(min, max));
-			if (direction == 2)gravity.set(-ofRandom(min, max), 0);
-			if (direction == 3)gravity.set(0, -ofRandom(min, max));
-			_p.applyforce(gravity);
+			glm::vec2 gravity;
+			if (direction == 0)gravity = glm::vec2(ofRandom(min, max), 0);
+			if (direction == 1)gravity = glm::vec2(0, ofRandom(min, max));
+			if (direction == 2)gravity = glm::vec2(-ofRandom(min, max), 0);
+			if (direction == 3)gravity = glm::vec2(0, -ofRandom(min, max));
+			_p.applyforce(ofVec2f(gravity));
 		}
 	}
 
-	void setLocation(ofVec2f loc) {
+	void setLocation(glm::vec2 loc) {
 		curr_location = loc;
 	}
 
 	void randomSpawn() {
-		spawn(ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetWidth())));
+		spawn(glm::vec2(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetWidth())));
 	}
 
-	void drawDebug(){}
+	void drawDebug(){
+		ofPushStyle();
+		for (auto& _p : p)
+			_p.drawDebug();
+		ofPopStyle();
+	}
 
 	void clear() {
 		p.clear();
@@ -100,10 +113,12 @@ public:
 		gui.add(enable_bounce.set("enable bounce", false));
 	}
 
+	BaseCut getCut() { return cut; }
 
+	BaseCut cut;
 	vector<CutParticle> p;
-	ofTexture* frame;
-	ofVec2f orig_location, curr_location;
+	ofTexture frame;
+	glm::vec2 orig_location, curr_location;
 
 	//@todo:
 	//gotta be static - as we are doing one per cut

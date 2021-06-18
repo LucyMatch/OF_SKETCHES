@@ -6,7 +6,7 @@ class CutParticle : public Particle {
 public:
 
 	CutParticle(ofTexture* _img);
-	CutParticle(ofVec2f  _location, ofTexture* _img);
+	CutParticle(ofTexture* _img, glm::vec2  _location);
 	virtual void draw();
 	virtual void update();
 	//virtual void seek(ofVec2f& target);

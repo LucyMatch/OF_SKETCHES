@@ -8,10 +8,6 @@ void ofApp::setup() {
 	ofEnableSmoothing();
 	ofEnableAlphaBlending();
 
-	//set the mask fbo settings
-	mask_fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
-	mask_fbo.getTexture().setSwizzle(GL_TEXTURE_SWIZZLE_A, GL_RED);
-
 	//init vid manager
 	video.setDims(glm::vec2(1280, 720));
 	video.setup(); //also here we would define - ip / webcam / local
@@ -26,30 +22,30 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
+
 	framerate();
 
 	//update video for new frame
 	video.update();
 
-	//assign new frame to texture for cutting display
-	live_cut_tex = *(video.getFrameTex());
-
 	//live update cut manager w/ mouse position
 	cut_man.update(mouseX, mouseY);
 
-	ofPushStyle();
-	mask_fbo.begin();
+	//update cuts & ps
+	for (auto& p : p_man) {
+		if (video.cam.isFrameNew() && p.p.size() > 0) {
+			ofTexture tmp_tex;
+			tmp_tex = cut_man.getCutTexture( p.getCut() , *(video.getFrameTex()));
+			p.update(tmp_tex);
+		}	
+		if (enable_auto_spawn)p.spawn();
+		if (p.p.size() > 0) {
+			if (enable_varying_gravity)p.applyVaryingGravity(v_gravity_min, v_gravity_max, v_gravity_direction);
+			p.update();
+		}
+	}
 
-	//draw to mask fbo
-	ofSetColor(0, 0, 0, 255);
-	ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-
-	cut_man.draw();
-
-	mask_fbo.end();
-	ofPopStyle();
-
-	live_cut_tex.setAlphaMask(mask_fbo.getTexture());
+	
 
 }
 
@@ -59,31 +55,26 @@ void ofApp::draw() {
 	ofSetColor(bg_c);
 	ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 
-	//draw "uncut" texture 
-	if (enable_orig) {
-		//@TODO: figure out blending...
-		//ofEnableBlendMode(blends[b_mode_selector]);
-		video.draw();
-	}
+	//draw "original" texture 
+	if (enable_orig)video.draw();
 
-	//draw the cut img...
-	ofSetColor(curr_c);
-	live_cut_tex.draw(0, 0, video.getDims().x, video.getDims().y);
+	//@TODO: sometimes memory error
+	//sometimes this is out of bounds??
+	//or w / h of p is fucked sometimes - so the draw throws an errr
+	for (auto& p : p_man)
+		p.draw();
 
-	if (enable_debug)drawDebug();
+	if(enable_debug)drawDebug();
 
 }
 
 //--------------------------------------------------------------
 void ofApp::drawDebug() {
 
-	ofPushStyle();
-	video.draw();
-	ofPopStyle();
+	cut_man.draw();
 
-	mask_fbo.draw(0, 0, ofGetWidth(), ofGetHeight());
-
-	cut_man.drawDebug();
+	for (auto& p : p_man)
+		p.drawDebug();
 
 }
 
@@ -103,13 +94,23 @@ void ofApp::initGui() {
 	gui.add(enable_debug.set("enable debug", false));
 	gui.add(enable_orig.set("enable orig", true));
 	//gui.add(b_mode_selector.set("blend modes", 1, 0, blends.size() - 1));
-	gui.add(curr_c.set("cut img colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+	//gui.add(curr_c.set("cut img colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+	gui.add(enable_auto_spawn.set("enable auto spawning", false));
+	gui.add(enable_varying_gravity.set("enable varying gravity", false));
+	gui.add(v_gravity_direction.set("gravity direction", 0, 0, 3));
+	gui.add(v_gravity_min.set("gravity min", 0.5, 0.5, 25));
+	gui.add(v_gravity_max.set("gravity max", 10, 0.5, 25));
+
 
 	gui.add(video.gui);
 
 	//you may need to think more about this flow
 	//you likely want something closer to how FORCES class works
 	gui.add(cut_man.gui);
+
+	//@TODO: add pman gui
+	//make those vals static we have a few pmen now
+	//gui.add()
 
 }
 
@@ -134,6 +135,22 @@ void ofApp::keyPressed(int key) {
 	case 'x':
 		//clear saved cuts
 		cut_man.clearCuts();
+		p_man.clear();
+		break;
+	case 'p':
+		//spawn 
+		for (auto& p : p_man)
+			p.spawn();
+		break;
+	case 'o':
+		//random spawn 
+		for (auto& p : p_man)
+			p.randomSpawn();
+		break;
+	case '-':
+		//clear p's only 
+		for (auto& p : p_man)
+			p.clear();
 		break;
 	case '1':
 		gui.saveToFile("1_gui.xml");
@@ -188,7 +205,12 @@ void ofApp::mouseDragged(int x, int y, int button) {
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button) {
-	cut_man.saveCut();
+
+	//@TODO: determine if this how we wanna do this...
+	//_cpm holds a pointer to the cut
+	CutParticleManager _cpm( *(cut_man.saveCut()) );
+	p_man.push_back( _cpm );
+
 }
 
 //--------------------------------------------------------------

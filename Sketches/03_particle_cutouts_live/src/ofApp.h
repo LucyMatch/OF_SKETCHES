@@ -5,6 +5,7 @@
 #include "VideoHandler.h"
 #include "CutManager.h"
 #include "CutParticleManager.h"
+#include "Cuts.h"
 
 class ofApp : public ofBaseApp {
 
@@ -30,26 +31,25 @@ public:
 	void windowResized(int w, int h);
 
 	VideoHandler video;
-	ofTexture live_cut_tex;
+	//ofTexture live_cut_tex;
 
 	CutManager cut_man;
 	vector<CutParticleManager> p_man;
 
 	//mask_fbo for drawing the shape we want to cut out
-	ofFbo mask_fbo;
+	//ofFbo mask_fbo;
 
 	ofxPanel gui;
 	ofParameter<ofColor> bg_c, curr_c;
-	ofParameter<bool> enable_debug, enable_orig;
-	
+	ofParameter<bool> enable_debug, enable_orig, enable_auto_spawn, enable_varying_gravity;
+	ofParameter<int> v_gravity_direction;
+	ofParameter<float> v_gravity_min, v_gravity_max;
 
 	//@todo
 	// 
 	// 
 	// 
 	// 	   //ofParameter<int> b_mode_selector;
-	//ofParameter<int> v_gravity_direction;
-	//ofParameter<float> v_gravity_min, v_gravity_max;
 
 	//enable_spawn_on_cut // - do we even need this
 	//enable_auto_spawning

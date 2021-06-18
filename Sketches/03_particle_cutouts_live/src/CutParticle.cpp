@@ -7,7 +7,7 @@ ofParameter<float> CutParticle::speed_limit = 2.0;
 ofParameter<float> CutParticle::mass_base = 11.0;
 ofParameter<bool> CutParticle::arrive_on = true;
 ofParameter<bool> CutParticle::seek_on = true;
-ofParameter<bool> CutParticle::trail = true;
+ofParameter<bool> CutParticle::trail = false;
 ofParameter<int> CutParticle::arrive_cap = 100;
 ofParameter<int> CutParticle::b_mode_selector = 1;
 
@@ -41,7 +41,7 @@ CutParticle::CutParticle(ofTexture* _img) {
 };
 
 //--------------------------------------------------------------
-CutParticle::CutParticle(ofVec2f  _location, ofTexture* _img) {
+CutParticle::CutParticle(ofTexture* _img, glm::vec2  _location) {
 
 	img = _img;
 
@@ -62,6 +62,8 @@ CutParticle::CutParticle(ofVec2f  _location, ofTexture* _img) {
 //--------------------------------------------------------------
 void CutParticle::draw() {
 
+	size();
+
 	if (trail) {
 		for (int i = 1; i < history.size(); i++) 
 			img->draw(history[i].x - (w / 2), history[i].y - (h / 2), w, h);
@@ -76,7 +78,7 @@ void CutParticle::update() {
 	//update radius + mass incase it's been updated
 	//we wilkl want to check that this doesnt eat up fps
 	//we may want to come up with a flag to see if it needs updating....
-	size();
+	//size();
 
 	//limit the magnitude of a vector
 	velocity.limit(speed_limit);
