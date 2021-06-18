@@ -24,10 +24,10 @@ ofParameter<bool> CutParticle::enable_home_in_history = false;
 //--------------------------------------------------------------
 CutParticle::CutParticle(ofTexture* _img) {
 
-	img = _img;
+	img = *_img;
 
-	orig_w = img->getWidth();
-	orig_h = img->getHeight();
+	orig_w = img.getWidth();
+	orig_h = img.getHeight();
 	size();
 
 	dead = false;
@@ -43,10 +43,10 @@ CutParticle::CutParticle(ofTexture* _img) {
 //--------------------------------------------------------------
 CutParticle::CutParticle(ofTexture* _img, glm::vec2  _location) {
 
-	img = _img;
+	img = *_img;
 
-	orig_w = img->getWidth();
-	orig_h = img->getHeight();
+	orig_w = img.getWidth();
+	orig_h = img.getHeight();
 	size();
 
 	dead = false;
@@ -66,10 +66,10 @@ void CutParticle::draw() {
 
 	if (trail) {
 		for (int i = 1; i < history.size(); i++) 
-			img->draw(history[i].x - (w / 2), history[i].y - (h / 2), w, h);
+			if (img.isAllocated())img.draw(history[i].x - (w / 2), history[i].y - (h / 2), w, h);
 	}
 
-	img->draw((location.x - (w / 2)), (location.y - h / 2), w, h);
+	if(img.isAllocated())img.draw((location.x - (w / 2)), (location.y - h / 2), w, h);
 }
 
 //--------------------------------------------------------------
@@ -111,7 +111,7 @@ void CutParticle::update() {
 
 //--------------------------------------------------------------
 void CutParticle::updateFrame(ofTexture* _img) {
-	img = _img;
+	img = *_img;
 }
 
 //--------------------------------------------------------------

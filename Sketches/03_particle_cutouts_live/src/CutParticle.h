@@ -23,7 +23,7 @@ public:
 	static ofParameter<int> r, b_mode_selector;
 	static ofParameter<bool> enable_uniform_size, enable_true_size, enable_home_in_history;
 
-	ofTexture* img;
+	ofTexture img;
 	float w, h;
 	float orig_w, orig_h;
 

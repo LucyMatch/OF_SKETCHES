@@ -34,7 +34,7 @@ public:
 
 	CutParticleManager( BaseCut c ) {
 		cut = c;
-		orig_location = c.getPos();
+		orig_location = c.getCenter();
 		setLocation(orig_location);
 	};
 
