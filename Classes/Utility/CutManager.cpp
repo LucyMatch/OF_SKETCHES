@@ -33,15 +33,16 @@ void CutManager::drawDebug(){
 //--------------------------------------------------------------
 void CutManager::initGui(){
 	gui.setName("cut manager");
-	gui.add(enable_multi_cut_view.set("enable multi cut display", false));
+	gui.add(enable_multi_cut_view.set("enable multi cut display", true));
 	gui.add(save_pad.set("save padding", 5, 0, 100));
 	gui.add(curr_cut.gui);
 }
 
 //--------------------------------------------------------------
-void CutManager::saveCut(){
+BaseCut* CutManager::saveCut(){
 	curr_cut.set();
 	cuts.push_back(curr_cut);
+	return &cuts.back();
 }
 
 //--------------------------------------------------------------
@@ -55,11 +56,6 @@ void CutManager::undoCut() {
 }
 
 /* 
-	basic export of every cut in cuts of current texture
-	disable individual for all cuts to happen from "one texture"
-		-like a piece of paper with all the cuts already in it
-		-we capture chunk by chunk based on the cuts pos / size
-
 	@TODO : test everything then split this up into functions
 			maybe it's own class on a seperate thread actually?
 */
@@ -75,7 +71,7 @@ void CutManager::exportCuts(ofTexture* tex) {
 		glm::vec2 size = _cuts[i].getSize();
 		////export
 		ofPixels tmp_pix;
-		getCutTexture(_cuts[i], tex).readToPixels(tmp_pix);
+		getCutTexture(_cuts[i], *tex).readToPixels(tmp_pix);
 		ofImage new_img(tmp_pix);
 		new_img.allocate(int(size.x), int(size.y), OF_IMAGE_COLOR_ALPHA);
 		new_img.save("outputs/cuts_" + ofToString(i) + "_" + ofToString(ofGetMonth()) + "_" + ofToString(ofGetDay()) + "_" + ofToString(ofGetYear()) + "_" + ofToString(ofGetHours()) + "_" + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png", OF_IMAGE_QUALITY_BEST);
@@ -83,9 +79,9 @@ void CutManager::exportCuts(ofTexture* tex) {
 	}
 }
 
-ofTexture CutManager::getCutTexture(BaseCut c, ofTexture * tex) {
+ofTexture CutManager::getCutTexture(BaseCut c, ofTexture tex) {
 		//our texture
-		ofTexture temp_tex = *tex;
+		ofTexture temp_tex = tex;
 
 		//fbo for drawing masks
 		//@TODO: may wanna size this to the texture
@@ -106,10 +102,17 @@ ofTexture CutManager::getCutTexture(BaseCut c, ofTexture * tex) {
 		glm::vec2 pos = c.getPos();
 		glm::vec2 size = c.getSize();
 
+		//cout << pos.x << " " << pos.y << endl;
+		//cout << size.x << " " << size.y << endl;
+
 		save_fbo.allocate( size.x, size.y, GL_RGBA );
 		save_fbo.begin();
 			temp_tex.drawSubsection( 0, 0, size.x, size.y, pos.x, pos.y );
 		save_fbo.end();
 
 		return save_fbo.getTexture();
+}
+
+size_t CutManager::getCutsSize() {
+	return cuts.size();
 }

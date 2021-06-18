@@ -17,13 +17,14 @@ class CutManager {
 		void drawDebug();
 		void initGui();
 
-		void saveCut();
+		BaseCut* saveCut();
 		void clearCuts();
 		void undoCut();
 		void exportCuts( ofTexture *tex );
 		//void exportCurrCut();
 
-		ofTexture getCutTexture( BaseCut c, ofTexture* tex );
+		ofTexture getCutTexture( BaseCut c, ofTexture tex );
+		size_t getCutsSize();
 
 		ofFbo save_fbo;
 

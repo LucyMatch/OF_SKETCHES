@@ -36,6 +36,7 @@ class BaseCut {
 
 			pos = bounding.getPosition();
 			size = glm::vec2(bounding.getWidth(), bounding.getHeight());
+
 		}
 
 		void draw() {

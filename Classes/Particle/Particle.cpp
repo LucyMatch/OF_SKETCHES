@@ -97,6 +97,9 @@ void Particle::draw() {
 }
 
 void Particle::applyforce(ofVec2f &force) {
+    cout << "applying force" << endl;
+    cout << &force << endl;
+
     ofVec2f f = force;
     force = force / mass;
     acceleration += force;
