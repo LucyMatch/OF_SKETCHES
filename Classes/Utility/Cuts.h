@@ -36,6 +36,7 @@ class BaseCut {
 
 			pos = bounding.getPosition();
 			size = glm::vec2(bounding.getWidth(), bounding.getHeight());
+			center = bounding.getCenter();
 
 		}
 
@@ -91,17 +92,13 @@ class BaseCut {
 			gui.add(circle_reso.set("circle resolution", 250, 1, 1000));
 		}
 
-		glm::vec2 getPos() {
-			return pos;
-		}
-
-		glm::vec2 getSize() {
-			return size;
-		}
+		glm::vec2 getPos() {return pos;}
+		glm::vec2 getSize() {return size;}
+		glm::vec2 getCenter() {return center;}
 
 		//vars
 		ofPath shape;
-		glm::vec2 pos, size;
+		glm::vec2 pos, size, center;
 		glm::vec2 a, b, c;	//for triangle points
 
 		ofParameterGroup gui;
