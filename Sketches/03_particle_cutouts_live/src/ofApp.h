@@ -6,6 +6,7 @@
 #include "CutManager.h"
 #include "CutParticleManager.h"
 #include "Cuts.h"
+#include "CutParticle.h"
 
 class ofApp : public ofBaseApp {
 
@@ -30,6 +31,8 @@ public:
 	void mouseExited(int x, int y);
 	void windowResized(int w, int h);
 
+	ofFbo p_draw, main_draw;
+
 	VideoHandler video;
 	//ofTexture live_cut_tex;
 
@@ -40,10 +43,13 @@ public:
 	//ofFbo mask_fbo;
 
 	ofxPanel gui;
+	ofParameterGroup particleGui, repelGui, attractGui;
 	ofParameter<ofColor> bg_c, curr_c;
 	ofParameter<bool> enable_debug, enable_orig, enable_auto_spawn, enable_varying_gravity;
 	ofParameter<int> v_gravity_direction;
 	ofParameter<float> v_gravity_min, v_gravity_max;
+
+	ofxPanel p_man_gui;
 
 	//@todo
 	// 

@@ -2,14 +2,14 @@
 
 //behavior
 //--------------------------------------------------------------
-ofParameter<float> CutParticle::seek_limit = 50.0;
+//ofParameter<float> CutParticle::seek_limit = 50.0;
 ofParameter<float> CutParticle::speed_limit = 2.0;
 ofParameter<float> CutParticle::mass_base = 11.0;
-ofParameter<bool> CutParticle::arrive_on = true;
-ofParameter<bool> CutParticle::seek_on = true;
+//ofParameter<bool> CutParticle::arrive_on = true;
+//ofParameter<bool> CutParticle::seek_on = true;
 ofParameter<bool> CutParticle::trail = false;
-ofParameter<int> CutParticle::arrive_cap = 100;
-ofParameter<int> CutParticle::b_mode_selector = 1;
+//ofParameter<int> CutParticle::arrive_cap = 100;
+//ofParameter<int> CutParticle::b_mode_selector = 1;
 
 //asethetic
 //--------------------------------------------------------------

@@ -25,17 +25,20 @@ public:
 	CutParticleManager() { 
 		orig_location = glm::vec2(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight()));
 		setLocation(orig_location);
+		initGui();
 	};
 
 	CutParticleManager( glm::vec2 loc) { 
 		orig_location = loc;
 		setLocation(loc);
+		initGui();
 	};
 
 	CutParticleManager( BaseCut c ) {
 		cut = c;
 		orig_location = c.getCenter();
 		setLocation(orig_location);
+		initGui();
 	};
 
 	virtual void update() {
@@ -61,8 +64,11 @@ public:
 	}
 
 	virtual void draw() {
+		ofPushStyle();
+		ofSetColor(c);
 		for (auto& _p : p)
 			_p.draw();
+		ofPopStyle();
 	}
 
 	virtual void spawn() {
@@ -96,6 +102,7 @@ public:
 
 	void drawDebug(){
 		ofPushStyle();
+		ofSetColor(db_c);
 		for (auto& _p : p)
 			_p.drawDebug();
 		ofPopStyle();
@@ -109,8 +116,10 @@ public:
 		gui.setName("particle manager");
 		gui.add(enable_limit.set("enable limit", true));
 		gui.add(limit.set("limit amt", 100, 0, 500));
-		gui.add(enable_kill.set("enable kill on screen exit"));
+		gui.add(enable_kill.set("enable kill on screen exit", true));
 		gui.add(enable_bounce.set("enable bounce", false));
+		gui.add(db_c.set("debug colour", ofColor(125, 0, 0, 255), ofColor(0,0,0,255), ofColor(255,255,255,255)));
+		gui.add(c.set("colour", ofColor(255, 255, 255, 255), ofColor(0,0,0,255), ofColor(255,255,255,255)));
 	}
 
 	BaseCut getCut() { return cut; }
@@ -126,6 +135,7 @@ public:
 	ofParameterGroup gui;
 	ofParameter<bool> enable_limit, enable_kill, enable_bounce;
 	ofParameter<int> limit;
+	ofParameter<ofColor> db_c, c;
 
 private:
 

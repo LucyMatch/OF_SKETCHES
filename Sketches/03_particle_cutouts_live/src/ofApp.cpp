@@ -8,6 +8,9 @@ void ofApp::setup() {
 	ofEnableSmoothing();
 	ofEnableAlphaBlending();
 
+	main_draw.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
+	p_draw.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
+
 	//init vid manager
 	video.setDims(glm::vec2(1280, 720));
 	video.setup(); //also here we would define - ip / webcam / local
@@ -42,6 +45,10 @@ void ofApp::update() {
 		if (p.p.size() > 0) {
 			if (enable_varying_gravity)p.applyVaryingGravity(v_gravity_min, v_gravity_max, v_gravity_direction);
 			p.update();
+			//p.drawFbo();
+			//@TODO:
+			//so we just had a slider for this before and had to "clean things off
+			//but there is an issue with order of ops.. 
 		}
 	}
 
@@ -52,19 +59,34 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::draw() {
 
+	p_draw.begin();
+		ofPushStyle();
+		//@TODO: add ctrl for this
+			ofSetColor(0,0,0,1);
+			ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+			for (auto& p : p_man) { p.draw(); }
+		ofPopStyle();
+	p_draw.end();
+
+	main_draw.begin();
+		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+		p_draw.draw(0,0);
+	main_draw.end();
+
 	ofSetColor(bg_c);
 	ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 
 	//draw "original" texture 
 	if (enable_orig)video.draw();
 
-	//@TODO: sometimes memory error
-	//sometimes this is out of bounds??
-	//or w / h of p is fucked sometimes - so the draw throws an errr
-	for (auto& p : p_man)
-		p.draw();
+	//for (auto& p : p_man)
+		//p.draw();
+	
+	main_draw.draw(0, 0);
 
 	if(enable_debug)drawDebug();
+
+	ofEnableAlphaBlending();
 
 }
 
@@ -101,22 +123,52 @@ void ofApp::initGui() {
 	gui.add(v_gravity_min.set("gravity min", 0.5, 0.5, 25));
 	gui.add(v_gravity_max.set("gravity max", 10, 0.5, 25));
 
-
 	gui.add(video.gui);
-
-	//you may need to think more about this flow
-	//you likely want something closer to how FORCES class works
 	gui.add(cut_man.gui);
+
+	particleGui.setName("P");
+	particleGui.add(CutParticle::pcolor.set("color", ofColor(0, 0, 0, 100), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+	particleGui.add(CutParticle::tcolor.set("trail color", ofColor(0, 0, 0, 100), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+	//particleGui.add(CutParticle::b_mode_selector.set("blend Mode Selector", 1, 0, blends.size() - 1));
+
+	particleGui.add(CutParticle::r.set("radius", 10, 0, 1000));
+	particleGui.add(CutParticle::enable_true_size.set("true size", true));
+	particleGui.add(CutParticle::mass_base.set("mass base", 11.0, 0.0, 500.0));
+	particleGui.add(CutParticle::speed_limit.set("speed limit", 20.0, 0.0, 50.0));
+
+	//particleGui.add(CutParticle::seek_on.set("seek on", true));
+	//particleGui.add(CutParticle::seek_limit.set("seek limit", 50.0, 0.0, 50.0));
+	//particleGui.add(CutParticle::arrive_on.set("arrive on", true));
+	//particleGui.add(CutParticle::arrive_cap.set("arrive cap", 100, 0, 250));
+
+	particleGui.add(CutParticle::trail.set("trail on", true));
+	particleGui.add(CutParticle::enable_home_in_history.set("trail include home", false));
+	particleGui.add(CutParticle::trail_wgt.set("trail weight", 5.0, 0.0, 10.0));
+	particleGui.add(CutParticle::history_length.set("history length", 3, 0, 50));
+
+	//repelGui.setup("R E P E L");
+	//repelGui.add(enable_repel.set("repel enable", true));
+	//repelGui.add(repel.force_ctrl);
+
+	//attractGui.setup("A T T R A C T");
+	//attractGui.add(enable_attract.set("attract enable", false));
+	//attractGui.add(attract.force_ctrl);
+
+	gui.add(particleGui);
+	//gui.add(repelGui);
+	//gui.add(attractGui);
 
 	//@TODO: add pman gui
 	//make those vals static we have a few pmen now
 	//gui.add()
+	p_man_gui.setup("P MEN");
 
 }
 
 //--------------------------------------------------------------
 void ofApp::drawGui(ofEventArgs& args) {
 	gui.draw();
+	p_man_gui.draw();
 }
 
 //--------------------------------------------------------------
@@ -136,6 +188,8 @@ void ofApp::keyPressed(int key) {
 		//clear saved cuts
 		cut_man.clearCuts();
 		p_man.clear();
+		p_man_gui.clear();
+		p_man_gui.setup("P MEN");
 		break;
 	case 'p':
 		//spawn 
@@ -206,9 +260,8 @@ void ofApp::mouseDragged(int x, int y, int button) {
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button) {
 
-	//@TODO: determine if this how we wanna do this...
-	//_cpm holds a pointer to the cut
 	CutParticleManager _cpm( *(cut_man.saveCut()) );
+	p_man_gui.add(_cpm.gui); //@todo test 
 	p_man.push_back( _cpm );
 
 }

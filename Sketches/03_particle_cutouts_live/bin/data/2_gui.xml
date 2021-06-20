@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<P_R_I_M_A_R_Y>
+	<background>255, 228, 246, 255</background>
+	<enable_debug>0</enable_debug>
+	<enable_orig>1</enable_orig>
+	<enable_auto_spawning>0</enable_auto_spawning>
+	<enable_varying_gravity>0</enable_varying_gravity>
+	<gravity_direction>0</gravity_direction>
+	<gravity_min>0.5</gravity_min>
+	<gravity_max>10</gravity_max>
+	<video_controls>
+		<video_colour>255, 255, 255, 255</video_colour>
+		<video_bg_colour>255, 255, 255, 255</video_bg_colour>
+		<enable_video_bg>0</enable_video_bg>
+	</video_controls>
+	<cut_manager>
+		<enable_multi_cut_display>1</enable_multi_cut_display>
+		<save_padding>5</save_padding>
+		<shape_controls>
+			<colour>255, 255, 255, 255</colour>
+			<cut_shape>0</cut_shape>
+			<cut_radius>100</cut_radius>
+			<cut_width>100</cut_width>
+			<cut_height>100</cut_height>
+			<circle_resolution>250</circle_resolution>
+		</shape_controls>
+	</cut_manager>
+	<P>
+		<color>0, 0, 0, 100</color>
+		<trail_color>0, 0, 0, 100</trail_color>
+		<radius>10</radius>
+		<true_size>1</true_size>
+		<mass_base>11</mass_base>
+		<speed_limit>20</speed_limit>
+		<trail_on>1</trail_on>
+		<trail_include_home>0</trail_include_home>
+		<trail_weight>5</trail_weight>
+		<history_length>3</history_length>
+	</P>
+</P_R_I_M_A_R_Y>
