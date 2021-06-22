@@ -71,26 +71,16 @@ public:
 		ofPopStyle();
 	}
 	
-	//@TODO:
-	//first spawned doesn't "appear"
-	//location is 0,0
-	//looks like texture is fucked too
 	virtual void spawn() {
 		if (enable_limit && p.size() < limit) {
-			CutParticle _p(&frame, curr_location);
+			CutParticle _p( &frame, curr_location);
 			p.push_back(_p);
-			if (p.size() == 1) {
-				//first one is issue
-				cout << "first spawn ";
-				cout << _p.location << '\n';
-				cout << _p.img.isAllocated() << endl;
-			}
 		}
 	}
 
 	virtual void spawn(glm::vec2 loc) {
 		if (enable_limit && p.size() < limit) {
-			CutParticle _p(&frame, loc);
+			CutParticle _p( &frame, loc);
 			p.push_back(_p);
 		}
 	}
@@ -132,8 +122,8 @@ public:
 		gui.add(limit.set("limit amt", 100, 0, 500));
 		gui.add(enable_kill.set("enable kill on screen exit", true));
 		gui.add(enable_bounce.set("enable bounce", false));
-		gui.add(db_c.set("debug colour", ofColor(125, 0, 0, 255), ofColor(0,0,0,255), ofColor(255,255,255,255)));
-		gui.add(c.set("colour", ofColor(255, 255, 255, 255), ofColor(0,0,0,255), ofColor(255,255,255,255)));
+		gui.add(db_c.set("debug colour", ofColor(125, 0, 0, 255), ofColor(0,0,0,0), ofColor(255,255,255,255)));
+		gui.add(c.set("colour", ofColor(255, 255, 255, 255), ofColor(0,0,0,0), ofColor(255,255,255,255)));
 	}
 
 	BaseCut getCut() { return cut; }

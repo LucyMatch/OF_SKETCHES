@@ -36,16 +36,14 @@ void ofApp::update() {
 
 	//update cuts & ps
 	for (auto& p : p_man) {
-		if (video.cam.isFrameNew() && p.p.size() > 0) {
+		if (video.cam.isFrameNew()) {
 			ofTexture tmp_tex;
 			tmp_tex = cut_man.getCutTexture( p.getCut() , *(video.getFrameTex()));
 			p.update(tmp_tex);
 		}	
 		if (enable_auto_spawn)p.spawn();
-		if (p.p.size() > 0) {
-			if (enable_varying_gravity)p.applyVaryingGravity(v_gravity_min, v_gravity_max, v_gravity_direction);
-			p.update();
-		}
+		if (enable_varying_gravity)p.applyVaryingGravity(v_gravity_min, v_gravity_max, v_gravity_direction);
+		p.update();
 	}
 
 	
@@ -126,11 +124,6 @@ void ofApp::initGui() {
 
 	gui.add(particle_fbo_alpha.set("particle fbo alpha ctrl", 0, 0, 255));
 	gui.add(pman_c.set("pman fbo colour", ofColor(255, 255, 255), ofColor(0, 0, 0), ofColor(255, 255, 255)));
-	
-	//@TODO: 
-	//these vals are all duplicated in gui ??
-	//WHYYYYY
-	//is init actually getting called twice???
 
 	particleGui.clear();
 	particleGui.setName("P");
@@ -169,8 +162,6 @@ void ofApp::initGui() {
 	//gui.add(repelGui);
 	//gui.add(attractGui);
 
-	//seems to be working
-	//@TODO: test limits + bounce - hard to tell if working
 	p_man_gui.setup("P MEN");
 
 }
