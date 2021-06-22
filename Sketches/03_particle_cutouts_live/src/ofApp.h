@@ -41,7 +41,7 @@ public:
 	ofxPanel gui;
 	ofParameterGroup particleGui, repelGui, attractGui;
 	ofParameter<ofColor> bg_c, pman_c;
-	ofParameter<bool> enable_debug, enable_orig, enable_auto_spawn, enable_varying_gravity;
+	ofParameter<bool> enable_debug, enable_orig, enable_auto_spawn, enable_varying_gravity, enable_trails, enable_blend_min, enable_blend_max, enable_plain_draw;
 	ofParameter<int> v_gravity_direction, particle_fbo_alpha;
 	ofParameter<float> v_gravity_min, v_gravity_max;
 

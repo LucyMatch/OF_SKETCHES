@@ -54,29 +54,65 @@ void ofApp::update() {
 void ofApp::draw() {
 
 	p_draw.begin();
-		ofPushStyle();
-			//@TODO: come up with other ways of controlling this apha
-			//		 using animate?
-			ofSetColor(pman_c, particle_fbo_alpha);
-			ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-			for (auto& p : p_man) { p.draw(); }
-		ofPopStyle();
+	ofPushStyle();
+	//@TODO: come up with other ways of controlling this apha
+	//		 using animate?
+	ofSetColor(pman_c, particle_fbo_alpha);
+	ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+	for (auto& p : p_man) { p.draw(); }
+	ofPopStyle();
 	p_draw.end();
 
+	//@TODO: im still not entirely convinced I havent made this worse... 
+
+	ofPushStyle();
 	main_draw.begin();
+
+	if (!enable_trails){
+		ofSetColor(bg_c);
+		ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+
+		//draw "original" texture 
+		if (enable_orig)video.draw();
+	}
+
 		//blend so we only get particles + their trails
-		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-		p_draw.draw(0,0);
+		if(enable_trails)
+			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+		//@TODO: test
+		//trying out some other blends....
+		if (enable_blend_min) {
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_ONE, GL_ONE_MINUS_DST_COLOR);
+			glBlendEquation(GL_MIN);
+		}
+
+		if (enable_blend_max) {
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_ONE, GL_ONE);
+			glBlendEquation(GL_MAX);
+		}
+
+		if(enable_trails || enable_blend_min || enable_blend_max)
+			p_draw.draw(0,0);
+
 	main_draw.end();
+	ofPopStyle();
 
-	ofSetColor(bg_c);
-	ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+	if (enable_trails) {
+		ofSetColor(bg_c);
+		ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 
-	//draw "original" texture 
-	if (enable_orig)video.draw();
-	
-	main_draw.draw(0, 0);
+		//draw "original" texture 
+		if (enable_orig)video.draw();
+	}
+	else {
+		main_draw.draw(0, 0);
+	}
 
+	if(enable_plain_draw)for (auto& p : p_man) { p.draw(); }
+		
 	if(enable_debug)drawDebug();
 
 	ofEnableAlphaBlending();
@@ -112,6 +148,10 @@ void ofApp::initGui() {
 	gui.add(bg_c.set("background", ofColor(255, 228, 246, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 	gui.add(enable_debug.set("enable debug", false));
 	gui.add(enable_orig.set("enable orig", true));
+	gui.add(enable_trails.set("enable trails", true));
+	gui.add(enable_blend_min.set("enable blend min", false));
+	gui.add(enable_blend_max.set("enable blend max", false));
+	gui.add(enable_plain_draw.set("enable plain draw", true));
 	//gui.add(b_mode_selector.set("blend modes", 1, 0, blends.size() - 1));
 	gui.add(enable_auto_spawn.set("enable auto spawning", false));
 	gui.add(enable_varying_gravity.set("enable varying gravity", false));
