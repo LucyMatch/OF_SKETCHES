@@ -18,8 +18,13 @@ ofParameter<ofColor> CutParticle::tcolor = ofColor(0, 0, 0, 100);
 ofParameter<float> CutParticle::trail_wgt = 5.0;
 ofParameter<int> CutParticle::history_length = 3;
 ofParameter<int> CutParticle::r = 10;
+ofParameter<int> CutParticle::size_min = 10;
+ofParameter<int> CutParticle::size_max = 10;
 ofParameter<bool> CutParticle::enable_true_size = true;
+ofParameter<bool> CutParticle::enable_random_size = true;
+ofParameter<bool> CutParticle::enable_continous_resizing = false;
 ofParameter<bool> CutParticle::enable_home_in_history = false;
+
 
 //--------------------------------------------------------------
 CutParticle::CutParticle(ofTexture* _img) {
@@ -62,8 +67,6 @@ CutParticle::CutParticle(ofTexture* _img, glm::vec2  _location) {
 //--------------------------------------------------------------
 void CutParticle::draw() {
 
-	size();
-
 	if (trail) {
 		for (int i = 1; i < history.size(); i++) 
 			if (img.isAllocated())img.draw(history[i].x - (w / 2), history[i].y - (h / 2), w, h);
@@ -75,10 +78,7 @@ void CutParticle::draw() {
 //--------------------------------------------------------------
 void CutParticle::update() {
 
-	//update radius + mass incase it's been updated
-	//we wilkl want to check that this doesnt eat up fps
-	//we may want to come up with a flag to see if it needs updating....
-	//size();
+	if (enable_continous_resizing)size();
 
 	//limit the magnitude of a vector
 	velocity.limit(speed_limit);
@@ -145,11 +145,16 @@ void CutParticle::size() {
 		if (w > h) mass = mass_base / w;
 	}
 	else {
+
+		auto size = r;
+		if (enable_random_size)
+			size = ofRandom(size_min, size_max);
+
 		//here we keep in ratio 
 		//and use r as a modifier.. 
-		w = r;
+		w = size;
 		h = (orig_h / orig_w) * w;
-		mass = mass_base / r;
+		mass = mass_base / size;
 	}
 }
 
