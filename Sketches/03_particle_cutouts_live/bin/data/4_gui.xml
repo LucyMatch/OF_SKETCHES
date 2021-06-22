@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<P_R_I_M_A_R_Y>
+	<background>255, 228, 246, 255</background>
+	<enable_debug>0</enable_debug>
+	<enable_orig>0</enable_orig>
+	<enable_trails>1</enable_trails>
+	<enable_blend_min>0</enable_blend_min>
+	<enable_blend_max>0</enable_blend_max>
+	<enable_plain_draw>0</enable_plain_draw>
+	<enable_auto_spawning>0</enable_auto_spawning>
+	<enable_varying_gravity>1</enable_varying_gravity>
+	<gravity_direction>1</gravity_direction>
+	<gravity_min>0.5</gravity_min>
+	<gravity_max>1.48</gravity_max>
+	<video_controls>
+		<video_colour>255, 255, 255, 255</video_colour>
+		<video_bg_colour>255, 255, 255, 255</video_bg_colour>
+		<enable_video_bg>0</enable_video_bg>
+	</video_controls>
+	<cut_manager>
+		<enable_multi_cut_display>1</enable_multi_cut_display>
+		<save_padding>5</save_padding>
+		<shape_controls>
+			<colour>255, 255, 255, 255</colour>
+			<cut_shape>3</cut_shape>
+			<cut_radius>100</cut_radius>
+			<cut_width>74.2296</cut_width>
+			<cut_height>74.2296</cut_height>
+			<circle_resolution>250</circle_resolution>
+		</shape_controls>
+	</cut_manager>
+	<particle_fbo_alpha_ctrl>0</particle_fbo_alpha_ctrl>
+	<pman_fbo_colour>255, 255, 255, 255</pman_fbo_colour>
+	<P>
+		<color>0, 0, 0, 100</color>
+		<trail_color>0, 0, 0, 100</trail_color>
+		<radius>10</radius>
+		<true_size>1</true_size>
+		<random_size>0</random_size>
+		<continous_resize>0</continous_resize>
+		<size_min>11</size_min>
+		<size_max>100</size_max>
+		<mass_base>500</mass_base>
+		<speed_limit>1.27551</speed_limit>
+		<trail_on>1</trail_on>
+		<trail_include_home>0</trail_include_home>
+		<trail_weight>5</trail_weight>
+		<history_length>3</history_length>
+	</P>
+</P_R_I_M_A_R_Y>
