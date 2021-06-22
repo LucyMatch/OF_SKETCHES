@@ -48,7 +48,7 @@ public:
 			if (enable_bounce)
 				p[i].checkEdges(glm::vec4(0, 0, ofGetWidth(), ofGetHeight()), false);
 
-			if (enable_kill)
+			if (enable_kill && !enable_bounce)
 				p[i].checkEdges(glm::vec4(0, 0, ofGetWidth(), ofGetHeight()), true);
 
 			if (p[i].dead)
@@ -70,15 +70,29 @@ public:
 			_p.draw();
 		ofPopStyle();
 	}
-
+	
+	//@TODO:
+	//first spawned doesn't "appear"
+	//location is 0,0
+	//looks like texture is fucked too
 	virtual void spawn() {
-		CutParticle _p(&frame, curr_location);
-		p.push_back(_p);
+		if (enable_limit && p.size() < limit) {
+			CutParticle _p(&frame, curr_location);
+			p.push_back(_p);
+			if (p.size() == 1) {
+				//first one is issue
+				cout << "first spawn ";
+				cout << _p.location << '\n';
+				cout << _p.img.isAllocated() << endl;
+			}
+		}
 	}
 
 	virtual void spawn(glm::vec2 loc) {
-		CutParticle _p( &frame, loc );
-		p.push_back(_p);
+		if (enable_limit && p.size() < limit) {
+			CutParticle _p(&frame, loc);
+			p.push_back(_p);
+		}
 	}
 	
 	virtual void applyVaryingGravity(float min, float max, int direction) {
@@ -124,19 +138,15 @@ public:
 
 	BaseCut getCut() { return cut; }
 
-	BaseCut cut;
 	vector<CutParticle> p;
-	ofTexture frame;
-	glm::vec2 orig_location, curr_location;
 
-	//@todo:
-	//gotta be static - as we are doing one per cut
-	//can we see if there is a dynamic way to do gui? would be great to have diff ctrls for each
 	ofParameterGroup gui;
 	ofParameter<bool> enable_limit, enable_kill, enable_bounce;
 	ofParameter<int> limit;
 	ofParameter<ofColor> db_c, c;
 
 private:
-
+	BaseCut cut;
+	ofTexture frame;
+	glm::vec2 orig_location, curr_location;
 };
