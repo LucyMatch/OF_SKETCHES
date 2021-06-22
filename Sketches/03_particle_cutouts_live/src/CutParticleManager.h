@@ -58,9 +58,10 @@ public:
 
 	virtual void update(ofTexture _img) {
 		frame = _img;
-		//do we want to do this seperate from above?
-		for(auto& _p : p)
-			_p.updateFrame( &frame );
+		if (enable_live_cut) {
+				for (auto& _p : p)
+					_p.updateFrame(&frame);
+		}
 	}
 
 	virtual void draw() {
@@ -119,6 +120,7 @@ public:
 	void initGui() {
 		gui.setName("particle manager");
 		gui.add(enable_limit.set("enable limit", true));
+		gui.add(enable_live_cut.set("enable live frame updates", true));
 		gui.add(limit.set("limit amt", 100, 0, 500));
 		gui.add(enable_kill.set("enable kill on screen exit", true));
 		gui.add(enable_bounce.set("enable bounce", false));
@@ -131,7 +133,7 @@ public:
 	vector<CutParticle> p;
 
 	ofParameterGroup gui;
-	ofParameter<bool> enable_limit, enable_kill, enable_bounce;
+	ofParameter<bool> enable_limit, enable_kill, enable_bounce, enable_live_cut;
 	ofParameter<int> limit;
 	ofParameter<ofColor> db_c, c;
 
