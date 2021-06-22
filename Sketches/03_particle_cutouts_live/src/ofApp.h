@@ -34,27 +34,20 @@ public:
 	ofFbo p_draw, main_draw;
 
 	VideoHandler video;
-	//ofTexture live_cut_tex;
 
 	CutManager cut_man;
 	vector<CutParticleManager> p_man;
 
-	//mask_fbo for drawing the shape we want to cut out
-	//ofFbo mask_fbo;
-
 	ofxPanel gui;
 	ofParameterGroup particleGui, repelGui, attractGui;
-	ofParameter<ofColor> bg_c, curr_c;
+	ofParameter<ofColor> bg_c, pman_c;
 	ofParameter<bool> enable_debug, enable_orig, enable_auto_spawn, enable_varying_gravity;
-	ofParameter<int> v_gravity_direction;
+	ofParameter<int> v_gravity_direction, particle_fbo_alpha;
 	ofParameter<float> v_gravity_min, v_gravity_max;
 
 	ofxPanel p_man_gui;
 
 	//@todo
-	// 
-	// 
-	// 
 	// 	   //ofParameter<int> b_mode_selector;
 
 	//enable_spawn_on_cut // - do we even need this

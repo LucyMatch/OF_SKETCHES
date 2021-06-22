@@ -45,10 +45,6 @@ void ofApp::update() {
 		if (p.p.size() > 0) {
 			if (enable_varying_gravity)p.applyVaryingGravity(v_gravity_min, v_gravity_max, v_gravity_direction);
 			p.update();
-			//p.drawFbo();
-			//@TODO:
-			//so we just had a slider for this before and had to "clean things off
-			//but there is an issue with order of ops.. 
 		}
 	}
 
@@ -61,14 +57,16 @@ void ofApp::draw() {
 
 	p_draw.begin();
 		ofPushStyle();
-		//@TODO: add ctrl for this
-			ofSetColor(0,0,0,1);
+			//@TODO: come up with other ways of controlling this apha
+			//		 using animate?
+			ofSetColor(pman_c, particle_fbo_alpha);
 			ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 			for (auto& p : p_man) { p.draw(); }
 		ofPopStyle();
 	p_draw.end();
 
 	main_draw.begin();
+		//blend so we only get particles + their trails
 		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 		p_draw.draw(0,0);
 	main_draw.end();
@@ -78,9 +76,6 @@ void ofApp::draw() {
 
 	//draw "original" texture 
 	if (enable_orig)video.draw();
-
-	//for (auto& p : p_man)
-		//p.draw();
 	
 	main_draw.draw(0, 0);
 
@@ -110,13 +105,16 @@ void ofApp::framerate() {
 //--------------------------------------------------------------
 void ofApp::initGui() {
 
+	//@TODO: looks like this is getting called twice?
+	//		 ive done stuff to make sure duplicate dont show up
+	//		but you shoud look into it...
+
 	gui.setup("P R I M A R Y");
 
 	gui.add(bg_c.set("background", ofColor(255, 228, 246, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 	gui.add(enable_debug.set("enable debug", false));
 	gui.add(enable_orig.set("enable orig", true));
 	//gui.add(b_mode_selector.set("blend modes", 1, 0, blends.size() - 1));
-	//gui.add(curr_c.set("cut img colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 	gui.add(enable_auto_spawn.set("enable auto spawning", false));
 	gui.add(enable_varying_gravity.set("enable varying gravity", false));
 	gui.add(v_gravity_direction.set("gravity direction", 0, 0, 3));
@@ -126,6 +124,15 @@ void ofApp::initGui() {
 	gui.add(video.gui);
 	gui.add(cut_man.gui);
 
+	gui.add(particle_fbo_alpha.set("particle fbo alpha ctrl", 0, 0, 255));
+	gui.add(pman_c.set("pman fbo colour", ofColor(255, 255, 255), ofColor(0, 0, 0), ofColor(255, 255, 255)));
+	
+	//@TODO: 
+	//these vals are all duplicated in gui ??
+	//WHYYYYY
+	//is init actually getting called twice???
+
+	particleGui.clear();
 	particleGui.setName("P");
 	particleGui.add(CutParticle::pcolor.set("color", ofColor(0, 0, 0, 100), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 	particleGui.add(CutParticle::tcolor.set("trail color", ofColor(0, 0, 0, 100), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
@@ -133,6 +140,10 @@ void ofApp::initGui() {
 
 	particleGui.add(CutParticle::r.set("radius", 10, 0, 1000));
 	particleGui.add(CutParticle::enable_true_size.set("true size", true));
+	particleGui.add(CutParticle::enable_random_size.set("random size", false));
+	particleGui.add(CutParticle::enable_continous_resizing.set("continous resize", false));
+	particleGui.add(CutParticle::size_min.set("size min", 11, 10, 500));
+	particleGui.add(CutParticle::size_max.set("size max", 100, 0, 500));
 	particleGui.add(CutParticle::mass_base.set("mass base", 11.0, 0.0, 500.0));
 	particleGui.add(CutParticle::speed_limit.set("speed limit", 20.0, 0.0, 50.0));
 
@@ -158,9 +169,8 @@ void ofApp::initGui() {
 	//gui.add(repelGui);
 	//gui.add(attractGui);
 
-	//@TODO: add pman gui
-	//make those vals static we have a few pmen now
-	//gui.add()
+	//seems to be working
+	//@TODO: test limits + bounce - hard to tell if working
 	p_man_gui.setup("P MEN");
 
 }
@@ -205,6 +215,14 @@ void ofApp::keyPressed(int key) {
 		//clear p's only 
 		for (auto& p : p_man)
 			p.clear();
+		break;
+	case '=':
+		p_draw.begin();
+			ofClear(0, 0, 0, 0);
+		p_draw.end();		
+		main_draw.begin();
+			ofClear(0, 0, 0, 0);
+		main_draw.end();
 		break;
 	case '1':
 		gui.saveToFile("1_gui.xml");
@@ -261,7 +279,7 @@ void ofApp::mouseDragged(int x, int y, int button) {
 void ofApp::mousePressed(int x, int y, int button) {
 
 	CutParticleManager _cpm( *(cut_man.saveCut()) );
-	p_man_gui.add(_cpm.gui); //@todo test 
+	p_man_gui.add(_cpm.gui); //createa gui panel for new manager
 	p_man.push_back( _cpm );
 
 }
