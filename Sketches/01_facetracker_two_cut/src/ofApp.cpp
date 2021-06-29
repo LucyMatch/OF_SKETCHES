@@ -32,6 +32,33 @@ void ofApp::update(){
     if(video.cam.isFrameNew()){
         tracker.update(video.cam);
     }
+
+    //testing
+////
+/*
+    enum Feature {
+    LEFT_EYE_TOP, RIGHT_EYE_TOP,
+    LEFT_EYEBROW, RIGHT_EYEBROW,
+    LEFT_EYE, RIGHT_EYE,
+    LEFT_JAW, RIGHT_JAW, JAW,
+    OUTER_MOUTH, INNER_MOUTH,
+    NOSE_BRIDGE, NOSE_BASE,
+    FACE_OUTLINE, ALL_FEATURES
+};
+*/
+    auto t = tracker.getInstances();
+    for (auto& _t : t) {
+        auto l = _t.getLandmarks();
+        //ofSetColor(255, 0, 0);
+        //poly.draw();
+        //just do one polycut for now - no manager...
+        left_eye.update(l.getImageFeature(l.LEFT_EYE));
+        right_eye.update(l.getImageFeature(l.RIGHT_EYE));
+        mouth.update(l.getImageFeature(l.OUTER_MOUTH));
+    }
+
+
+
 }
 
 //--------------------------------------------------------------
@@ -45,26 +72,9 @@ void ofApp::draw(){
         video.draw();
 
 
-    //testing
-    ////
-    /*
-        enum Feature {
-        LEFT_EYE_TOP, RIGHT_EYE_TOP,
-        LEFT_EYEBROW, RIGHT_EYEBROW,
-        LEFT_EYE, RIGHT_EYE,
-        LEFT_JAW, RIGHT_JAW, JAW,
-        OUTER_MOUTH, INNER_MOUTH,
-        NOSE_BRIDGE, NOSE_BASE,
-        FACE_OUTLINE, ALL_FEATURES
-    };
-    */
-    auto t = tracker.getInstances();
-    for (auto& _t : t) {
-       auto l = _t.getLandmarks();
-       auto poly = l.getImageFeature(l.LEFT_EYE);
-       ofSetColor(255,0,0);
-       poly.draw();
-    }
+    left_eye.draw();
+    right_eye.draw();
+    mouth.draw();
 
 
     if (enable_debug)
@@ -100,6 +110,9 @@ void ofApp::initGui() {
     gui.add(enable_orig.set("enable orig", true));
 
     gui.add(video.gui);
+    gui.add(left_eye.gui);
+    gui.add(right_eye.gui);
+    gui.add(mouth.gui);
 
 }
 

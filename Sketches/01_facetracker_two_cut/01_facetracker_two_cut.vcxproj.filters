@@ -1307,6 +1307,12 @@
     <ClInclude Include="..\..\Classes\Utility\VideoHandler.h">
       <Filter>src\external</Filter>
     </ClInclude>
+    <ClInclude Include="src\LandmarkCutManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PolyCuts.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

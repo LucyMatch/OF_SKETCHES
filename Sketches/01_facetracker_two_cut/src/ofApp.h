@@ -4,6 +4,7 @@
 #include "ofxGui.h"
 #include "ofxFaceTracker2.h"
 #include "VideoHandler.h"
+#include "PolyCuts.h"
 
 class ofApp : public ofBaseApp{
 public:
@@ -22,6 +23,9 @@ public:
     VideoHandler video;
 
     ofxFaceTracker2 tracker;
+
+    //testing singular cut
+    PolyCuts left_eye, right_eye, mouth;
 
     ofxPanel gui;
     ofParameter<ofColor> bg_c;

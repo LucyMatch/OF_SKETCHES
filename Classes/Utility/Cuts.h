@@ -43,11 +43,12 @@ class BaseCut {
 		void draw() {
 			ofPushStyle();
 				ofSetColor(colour);
+				shape.setColor(colour);
 				shape.draw();
 			ofPopStyle();
 		}
 
-		void update( int x, int y ) {
+		virtual void update( int x, int y ) {
 
 			shape.clear();
 
@@ -82,7 +83,7 @@ class BaseCut {
 
 		}
 
-		void initGui() {
+		virtual void initGui() {
 			gui.setName("shape controls");
 			gui.add(colour.set("colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 			gui.add(shape_mode.set("cut shape", 0, 0, 4));
