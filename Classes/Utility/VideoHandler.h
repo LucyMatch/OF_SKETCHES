@@ -5,8 +5,8 @@
 #include "ofxGui.h"
 //@TODO : //#include "IPVideoGrabber.h"
 
-//#define _LOCAL			//@TODO: local video trigger & set up
-#define _WEBCAM				//comment for ip cam ( todo )
+#define _LOCAL 1	//@TODO: local video trigger & set up
+#define _WEBCAM	0   //comment for ip cam ( todo )
 
 //@TODO:
 //			btns for looping through different ip cameras & webcams
@@ -29,7 +29,7 @@ class VideoHandler {
 
 		VideoHandler(glm::vec2 _dims = glm::vec2(640,480));
 
-		void setup();
+		void setup(string path = "videos");
 		void update();
 		void draw();
 
@@ -43,7 +43,9 @@ class VideoHandler {
 		ofTexture* getFrameTex();
 		ofImage& getFrameImg();
 
-	#ifdef _WEBCAM
+	#if _LOCAL > 0
+		ofVideoPlayer cam;
+	#elif _WEBCAM > 0
 		ofVideoGrabber cam;
 	#else 
 		//todo

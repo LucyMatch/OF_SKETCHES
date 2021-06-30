@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <P_R_I_M_A_R_Y>
-	<background>255, 228, 246, 255</background>
+	<background>251, 255, 220, 255</background>
 	<enable_debug>0</enable_debug>
 	<enable_orig>0</enable_orig>
 	<video_controls>
@@ -9,14 +9,14 @@
 		<enable_video_bg>0</enable_video_bg>
 	</video_controls>
 	<shape_controls>
-		<colour>255, 255, 255, 255</colour>
+		<colour>149, 176, 255, 255</colour>
 		<cut_shape>0</cut_shape>
 		<cut_radius>100</cut_radius>
 		<cut_width>100</cut_width>
 		<cut_height>100</cut_height>
 		<circle_resolution>250</circle_resolution>
 		<enable_shape_clear>1</enable_shape_clear>
-		<enable_subpath>0</enable_subpath>
+		<enable_subpath>1</enable_subpath>
 		<enable_curve>1</enable_curve>
 		<enable_scale>0</enable_scale>
 	</shape_controls>

@@ -7,9 +7,20 @@ VideoHandler::VideoHandler(glm::vec2 _dims) {
 }
 
 //--------------------------------------------------------------
-void VideoHandler::setup() {
+void VideoHandler::setup(string path) {
 
-#ifdef _WEBCAM
+#if _LOCAL > 0
+
+	ofDirectory dir;
+	dir.listDir(path);
+	dir.sort();
+
+	feed_count = (int)dir.size();
+
+	cam.load(dir.getPath(curr_feed));
+	cam.play();
+
+#elif _WEBCAM > 0
 	cam.close();
 	cam.setVerbose(true);
 	cam.setDeviceID(curr_feed);
@@ -21,10 +32,9 @@ void VideoHandler::setup() {
 	//	cout << i.deviceName << endl;
 
 	feed_count = cams.size();
-		
-	cam.setup(dims.x, dims.y, true);
 
-#else
+	cam.setup(dims.x, dims.y, true);
+#else 
 	//@TODO:
 	// 	   //make a class from ip cam sketch
 	// 	   //so we can load a bunch and cycle through which we are "pulling"
@@ -42,6 +52,8 @@ void VideoHandler::setup() {
 
 //--------------------------------------------------------------
 void VideoHandler::update() {
+
+	//cout << cam.isLoaded() << endl;
 
 	cam.update();
 	if (cam.isFrameNew())
