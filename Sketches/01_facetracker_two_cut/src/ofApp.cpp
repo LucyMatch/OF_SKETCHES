@@ -11,9 +11,6 @@ void ofApp::setup(){
     video.setDims(glm::vec2(1280, 720));
     video.setup(); //also here we would define - ip / webcam / local
 
-    //init cut manager
-    //cut_man.setup();
-
     ////init gui
     initGui();
     
@@ -29,36 +26,17 @@ void ofApp::update(){
     video.update();
     
     // Update tracker when there are new frames
-    if(video.cam.isFrameNew()){
+    if(video.cam.isFrameNew())
         tracker.update(video.cam);
-    }
 
-    //testing
-////
-/*
-    enum Feature {
-    LEFT_EYE_TOP, RIGHT_EYE_TOP,
-    LEFT_EYEBROW, RIGHT_EYEBROW,
-    LEFT_EYE, RIGHT_EYE,
-    LEFT_JAW, RIGHT_JAW, JAW,
-    OUTER_MOUTH, INNER_MOUTH,
-    NOSE_BRIDGE, NOSE_BASE,
-    FACE_OUTLINE, ALL_FEATURES
-};
-*/
+    //@TODO:
+    //not dealthing with seperate faces yet
+    //will need to do that... 
+    //instances comes with label - so i believe that's what we will want to match... 
     auto t = tracker.getInstances();
-    for (auto& _t : t) {
-        auto l = _t.getLandmarks();
-        //ofSetColor(255, 0, 0);
-        //poly.draw();
-        //just do one polycut for now - no manager...
-        left_eye.update(l.getImageFeature(l.LEFT_EYE));
-        right_eye.update(l.getImageFeature(l.RIGHT_EYE));
-        mouth.update(l.getImageFeature(l.OUTER_MOUTH));
-    }
-
-
-
+    if(t.size() > 0)cut_man.update(t[0].getLandmarks());
+    //for (auto& _t : t) 
+    //    cut_man.update(_t.getLandmarks());
 }
 
 //--------------------------------------------------------------
@@ -71,11 +49,13 @@ void ofApp::draw(){
     if (enable_orig)
         video.draw();
 
+    
+    cut_man.draw();
 
-    left_eye.draw();
-    right_eye.draw();
-    mouth.draw();
+    cut_man.draw(video.getFrameTex());
 
+
+    ofEnableAlphaBlending();
 
     if (enable_debug)
         drawDebug();
@@ -90,6 +70,10 @@ void ofApp::drawDebug() {
 
     // Draw estimated 3d pose
     tracker.drawDebugPose();
+
+    cut_man.drawDebug();
+
+    cut_man.draw();
     
 }
 
@@ -108,11 +92,10 @@ void ofApp::initGui() {
     gui.add(bg_c.set("background", ofColor(255, 228, 246, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
     gui.add(enable_debug.set("enable debug", false));
     gui.add(enable_orig.set("enable orig", true));
+    gui.add(blend_mode.set("blend mode", 0, 0, 5));
 
     gui.add(video.gui);
-    gui.add(left_eye.gui);
-    gui.add(right_eye.gui);
-    gui.add(mouth.gui);
+    gui.add(cut_man.gui);
 
 }
 
@@ -130,6 +113,9 @@ void ofApp::keyPressed(int key) {
         break;
     case ',':
         video.prevFeed();
+        break;
+    case 'x':
+        cut_man.exportCuts(video.getFrameTex());
         break;
     case '1':
         gui.saveToFile("1_gui.xml");
