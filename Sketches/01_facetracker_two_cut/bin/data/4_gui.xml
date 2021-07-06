@@ -8,42 +8,52 @@
 		<video_bg_colour>255, 255, 255, 255</video_bg_colour>
 		<enable_video_bg>0</enable_video_bg>
 	</video_controls>
-	<shape_controls>
-		<colour>149, 176, 255, 255</colour>
-		<cut_shape>0</cut_shape>
-		<cut_radius>100</cut_radius>
-		<cut_width>100</cut_width>
-		<cut_height>100</cut_height>
-		<circle_resolution>250</circle_resolution>
-		<enable_shape_clear>1</enable_shape_clear>
-		<enable_subpath>1</enable_subpath>
-		<enable_curve>1</enable_curve>
-		<enable_scale>0</enable_scale>
-	</shape_controls>
 	<CUT_MANAGER>
 		<enable_left_eye>1</enable_left_eye>
 		<enable_right_eye>1</enable_right_eye>
 		<enable_mouth>1</enable_mouth>
 		<left_eye>
-			<colour>209, 255, 184, 255</colour>
+			<colour>255, 255, 255, 255</colour>
 			<enable_shape_clear>1</enable_shape_clear>
 			<enable_subpath>0</enable_subpath>
 			<enable_curve>1</enable_curve>
 			<enable_scale>0</enable_scale>
+			<curve_resolution>200</curve_resolution>
+			<scale_x>1</scale_x>
+			<scale_y>1</scale_y>
+			<stroke_width>5</stroke_width>
+			<stroke_colour>255, 255, 255, 255</stroke_colour>
+			<enable_tesselate>0</enable_tesselate>
+			<enable_simplify>0</enable_simplify>
 		</left_eye>
 		<right_eye>
-			<colour>221, 159, 255, 255</colour>
+			<colour>255, 255, 255, 255</colour>
 			<enable_shape_clear>1</enable_shape_clear>
 			<enable_subpath>0</enable_subpath>
 			<enable_curve>1</enable_curve>
 			<enable_scale>0</enable_scale>
+			<curve_resolution>200</curve_resolution>
+			<scale_x>1</scale_x>
+			<scale_y>1</scale_y>
+			<stroke_width>5</stroke_width>
+			<stroke_colour>255, 255, 255, 255</stroke_colour>
+			<enable_tesselate>0</enable_tesselate>
+			<enable_simplify>0</enable_simplify>
 		</right_eye>
 		<mouth>
-			<colour>137, 184, 255, 255</colour>
+			<colour>255, 255, 255, 255</colour>
 			<enable_shape_clear>1</enable_shape_clear>
 			<enable_subpath>0</enable_subpath>
 			<enable_curve>1</enable_curve>
 			<enable_scale>0</enable_scale>
+			<curve_resolution>200</curve_resolution>
+			<scale_x>1</scale_x>
+			<scale_y>1</scale_y>
+			<stroke_width>5</stroke_width>
+			<stroke_colour>255, 255, 255, 255</stroke_colour>
+			<enable_tesselate>0</enable_tesselate>
+			<enable_simplify>0</enable_simplify>
 		</mouth>
 	</CUT_MANAGER>
+	<blend_mode>0</blend_mode>
 </P_R_I_M_A_R_Y>

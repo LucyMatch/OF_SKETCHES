@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <P_R_I_M_A_R_Y>
-	<background>251, 255, 220, 255</background>
+	<background>255, 228, 246, 255</background>
 	<enable_debug>0</enable_debug>
 	<enable_orig>0</enable_orig>
 	<video_controls>
@@ -20,4 +20,27 @@
 		<enable_curve>1</enable_curve>
 		<enable_scale>0</enable_scale>
 	</shape_controls>
+	<CUT_MANAGER>
+		<enable_left_eye>0</enable_left_eye>
+		<enable_right_eye>0</enable_right_eye>
+		<enable_mouth>1</enable_mouth>
+		<left_eye>
+			<colour>255, 255, 255, 255</colour>
+			<enable_shape_clear>1</enable_shape_clear>
+			<enable_subpath>0</enable_subpath>
+			<enable_curve>1</enable_curve>
+		</left_eye>
+		<right_eye>
+			<colour>255, 255, 255, 255</colour>
+			<enable_shape_clear>1</enable_shape_clear>
+			<enable_subpath>0</enable_subpath>
+			<enable_curve>1</enable_curve>
+		</right_eye>
+		<mouth>
+			<colour>255, 122, 143, 255</colour>
+			<enable_shape_clear>1</enable_shape_clear>
+			<enable_subpath>0</enable_subpath>
+			<enable_curve>1</enable_curve>
+		</mouth>
+	</CUT_MANAGER>
 </P_R_I_M_A_R_Y>

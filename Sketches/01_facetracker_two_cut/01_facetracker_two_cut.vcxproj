@@ -184,7 +184,6 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Classes\Utility\CutManager.cpp" />
     <ClCompile Include="..\..\Classes\Utility\VideoHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
@@ -223,7 +222,6 @@
     <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxFaceTracker2\src\ofxFaceTracker2Landmarks.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Classes\Utility\CutManager.h" />
     <ClInclude Include="..\..\Classes\Utility\Cuts.h" />
     <ClInclude Include="..\..\Classes\Utility\VideoHandler.h" />
     <ClInclude Include="src\LandmarkCutManager.h" />

@@ -112,9 +112,6 @@
     <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxFaceTracker2\src\ofxFaceTracker2Landmarks.cpp">
       <Filter>addons\ofxFaceTracker2\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Classes\Utility\CutManager.cpp">
-      <Filter>src\external</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Classes\Utility\VideoHandler.cpp">
       <Filter>src\external</Filter>
     </ClCompile>
@@ -1297,9 +1294,6 @@
     </ClInclude>
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxFaceTracker2\src\ofxFaceTracker2Landmarks.h">
       <Filter>addons\ofxFaceTracker2\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Classes\Utility\CutManager.h">
-      <Filter>src\external</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Classes\Utility\Cuts.h">
       <Filter>src\external</Filter>
