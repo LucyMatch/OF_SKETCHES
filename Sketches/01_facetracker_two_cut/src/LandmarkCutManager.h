@@ -38,60 +38,135 @@ struct LandmarkCut {
 class LandmarkCutManager {
 
 public:
+	//LandmarkCutManager() {
+
+	//	PolyCuts 
+	//		re("left eye"), 
+	//		le("right eye"), 
+	//		m("mouth");
+
+	//	struct LandmarkCut 
+	//		lefteye { ofxFaceTracker2Landmarks::Feature::LEFT_EYE, re, true },
+	//		righteye{ ofxFaceTracker2Landmarks::Feature::RIGHT_EYE, le, true },
+	//		mouth{ ofxFaceTracker2Landmarks::Feature::OUTER_MOUTH, m, true };
+
+	//	cuts.push_back(lefteye);
+	//	cuts.push_back(righteye);
+	//	cuts.push_back(mouth);
+
+	//	initGui();
+
+	//}
+	//void update(ofxFaceTracker2Landmarks lm) {
+	//	for (auto &c : cuts) {
+	//		if (c.feature == ofxFaceTracker2Landmarks::Feature::LEFT_EYE && enable_left_eye != c.enabled)c.enabled = enable_left_eye;
+	//		if (c.feature == ofxFaceTracker2Landmarks::Feature::RIGHT_EYE &&  enable_right_eye != c.enabled)c.enabled = enable_right_eye;
+	//		if (c.feature == ofxFaceTracker2Landmarks::Feature::OUTER_MOUTH && enable_mouth != c.enabled)c.enabled = enable_mouth;
+	//		c.cut.update(lm.getImageFeature(c.feature));
+	//	}
+	//}
+
 	LandmarkCutManager() {
-
-		PolyCuts 
-			re("left eye"), 
-			le("right eye"), 
-			m("mouth");
-
-		struct LandmarkCut 
-			lefteye { ofxFaceTracker2Landmarks::Feature::LEFT_EYE, re, true },
-			righteye{ ofxFaceTracker2Landmarks::Feature::RIGHT_EYE, le, true },
-			mouth{ ofxFaceTracker2Landmarks::Feature::OUTER_MOUTH, m, true };
-
-		cuts.push_back(lefteye);
-		cuts.push_back(righteye);
-		cuts.push_back(mouth);
-
 		initGui();
-
 	}
-	void update(ofxFaceTracker2Landmarks lm) {
-		for (auto &c : cuts) {
-			if (c.feature == ofxFaceTracker2Landmarks::Feature::LEFT_EYE && enable_left_eye != c.enabled)c.enabled = enable_left_eye;
-			if (c.feature == ofxFaceTracker2Landmarks::Feature::RIGHT_EYE &&  enable_right_eye != c.enabled)c.enabled = enable_right_eye;
-			if (c.feature == ofxFaceTracker2Landmarks::Feature::OUTER_MOUTH && enable_mouth != c.enabled)c.enabled = enable_mouth;
-			c.cut.update(lm.getImageFeature(c.feature));
+
+	//sending ALL instances... 
+	void update( vector<ofxFaceTracker2Instance> t ) {
+		if (t.size() > 0) { 
+			for (int i = 0; i < t.size(); i++) {
+
+				//testing functions of t
+				
+				//t[i].transformPosePosition()
+
+				//now we check to see if there are elements for this face yet
+				if (i < faces.size()) {
+					//exists
+					update(t[i].getLandmarks(), i);
+					cout << "face exists" << "  ";
+					cout << t[i].getLabel() << endl;
+				}
+				else {
+					//create new
+					cout << "creating new face" << "  ";
+					cout << t[i].getLabel() << endl; 
+					initNewFace();
+					update( t[i].getLandmarks(), i );
+				}
+			}
+		}
+		//@TODO:
+		//if 0 do we want to start an timer or something to clear cuts?
+		//so we dont get face holes with no face content
+		//also remove from gui
+	}
+
+	void update(ofxFaceTracker2Landmarks lm, int index) {
+		if (faces.size() > index) {
+			for (auto& c : faces[index]) {
+				if (c.feature == ofxFaceTracker2Landmarks::Feature::LEFT_EYE && enable_left_eye != c.enabled)c.enabled = enable_left_eye;
+				if (c.feature == ofxFaceTracker2Landmarks::Feature::RIGHT_EYE && enable_right_eye != c.enabled)c.enabled = enable_right_eye;
+				if (c.feature == ofxFaceTracker2Landmarks::Feature::OUTER_MOUTH && enable_mouth != c.enabled)c.enabled = enable_mouth;
+				c.cut.update(lm.getImageFeature(c.feature));
+			}
 		}
 	}
+
+	void initNewFace( ) {
+		PolyCuts re("left eye"), le("right eye"), m("mouth");
+
+	struct LandmarkCut 
+		lefteye { ofxFaceTracker2Landmarks::Feature::LEFT_EYE, re, true },
+		righteye{ ofxFaceTracker2Landmarks::Feature::RIGHT_EYE, le, true },
+		mouth{ ofxFaceTracker2Landmarks::Feature::OUTER_MOUTH, m, true };
+
+		vector<LandmarkCut> face;
+
+		face.push_back(lefteye);
+		face.push_back(righteye);
+		face.push_back(mouth);
+
+		faces.push_back(face);
+
+		//add to gui @TODO: this will need work
+		//					likely needs updating in 
+		//					ofapp to owhen a new instance is added / removed
+		gui.add(faces.back()[0].cut.gui);
+		gui.add(faces.back()[1].cut.gui);
+		gui.add(faces.back()[2].cut.gui);
+	}
+
 	void draw() {
-		for (auto& c : cuts)
+	for(auto& f : faces)
+		for (auto& c : f)
 			if(c.enabled)c.cut.draw();
 	}	
 	void draw(ofTexture* tex) {
-		for (auto& c : cuts)
-			if (c.enabled) {
-				c.cut.set();
-				getCutTexture(c.cut, *tex).draw(c.cut.getPos());
-			}
+		for (auto& f : faces)
+			for (auto& c : f)
+				if (c.enabled) {
+					c.cut.set();
+					getCutTexture(c.cut, *tex).draw(c.cut.getPos());
+				}
 	}
 
 	void drawDebug() {
-		for (auto& c : cuts)
-			c.cut.draw();
+		for (auto& f : faces)
+			for (auto& c : f)
+				c.cut.draw();
 	}
 
 	void exportCuts( ofTexture *tex ){
-		for (auto& c : cuts) {
-			glm::vec2 size = c.cut.getSize();
-			////export
-			ofPixels tmp_pix;
-			getCutTexture(c.cut, *tex).readToPixels(tmp_pix);
-			ofImage new_img(tmp_pix);
-			new_img.allocate(int(size.x), int(size.y), OF_IMAGE_COLOR_ALPHA);
-			new_img.save("outputs/cuts_" + ofToString(c.feature) + "_" + ofToString(ofGetMonth()) + "_" + ofToString(ofGetDay()) + "_" + ofToString(ofGetYear()) + "_" + ofToString(ofGetHours()) + "_" + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png", OF_IMAGE_QUALITY_BEST);
-		}
+		for (auto& f : faces)
+			for (auto& c : f){
+				glm::vec2 size = c.cut.getSize();
+				////export
+				ofPixels tmp_pix;
+				getCutTexture(c.cut, *tex).readToPixels(tmp_pix);
+				ofImage new_img(tmp_pix);
+				new_img.allocate(int(size.x), int(size.y), OF_IMAGE_COLOR_ALPHA);
+				new_img.save("outputs/cuts_" + ofToString(c.feature) + "_" + ofToString(ofGetMonth()) + "_" + ofToString(ofGetDay()) + "_" + ofToString(ofGetYear()) + "_" + ofToString(ofGetHours()) + "_" + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png", OF_IMAGE_QUALITY_BEST);
+			}
 	}
 
 	ofTexture getCutTexture( PolyCuts c, ofTexture tex ){
@@ -140,15 +215,14 @@ public:
 		gui.add(enable_left_eye.set("enable left eye", true));
 		gui.add(enable_right_eye.set("enable right eye", true));
 		gui.add(enable_mouth.set("enable mouth", true));
-		gui.add(cuts[0].cut.gui);
-		gui.add(cuts[1].cut.gui);
-		gui.add(cuts[2].cut.gui);
 	}
 
 	ofParameterGroup gui;
 	ofParameter<bool> enable_left_eye, enable_right_eye, enable_mouth;
 
-	vector<LandmarkCut> cuts;
+	//vector<LandmarkCut> cuts;
+
+	vector< vector<LandmarkCut> > faces;
 
 private:
 

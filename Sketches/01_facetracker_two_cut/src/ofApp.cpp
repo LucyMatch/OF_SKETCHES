@@ -16,6 +16,7 @@ void ofApp::setup(){
     
     // Setup tracker
     tracker.setup();
+
 }
 
 //--------------------------------------------------------------
@@ -26,17 +27,12 @@ void ofApp::update(){
     video.update();
     
     // Update tracker when there are new frames
-    if(video.cam.isFrameNew())
-        tracker.update(video.cam);
+    if (video.cam.isFrameNew()) {
+        tracker.update(video.cam); 
+        auto t = tracker.getInstances();
+        cut_man.update(t);
+    }
 
-    //@TODO:
-    //not dealthing with seperate faces yet
-    //will need to do that... 
-    //instances comes with label - so i believe that's what we will want to match... 
-    auto t = tracker.getInstances();
-    if(t.size() > 0)cut_man.update(t[0].getLandmarks());
-    //for (auto& _t : t) 
-    //    cut_man.update(_t.getLandmarks());
 }
 
 //--------------------------------------------------------------
@@ -96,6 +92,10 @@ void ofApp::initGui() {
 
     gui.add(video.gui);
     gui.add(cut_man.gui);
+
+    //@TODO:
+    //if we get new "faces" - check with size of instances
+    //we need to remove cut_man and re add
 
 }
 

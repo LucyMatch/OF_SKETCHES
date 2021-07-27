@@ -91,7 +91,7 @@ public:
 		 gui.add(scale_x.set("scale x", 1.0, -1.0, 100.0));
 		 gui.add(scale_y.set("scale y", 1.0, -1.0, 100.0));
 
-		 gui.add(stroke_w.set("stroke width", 5.0, 0.0, 15.0));
+		 gui.add(stroke_w.set("stroke width", 0.0, 0.0, 15.0));
 		 gui.add(stroke_colour.set("stroke colour", ofColor(255,255,255,255), ofColor(0,0,0,0), ofColor(255,255,255,255)));
 
 		 gui.add(enable_tesselate.set("enable tesselate", false));
