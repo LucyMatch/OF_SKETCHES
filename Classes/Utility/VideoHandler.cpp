@@ -18,6 +18,7 @@ void VideoHandler::setup(string path) {
 	feed_count = (int)dir.size();
 
 	cam.load(dir.getPath(curr_feed));
+	cam.setVolume(0);
 	cam.play();
 
 #elif _WEBCAM > 0

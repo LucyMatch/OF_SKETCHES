@@ -5,8 +5,8 @@
 #include "ofxGui.h"
 //@TODO : //#include "IPVideoGrabber.h"
 
-#define _LOCAL 0	//@TODO: local video trigger & set up
-#define _WEBCAM	1   //comment for ip cam ( todo )
+#define _LOCAL 1	//@TODO: local video trigger & set up
+#define _WEBCAM	0   //comment for ip cam ( todo )
 
 //@TODO:
 //			btns for looping through different ip cameras & webcams
