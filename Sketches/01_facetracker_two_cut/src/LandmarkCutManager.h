@@ -38,33 +38,6 @@ struct LandmarkCut {
 class LandmarkCutManager {
 
 public:
-	//LandmarkCutManager() {
-
-	//	PolyCuts 
-	//		re("left eye"), 
-	//		le("right eye"), 
-	//		m("mouth");
-
-	//	struct LandmarkCut 
-	//		lefteye { ofxFaceTracker2Landmarks::Feature::LEFT_EYE, re, true },
-	//		righteye{ ofxFaceTracker2Landmarks::Feature::RIGHT_EYE, le, true },
-	//		mouth{ ofxFaceTracker2Landmarks::Feature::OUTER_MOUTH, m, true };
-
-	//	cuts.push_back(lefteye);
-	//	cuts.push_back(righteye);
-	//	cuts.push_back(mouth);
-
-	//	initGui();
-
-	//}
-	//void update(ofxFaceTracker2Landmarks lm) {
-	//	for (auto &c : cuts) {
-	//		if (c.feature == ofxFaceTracker2Landmarks::Feature::LEFT_EYE && enable_left_eye != c.enabled)c.enabled = enable_left_eye;
-	//		if (c.feature == ofxFaceTracker2Landmarks::Feature::RIGHT_EYE &&  enable_right_eye != c.enabled)c.enabled = enable_right_eye;
-	//		if (c.feature == ofxFaceTracker2Landmarks::Feature::OUTER_MOUTH && enable_mouth != c.enabled)c.enabled = enable_mouth;
-	//		c.cut.update(lm.getImageFeature(c.feature));
-	//	}
-	//}
 
 	LandmarkCutManager() {
 		initGui();
@@ -74,31 +47,19 @@ public:
 	void update( vector<ofxFaceTracker2Instance> t ) {
 		if (t.size() > 0) { 
 			for (int i = 0; i < t.size(); i++) {
-
-				//testing functions of t
-				
-				//t[i].transformPosePosition()
-
 				//now we check to see if there are elements for this face yet
 				if (i < faces.size()) {
 					//exists
 					update(t[i].getLandmarks(), i);
-					cout << "face exists" << "  ";
-					cout << t[i].getLabel() << endl;
 				}
 				else {
 					//create new
-					cout << "creating new face" << "  ";
-					cout << t[i].getLabel() << endl; 
 					initNewFace();
 					update( t[i].getLandmarks(), i );
 				}
 			}
+			checkFaces();
 		}
-		//@TODO:
-		//if 0 do we want to start an timer or something to clear cuts?
-		//so we dont get face holes with no face content
-		//also remove from gui
 	}
 
 	void update(ofxFaceTracker2Landmarks lm, int index) {
@@ -134,6 +95,20 @@ public:
 		gui.add(faces.back()[0].cut.gui);
 		gui.add(faces.back()[1].cut.gui);
 		gui.add(faces.back()[2].cut.gui);
+	}
+
+	void checkFaces() {
+		if (faces.size() > 0) {
+			time = ofGetElapsedTimeMillis();
+			bool kill = false;
+			int id;
+			for (int i = 0; i < faces.size(); ++i) {
+				if (faces[i][0].cut.alive && time - timeout > faces[i][0].cut.timetrack) {
+					kill = true; id = i;
+				}
+			}
+			if(kill)faces.erase(faces.begin() + id);
+		}
 	}
 
 	void draw() {
@@ -220,13 +195,12 @@ public:
 	ofParameterGroup gui;
 	ofParameter<bool> enable_left_eye, enable_right_eye, enable_mouth;
 
-	//vector<LandmarkCut> cuts;
-
 	vector< vector<LandmarkCut> > faces;
 
 private:
 
 	ofFbo save_fbo;
+	unsigned long time, timeout = 5000;
 	
 
 };

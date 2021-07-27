@@ -42,6 +42,10 @@ public:
 		shape.close();
 
 		set();
+
+		//update tracker
+		if (!alive)alive = true;
+		timetrack = ofGetElapsedTimeMillis();
 		
 	}
 
@@ -107,6 +111,9 @@ public:
 	 ofParameter<float> simplify, scale_x, scale_y, stroke_w;
 	 ofParameter<int> curve_reso;
 	 ofParameter<bool> enable_tesselate, enable_simplify;
+
+	 unsigned long timetrack;
+	 bool alive = false;
 
 private:
 
