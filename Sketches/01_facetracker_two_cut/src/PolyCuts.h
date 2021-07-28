@@ -11,8 +11,6 @@ public:
 	}
 
 	virtual void update() {
-		if (enable_simplify)shape.simplify(simplify);
-		if (enable_tesselate)shape.tessellate();
 		if (enable_scale)shape.scale(scale_x, scale_y);
 		shape.setCurveResolution(curve_reso);
 		shape.setStrokeColor(stroke_colour);
@@ -77,7 +75,7 @@ public:
 
 	}
 
-	 virtual void initGui(string label) {
+	virtual void initGui(string label) {
 		 //remove base class gui ctrls not using
 		 gui.remove(w);
 		 gui.remove(h);
@@ -85,7 +83,8 @@ public:
 		 gui.remove(shape_mode);
 		 gui.remove(circle_reso);
 		 gui.setName(label);
-		 
+
+		 //@TODO: may still want this to be static
 		 gui.add(enable_clear.set("enable shape clear", true));
 		 gui.add(enable_subpath.set("enable subpath", false));
 		 gui.add(enable_curve.set("enable curve", true));
@@ -98,19 +97,13 @@ public:
 		 gui.add(stroke_w.set("stroke width", 0.0, 0.0, 15.0));
 		 gui.add(stroke_colour.set("stroke colour", ofColor(255,255,255,255), ofColor(0,0,0,0), ofColor(255,255,255,255)));
 
-		 gui.add(enable_tesselate.set("enable tesselate", false));
-		 gui.add(enable_simplify.set("enable simplify", false));
-
-		 
-
 	}
 
 	 ofParameter<bool> enable_clear, enable_subpath, enable_curve, enable_scale;
 	 ofParameter<ofColor> colour, stroke_colour;
 
-	 ofParameter<float> simplify, scale_x, scale_y, stroke_w;
+	 ofParameter<float> scale_x, scale_y, stroke_w;
 	 ofParameter<int> curve_reso;
-	 ofParameter<bool> enable_tesselate, enable_simplify;
 
 	 unsigned long timetrack;
 	 bool alive = false;

@@ -33,6 +33,12 @@ void ofApp::update(){
         cut_man.update(t);
     }
 
+    //refresh gui
+    if (cut_count != cut_man.faces.size()) {
+        cut_count = cut_man.faces.size();
+        refreshCutManGui();
+    }
+
 }
 
 //--------------------------------------------------------------
@@ -91,17 +97,26 @@ void ofApp::initGui() {
     gui.add(blend_mode.set("blend mode", 0, 0, 5));
 
     gui.add(video.gui);
-    gui.add(cut_man.gui);
 
-    //@TODO:
-    //if we get new "faces" - check with size of instances
-    //we need to remove cut_man and re add
+    refreshCutManGui();
 
+}
+
+//--------------------------------------------------------------
+void ofApp::refreshCutManGui() {
+    //not fully convinced this will work....
+    //we will need to track faces so we know which we need to 
+    //remove rather than clearing everytime
+    //static may still be the way to go
+    cuts_gui.clear();
+    cuts_gui.setup("C U T S");
+    cuts_gui.add(cut_man.gui);
 }
 
 //--------------------------------------------------------------
 void ofApp::drawGui(ofEventArgs& args) {
     gui.draw();
+    cuts_gui.draw();
 }
 
 //--------------------------------------------------------------

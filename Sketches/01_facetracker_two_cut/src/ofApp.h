@@ -14,6 +14,7 @@ public:
     void draw();
 
     void initGui();
+    void refreshCutManGui();
     void drawGui(ofEventArgs& args);
     void framerate();
     void drawDebug();
@@ -29,7 +30,9 @@ public:
     //PolyCuts left_eye, right_eye, mouth;
     LandmarkCutManager cut_man;
 
-    ofxPanel gui;
+    int cut_count = 0;
+
+    ofxPanel gui, cuts_gui;
     ofParameter<ofColor> bg_c;
     ofParameter<bool> enable_debug, enable_orig;
     ofParameter<int> blend_mode;

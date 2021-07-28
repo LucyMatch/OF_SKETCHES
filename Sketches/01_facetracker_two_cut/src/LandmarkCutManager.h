@@ -89,9 +89,9 @@ public:
 
 		faces.push_back(face);
 
-		//add to gui @TODO: this will need work
-		//					likely needs updating in 
-		//					ofapp to owhen a new instance is added / removed
+		//@TODO:
+		//remove relevnt stuff from gui 
+		//when removed
 		gui.add(faces.back()[0].cut.gui);
 		gui.add(faces.back()[1].cut.gui);
 		gui.add(faces.back()[2].cut.gui);
@@ -108,6 +108,8 @@ public:
 				}
 			}
 			if(kill)faces.erase(faces.begin() + id);
+			//@TODO: here remove the stuff from gui too... 
+			//figure out how without removing eveyrthing
 		}
 	}
 
