@@ -79,7 +79,7 @@ void VideoHandler::draw() {
 //--------------------------------------------------------------
 void VideoHandler::nxtFeed() {
 	curr_feed = ++curr_feed % feed_count;
-	cout << "curr fedd = " << curr_feed << endl;
+	cout << "curr feed = " << curr_feed << endl;
 	setup();
 	
 }
@@ -87,7 +87,8 @@ void VideoHandler::nxtFeed() {
 //--------------------------------------------------------------
 void VideoHandler::prevFeed() {
 	curr_feed = --curr_feed % feed_count;
-	cout << "curr fedd = " << curr_feed << endl;
+	if (curr_feed < 0)curr_feed = feed_count -1;
+	cout << "curr feed = " << curr_feed << endl;
 	setup();
 }
 
