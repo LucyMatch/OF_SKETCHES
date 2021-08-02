@@ -15,14 +15,18 @@ PolyCuts::PolyCuts(string label) {
 }
 
 void PolyCuts::update() {
-		if (enable_scale)shape.scale(scale_x, scale_y);
+	if (enable_scale) {
+		set();
+		shape.translate( -getCenter() );
+		shape.scale(scale_x, scale_y);
+		shape.translate( getCenter() );
+	}
 		shape.setCurveResolution(curve_reso);
 }
 
 void PolyCuts::update(ofPolyline _p) {
 
-		update();
-
+	ofPushMatrix();
 		if (enable_clear)shape.clear();
 		if (enable_subpath)shape.newSubPath();
 
@@ -37,11 +41,11 @@ void PolyCuts::update(ofPolyline _p) {
 
 		if (enable_curve)shape.curveTo(_p[0]);
 
-		//if (enable_scale)shape.scale(w, h);
-
 		shape.close();
 
+		update();
 		set();
+	ofPopMatrix();
 
 		//update tracker
 		if (!alive)alive = true;
