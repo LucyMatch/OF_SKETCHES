@@ -42,6 +42,7 @@ class VideoHandler {
 		glm::vec2& getDims();
 		ofTexture* getFrameTex();
 		ofImage& getFrameImg();
+		string getVideoTitle();
 
 	#if _LOCAL > 0
 		ofVideoPlayer cam;
@@ -53,6 +54,7 @@ class VideoHandler {
 	#endif
 
 		int curr_feed = 0, feed_count;
+		ofDirectory dir;
 
 		glm::vec2 dims;
 		ofImage frame;

@@ -11,7 +11,6 @@ void VideoHandler::setup(string path) {
 
 #if _LOCAL > 0
 
-	ofDirectory dir;
 	dir.listDir(path);
 	dir.sort();
 
@@ -113,6 +112,17 @@ ofTexture* VideoHandler::getFrameTex() {
 ofImage& VideoHandler::getFrameImg() {
 	return frame;
 }
+
+//--------------------------------------------------------------
+string VideoHandler::getVideoTitle() {
+#if _LOCAL > 0
+	return dir.getPath(curr_feed);
+#else 
+	return "live video feed";
+#endif
+}
+
+
 
 //--------------------------------------------------------------
 void VideoHandler::initGui() {
