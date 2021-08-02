@@ -115,6 +115,9 @@
     <ClCompile Include="..\..\Classes\Utility\VideoHandler.cpp">
       <Filter>src\external</Filter>
     </ClCompile>
+    <ClCompile Include="src\PolyCuts.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">

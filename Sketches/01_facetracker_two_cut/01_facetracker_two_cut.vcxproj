@@ -220,6 +220,7 @@
     <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxFaceTracker2\src\ofxFaceTracker2.cpp" />
     <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxFaceTracker2\src\ofxFaceTracker2Instance.cpp" />
     <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxFaceTracker2\src\ofxFaceTracker2Landmarks.cpp" />
+    <ClCompile Include="src\PolyCuts.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Classes\Utility\Cuts.h" />
