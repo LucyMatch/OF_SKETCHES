@@ -23,7 +23,7 @@
 	<CUT_MANAGER>
 		<enable_left_eye>1</enable_left_eye>
 		<enable_right_eye>1</enable_right_eye>
-		<enable_mouth>1</enable_mouth>
+		<enable_mouth>0</enable_mouth>
 		<left_eye>
 			<colour>209, 255, 184, 255</colour>
 			<enable_shape_clear>1</enable_shape_clear>
@@ -45,5 +45,18 @@
 			<enable_curve>1</enable_curve>
 			<enable_scale>0</enable_scale>
 		</mouth>
+		<face_timeout>2295.92</face_timeout>
+		<left_eye_colour>255, 255, 255, 255</left_eye_colour>
+		<right_eye_colour>255, 255, 255, 255</right_eye_colour>
+		<mouth_colour>255, 255, 255, 255</mouth_colour>
+		<enable_clear>1</enable_clear>
+		<enable_subpath>0</enable_subpath>
+		<enable_curve>1</enable_curve>
+		<enable_scale>1</enable_scale>
+		<scale_x>1.37755</scale_x>
+		<scale_y>1.30102</scale_y>
+		<curve_reso>200</curve_reso>
 	</CUT_MANAGER>
+	<blend_mode>0</blend_mode>
+	<export_interval>1000</export_interval>
 </P_R_I_M_A_R_Y>
