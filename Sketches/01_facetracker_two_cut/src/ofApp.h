@@ -17,6 +17,8 @@ public:
     void drawGui(ofEventArgs& args);
     void framerate();
     void drawDebug();
+    void drawInfo();
+    void intervalExport();
 
     void keyPressed(int key);
     void mouseMoved(int x, int y);
@@ -28,11 +30,14 @@ public:
     LandmarkCutManager cut_man;
 
     int cut_count = 0;
+    bool show_info, enable_interval_export;
+    unsigned long time, time_elapsed;
 
     ofxPanel gui;
     ofParameter<ofColor> bg_c;
     ofParameter<bool> enable_debug, enable_orig;
     ofParameter<int> blend_mode;
+    ofParameter<float> time_interval;
 
     std::map<int, ofBlendMode> blends{
 	    {0, OF_BLENDMODE_DISABLED },

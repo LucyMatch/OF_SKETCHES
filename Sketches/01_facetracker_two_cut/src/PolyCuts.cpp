@@ -10,7 +10,8 @@ ofParameter<float> PolyCuts::scale_x = 1.0, PolyCuts::scale_y = 1.0;
 ofParameter<int> PolyCuts::curve_reso = 500;
 
 
-PolyCuts::PolyCuts(string label) {
+PolyCuts::PolyCuts(string _label) {
+		label = _label;
 		shape.setMode(ofPath::POLYLINES);
 }
 

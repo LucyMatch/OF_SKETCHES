@@ -21,6 +21,13 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    
+    if (enable_interval_export) {
+        time = ofGetElapsedTimeMillis();
+        if (time - time_interval > time_elapsed) 
+            intervalExport();
+    }
+
     framerate();
 
     //update video for new frame
@@ -54,6 +61,9 @@ void ofApp::draw(){
 
     if (enable_debug)
         drawDebug();
+
+    if (show_info)
+        drawInfo();
     
 }
 
@@ -73,10 +83,53 @@ void ofApp::drawDebug() {
 }
 
 //--------------------------------------------------------------
+void ofApp::intervalExport() {
+    //reset time tracker
+    time_elapsed = ofGetElapsedTimeMillis();
+    cut_man.exportCuts(video.getFrameTex());
+}
+
+//--------------------------------------------------------------
 void ofApp::framerate() {
     std::stringstream strm;
     strm << "fps: " << ofGetFrameRate();
     ofSetWindowTitle(strm.str());
+}
+
+//--------------------------------------------------------------
+void ofApp::drawInfo() {
+    ofPushMatrix();
+    ofPushStyle();
+
+    ofEnableAlphaBlending();
+
+    // draw the info box
+    ofSetColor(0,80);
+    ofDrawRectangle(5,5, ofGetWidth() /2, 200);
+
+    std::stringstream ss;
+
+    // ofToString formatting available in 0072+
+    ss << "          Video Feed: " << video.getVideoTitle() << std::endl;
+    ss << "          Export Interval: " << time_interval / 1000 << " /s" << std::endl;
+    string enabled = (enable_interval_export) ? "yes" : "no";
+    ss << "          Export Interval Active: " << enabled << std::endl;
+    ss << "---------------------------------- " <<  std::endl;
+    ss << " Key Controls " << std::endl;
+    ss << " Next Video              :  '.' " << std::endl;
+    ss << " Prev Video              :  ',' " << std::endl;
+    ss << " Single Export           :  'x' " << std::endl;
+    ss << " Toggle Interval Export  :  'z' " << std::endl;
+    ss << " Toggle This Info        :  'b' " << std::endl;
+
+
+    ofSetColor(255);
+    ofDrawBitmapString(ss.str(), 10, 10 + 12);
+
+    ofDisableAlphaBlending();
+
+    ofPopStyle();
+    ofPopMatrix();
 }
 
 //--------------------------------------------------------------
@@ -88,6 +141,7 @@ void ofApp::initGui() {
     gui.add(enable_debug.set("enable debug", false));
     gui.add(enable_orig.set("enable orig", true));
     gui.add(blend_mode.set("blend mode", 0, 0, 5));
+    gui.add(time_interval.set("export interval", 1000, 500, 50000));
 
     gui.add(video.gui);
     gui.add(cut_man.gui);
@@ -111,6 +165,12 @@ void ofApp::keyPressed(int key) {
         break;
     case 'x':
         cut_man.exportCuts(video.getFrameTex());
+        break;
+    case 'b':
+        show_info = !show_info;
+        break;    
+    case 'z':
+        enable_interval_export = !enable_interval_export;
         break;
     case '1':
         gui.saveToFile("1_gui.xml");

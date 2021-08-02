@@ -5,7 +5,7 @@
 class PolyCuts : public BaseCut {
 
 public:
-	PolyCuts(string label = "default");
+	PolyCuts(string _label = "default");
 	virtual void update();
 	virtual void update(ofPolyline _p);
 	//@TODO: for mouth etc things with iner shapes
@@ -17,6 +17,7 @@ public:
 
 	unsigned long timetrack;
 	bool alive = false;
+	string label;
 
 private:
 

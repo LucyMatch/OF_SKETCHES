@@ -21,6 +21,7 @@ struct LandmarkCut {
 	ofxFaceTracker2Landmarks::Feature feature;
 	PolyCuts cut;
 	bool enabled;
+	string label;
 };
 
 /*
@@ -91,9 +92,9 @@ public:
 		PolyCuts re("left eye"), le("right eye"), m("mouth");
 
 	struct LandmarkCut 
-		lefteye { ofxFaceTracker2Landmarks::Feature::LEFT_EYE, re, true },
-		righteye{ ofxFaceTracker2Landmarks::Feature::RIGHT_EYE, le, true },
-		mouth{ ofxFaceTracker2Landmarks::Feature::OUTER_MOUTH, m, true };
+		lefteye { ofxFaceTracker2Landmarks::Feature::LEFT_EYE, re, true, re.label },
+		righteye{ ofxFaceTracker2Landmarks::Feature::RIGHT_EYE, le, true, le.label },
+		mouth{ ofxFaceTracker2Landmarks::Feature::OUTER_MOUTH, m, true, m.label };
 
 		vector<LandmarkCut> face;
 
@@ -143,13 +144,15 @@ public:
 	void exportCuts( ofTexture *tex ){
 		for (auto& f : faces)
 			for (auto& c : f){
-				glm::vec2 size = c.cut.getSize();
-				////export
-				ofPixels tmp_pix;
-				getCutTexture(c.cut, *tex).readToPixels(tmp_pix);
-				ofImage new_img(tmp_pix);
-				new_img.allocate(int(size.x), int(size.y), OF_IMAGE_COLOR_ALPHA);
-				new_img.save("outputs/cuts_" + ofToString(c.feature) + "_" + ofToString(ofGetMonth()) + "_" + ofToString(ofGetDay()) + "_" + ofToString(ofGetYear()) + "_" + ofToString(ofGetHours()) + "_" + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png", OF_IMAGE_QUALITY_BEST);
+				if (c.enabled) {
+					glm::vec2 size = c.cut.getSize();
+					////export
+					ofPixels tmp_pix;
+					getCutTexture(c.cut, *tex).readToPixels(tmp_pix);
+					ofImage new_img(tmp_pix);
+					new_img.allocate(int(size.x), int(size.y), OF_IMAGE_COLOR_ALPHA);
+					new_img.save("outputs/cuts_" + c.label + "_" + ofToString(ofGetMonth()) + "_" + ofToString(ofGetDay()) + "_" + ofToString(ofGetYear()) + "_" + ofToString(ofGetHours()) + "_" + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png", OF_IMAGE_QUALITY_BEST);
+				}
 			}
 	}
 
