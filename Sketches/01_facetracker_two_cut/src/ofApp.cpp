@@ -32,13 +32,6 @@ void ofApp::update(){
         auto t = tracker.getInstances();
         cut_man.update(t);
     }
-
-    //refresh gui
-    if (cut_count != cut_man.faces.size()) {
-        cut_count = cut_man.faces.size();
-        refreshCutManGui();
-    }
-
 }
 
 //--------------------------------------------------------------
