@@ -65,9 +65,23 @@ public:
 	void update(ofxFaceTracker2Landmarks lm, int index) {
 		if (faces.size() > index) {
 			for (auto& c : faces[index]) {
-				if (c.feature == ofxFaceTracker2Landmarks::Feature::LEFT_EYE && enable_left_eye != c.enabled)c.enabled = enable_left_eye;
-				if (c.feature == ofxFaceTracker2Landmarks::Feature::RIGHT_EYE && enable_right_eye != c.enabled)c.enabled = enable_right_eye;
-				if (c.feature == ofxFaceTracker2Landmarks::Feature::OUTER_MOUTH && enable_mouth != c.enabled)c.enabled = enable_mouth;
+				/*
+				*	current solve for how many instances of polycuts
+				*	this approaches features as singletons not faces
+				*	this structure was designed for export utility
+				*/
+				if (c.feature == ofxFaceTracker2Landmarks::Feature::LEFT_EYE) {
+					if(enable_left_eye != c.enabled)c.enabled = enable_left_eye;
+					c.cut.colour = left_eye_c;
+				}
+				if (c.feature == ofxFaceTracker2Landmarks::Feature::RIGHT_EYE) {
+					if(enable_right_eye != c.enabled)c.enabled = enable_right_eye;
+					c.cut.colour = right_eye_c;
+				}
+				if (c.feature == ofxFaceTracker2Landmarks::Feature::OUTER_MOUTH) {
+					if(enable_mouth != c.enabled)c.enabled = enable_mouth;
+					c.cut.colour = mouth_c;
+				}
 				c.cut.update(lm.getImageFeature(c.feature));
 			}
 		}
@@ -88,13 +102,6 @@ public:
 		face.push_back(mouth);
 
 		faces.push_back(face);
-
-		//@TODO:
-		//remove relevnt stuff from gui 
-		//when removed
-		gui.add(faces.back()[0].cut.gui);
-		gui.add(faces.back()[1].cut.gui);
-		gui.add(faces.back()[2].cut.gui);
 	}
 
 	void checkFaces() {
@@ -189,20 +196,38 @@ public:
 	void initGui() {
 		gui.clear();
 		gui.setName("CUT MANAGER");
+
+		gui.add(timeout.set("face timeout", 0.0, 0.0, 10000.0));
+
 		gui.add(enable_left_eye.set("enable left eye", true));
 		gui.add(enable_right_eye.set("enable right eye", true));
 		gui.add(enable_mouth.set("enable mouth", true));
+
+		gui.add(left_eye_c.set("left eye colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+		gui.add(right_eye_c.set("right eye colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+		gui.add(mouth_c.set("mouth colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+
+		///add static cuts gui
+		gui.add(PolyCuts::enable_clear.set("enable clear", true));
+		gui.add(PolyCuts::enable_subpath.set("enable subpath", false));
+		gui.add(PolyCuts::enable_curve.set("enable curve", true));
+		gui.add(PolyCuts::enable_scale.set("enable scale", false));
+		gui.add(PolyCuts::scale_x.set("scale x", 1.0, 0.0, 10.0));
+		gui.add(PolyCuts::scale_y.set("scale y", 1.0, 0.0, 10.0));
+		gui.add(PolyCuts::curve_reso.set("curve reso", 200, 0, 1000));
 	}
 
 	ofParameterGroup gui;
 	ofParameter<bool> enable_left_eye, enable_right_eye, enable_mouth;
+	ofParameter<ofColor> left_eye_c, right_eye_c, mouth_c;
+	ofParameter<float> timeout;
 
 	vector< vector<LandmarkCut> > faces;
 
 private:
 
 	ofFbo save_fbo;
-	unsigned long time, timeout = 5000;
+	unsigned long time;
 	
 
 };

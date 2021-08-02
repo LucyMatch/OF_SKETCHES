@@ -97,8 +97,9 @@ void ofApp::initGui() {
     gui.add(blend_mode.set("blend mode", 0, 0, 5));
 
     gui.add(video.gui);
+    gui.add(cut_man.gui);
 
-    refreshCutManGui();
+    //refreshCutManGui();
 
 }
 
@@ -108,15 +109,14 @@ void ofApp::refreshCutManGui() {
     //we will need to track faces so we know which we need to 
     //remove rather than clearing everytime
     //static may still be the way to go
-    cuts_gui.clear();
-    cuts_gui.setup("C U T S");
-    cuts_gui.add(cut_man.gui);
+    //cuts_gui.clear();
+    //cuts_gui.setup("C U T S");
+    //cuts_gui.add(cut_man.gui);
 }
 
 //--------------------------------------------------------------
 void ofApp::drawGui(ofEventArgs& args) {
     gui.draw();
-    cuts_gui.draw();
 }
 
 //--------------------------------------------------------------

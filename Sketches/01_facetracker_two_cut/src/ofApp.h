@@ -32,7 +32,7 @@ public:
 
     int cut_count = 0;
 
-    ofxPanel gui, cuts_gui;
+    ofxPanel gui;
     ofParameter<ofColor> bg_c;
     ofParameter<bool> enable_debug, enable_orig;
     ofParameter<int> blend_mode;
