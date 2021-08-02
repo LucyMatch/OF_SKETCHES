@@ -14,7 +14,6 @@ public:
     void draw();
 
     void initGui();
-    void refreshCutManGui();
     void drawGui(ofEventArgs& args);
     void framerate();
     void drawDebug();
@@ -26,8 +25,6 @@ public:
 
     ofxFaceTracker2 tracker;
 
-    //testing singular cut
-    //PolyCuts left_eye, right_eye, mouth;
     LandmarkCutManager cut_man;
 
     int cut_count = 0;

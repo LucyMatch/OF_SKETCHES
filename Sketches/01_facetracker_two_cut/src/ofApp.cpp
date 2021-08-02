@@ -99,19 +99,6 @@ void ofApp::initGui() {
     gui.add(video.gui);
     gui.add(cut_man.gui);
 
-    //refreshCutManGui();
-
-}
-
-//--------------------------------------------------------------
-void ofApp::refreshCutManGui() {
-    //not fully convinced this will work....
-    //we will need to track faces so we know which we need to 
-    //remove rather than clearing everytime
-    //static may still be the way to go
-    //cuts_gui.clear();
-    //cuts_gui.setup("C U T S");
-    //cuts_gui.add(cut_man.gui);
 }
 
 //--------------------------------------------------------------
