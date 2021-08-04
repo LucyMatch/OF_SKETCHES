@@ -4,6 +4,7 @@
 #for any inputs / output image sets
 [Oo]utputs/
 [Ii]nputs/
+[Ii]mages/
 
 #repo specific
 IGNOREDBYREPO/
