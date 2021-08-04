@@ -80,7 +80,8 @@ void ofApp::initImages() {
 	mixed_sky = new ImageHandler("images/mixed_sky");
 
 	//misc = new ImageHandler("images/misc");
-	misc = new ImageHandler("images/lucy-eyes");
+	misc = new ImageHandler("images/carol");
+	eyes = new ImageHandler("images/lucy-selfie");
 
 }
 
