@@ -59,8 +59,8 @@ public:
 					update( t[i].getLandmarks(), i );
 				}
 			}
-			checkFaces();
 		}
+		checkFaces();
 	}
 
 	void update(ofxFaceTracker2Landmarks lm, int index) {

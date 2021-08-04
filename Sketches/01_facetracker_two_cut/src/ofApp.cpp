@@ -141,7 +141,7 @@ void ofApp::initGui() {
     gui.add(enable_debug.set("enable debug", false));
     gui.add(enable_orig.set("enable orig", true));
     gui.add(blend_mode.set("blend mode", 0, 0, 5));
-    gui.add(time_interval.set("export interval", 1000, 500, 50000));
+    gui.add(time_interval.set("export interval", 1000, 100, 50000));
 
     gui.add(video.gui);
     gui.add(cut_man.gui);
