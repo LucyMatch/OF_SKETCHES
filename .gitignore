@@ -1,3 +1,10 @@
+#adding an ignore for video files
+*.mp4
+
+#for any inputs / output image sets
+[Oo]utputs/
+[Ii]nputs/
+
 #repo specific
 IGNOREDBYREPO/
 */prev
