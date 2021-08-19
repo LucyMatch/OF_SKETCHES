@@ -223,7 +223,7 @@ GUI :
 
 * Yes for Particles / Blocks /Forces / Grid controls
 
-### 02_particle_cutouts - wip
+### 02_particle_cutouts 
 
 <img src="https://github.com/LucyMatch/OF_SKETCHES/blob/master/screen_grabs/02_particle_cutouts.png?raw=true" width="200" height="200">
 
@@ -262,7 +262,12 @@ GUI :
 
 * Yes for Particles / Blocks /Forces / Grid controls
 
-### 00_Image_Cut - wip
+ISSUES :
+
+* you fucked up all the blend modes
+* all controls could be better streamlined! its like a very complex instrument you forget how to play....
+
+### 00_Image_Cut 
 
 External Classes
 
@@ -270,8 +275,102 @@ External Classes
 
 Functionality
 
+* utility for cutting static images and exporting out the assets
+* there is an "input mode" where you can use the mouse to select where different cuts exist
+* cut shapes are configurable
+* key press for export / next image etc
+
+GUI : 
+
+* 
+
+Potential
+
+* tidy up with proper on screen info and could turn into utility offered on github!
+
+
+
+### 00_video_cut
+
+External Classes
+
+* ImageHandler
+
+Functionality
+
+* utility for cutting  videos /webcam live feed
+* same functionality as image-cut - mouse controlled "holepunch" with configrable shapes
+* key controlled export
+
+GUI : 
+
+* 
+
+Potential
+
+* tidy up with proper on screen info and could turn into utility offered on github!
+
+
+
+### 03_particle_cutouts_live
+
+External Classes
+
+* 
+
+Functionality
+
+* 00_video_cut + 02_particle_cut_outs
+* live / static video with "cuts" that act as particles - > spawn positions etc... 
+
+GUI : 
+
+* 
+
+Potential
+
+* 
+
+
+
+### 01_facetracker_two_cut
+
+External Classes
+
+* 
+
+Functionality
+
+* uses facetracker2 addon
+* Utility for exporting cuts based on facetracking with the ability to set timed intervals for exporting out cuts
+* only deals with eyes + mouths
+* live or input videos
+
+GUI : 
+
+* 
+
+Potential
+
+* tidy up with proper on screen info and could turn into utility offered on github!
+
+
+
+### 03_particle_cutouts_facetracker_two - wip
+
+External Classes
+
+* 
+
+Functionality ( plan )
+
 * 
 
 GUI : 
 
 * 
+
+Potential
+
+* 
+
