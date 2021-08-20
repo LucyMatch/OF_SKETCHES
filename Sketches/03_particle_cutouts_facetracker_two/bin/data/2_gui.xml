@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<P_R_I_M_A_R_Y>
+	<background>226, 255, 226, 255</background>
+	<enable_debug>0</enable_debug>
+	<enable_orig>0</enable_orig>
+	<export_interval>1000</export_interval>
+	<enable_trails>1</enable_trails>
+	<enable_plain_draw>1</enable_plain_draw>
+	<enable_auto_spawning>1</enable_auto_spawning>
+	<enable_varying_gravity>1</enable_varying_gravity>
+	<gravity_direction>1</gravity_direction>
+	<gravity_min>0.5</gravity_min>
+	<gravity_max>0.5</gravity_max>
+	<video_controls>
+		<video_colour>255, 255, 255, 255</video_colour>
+		<video_bg_colour>255, 255, 255, 255</video_bg_colour>
+		<enable_video_bg>0</enable_video_bg>
+	</video_controls>
+	<CUT_MANAGER>
+		<face_timeout>1836.73</face_timeout>
+		<enable_left_eye>1</enable_left_eye>
+		<enable_right_eye>1</enable_right_eye>
+		<enable_mouth>0</enable_mouth>
+		<left_eye_colour>255, 255, 255, 255</left_eye_colour>
+		<right_eye_colour>255, 255, 255, 255</right_eye_colour>
+		<mouth_colour>255, 255, 255, 255</mouth_colour>
+		<enable_clear>1</enable_clear>
+		<enable_subpath>0</enable_subpath>
+		<enable_curve>1</enable_curve>
+		<enable_scale>1</enable_scale>
+		<scale_x>1.11735</scale_x>
+		<scale_y>1.22449</scale_y>
+		<curve_reso>200</curve_reso>
+	</CUT_MANAGER>
+	<particle_fbo_alpha_ctrl>144</particle_fbo_alpha_ctrl>
+	<pman_fbo_colour>255, 255, 255, 255</pman_fbo_colour>
+	<P>
+		<color>0, 0, 0, 100</color>
+		<trail_color>0, 0, 0, 100</trail_color>
+		<radius>147</radius>
+		<true_size>0</true_size>
+		<random_size>0</random_size>
+		<continous_resize>0</continous_resize>
+		<size_min>47</size_min>
+		<size_max>100</size_max>
+		<mass_base>461.735</mass_base>
+		<speed_limit>1.27551</speed_limit>
+		<trail_on>0</trail_on>
+		<trail_include_home>0</trail_include_home>
+		<trail_weight>5</trail_weight>
+		<history_length>3</history_length>
+	</P>
+</P_R_I_M_A_R_Y>
