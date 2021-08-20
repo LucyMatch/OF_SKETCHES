@@ -360,11 +360,18 @@ Potential
 
 External Classes
 
-* 
+* Cuts.h
+* VideoHandler.h / .cpp
+* Forces / Particle / Pmanager (?)
 
-Functionality ( plan )
+Functionality ( plan / dump )
 
-* 
+* 01_facetracker_two_cut + 03_particle_cutouts_live / 02_particle_cuts
+* add alternate shapes for "face cuts" 
+  * think circles around the eyes but tracking
+* get baseline particle spawn / functionality going
+* THEN THE GOAL IS TO CLEAN THIS SHIT UP!!!!!!
+* eventually do mouth inner cut / other features?
 
 GUI : 
 
@@ -373,4 +380,13 @@ GUI :
 Potential
 
 * 
+
+Current approach...
+
+* A particle manager per "poly cut"
+  * meaning a particle manager per facial feature ( landmark )
+  * all particles belonging to that manager will have the same "texture"
+  * the option to spawn randomly / at feature location / debug ( display cut at location)
+  * *** option to do some really cool variations from the manager - spawn varying sizes, spawn varying shapes of cuts, spawn different colour effects per particle
+  * *** I believe this means we want the ability to control individual particle features from the manager... so no static particle features - but static per manager
 
