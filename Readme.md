@@ -1,5 +1,6 @@
 # OF SKETCH REPO
 
+This repo is for personal sketches exploration - its WIP stuff + a bit of a mess 
 
 
 **Classes :**
