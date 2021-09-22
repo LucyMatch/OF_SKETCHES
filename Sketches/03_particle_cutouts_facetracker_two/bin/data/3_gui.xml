@@ -4,7 +4,7 @@
 	<enable_debug>0</enable_debug>
 	<enable_orig>0</enable_orig>
 	<export_interval>1000</export_interval>
-	<enable_trails>0</enable_trails>
+	<enable_trails>1</enable_trails>
 	<enable_plain_draw>0</enable_plain_draw>
 	<enable_auto_spawning>1</enable_auto_spawning>
 	<enable_varying_gravity>1</enable_varying_gravity>
@@ -17,7 +17,7 @@
 		<enable_video_bg>0</enable_video_bg>
 	</video_controls>
 	<CUT_MANAGER>
-		<face_timeout>0</face_timeout>
+		<face_timeout>1071.43</face_timeout>
 		<enable_left_eye>1</enable_left_eye>
 		<enable_right_eye>1</enable_right_eye>
 		<enable_mouth>1</enable_mouth>
@@ -32,7 +32,7 @@
 		<scale_y>1.54592</scale_y>
 		<curve_reso>530</curve_reso>
 	</CUT_MANAGER>
-	<particle_fbo_alpha_ctrl>81</particle_fbo_alpha_ctrl>
+	<particle_fbo_alpha_ctrl>255</particle_fbo_alpha_ctrl>
 	<pman_fbo_colour>253, 255, 118, 255</pman_fbo_colour>
 	<P>
 		<color>0, 0, 0, 100</color>

@@ -38,20 +38,18 @@ void ofApp::update(){
     
     // Update tracker when there are new frames
     // if yes also update cut manager
-    if (video.cam.isFrameNew()) {
-        tracker.update(video.cam); 
-        auto t = tracker.getInstances();
-        cut_man.update(t);
-
-        //@TODO:
-        //make sure pmen exist for landmarks / create new if needed...
-        //update particle managers with locations
-        //update the particles with cut textures
-        
-        //@TODO: confirm this is the best way- this is all a bit of a mess 
-        //we're gonna do it here but it may make sense for either another manager
+    // 
+    //@TODO: not in love with this approach
+    //it may make sense for either another manager
         //to house (cut_man)landmark manager + particle men
         //or (cut_man)landmarkmanager to own particle men.... 
+
+    if (video.cam.isFrameNew()) {
+
+        tracker.update(video.cam); 
+        auto t = tracker.getInstances();
+
+        cut_man.update(t);
 
         if (cut_man.faces.size() > 0) {
             //we know we have faces!
@@ -63,12 +61,13 @@ void ofApp::update(){
                     auto index = i + ( j * cut_man.faces.size() );
                     if (index < p_men.size()) {
                         //pman_exists!
-                        //update cut
+                        //update cut ( shape )
                         p_men[index].update(cut_man.faces[i][j].cut);
                         //update texture
                         ofTexture tmp_tex;
                         tmp_tex = cut_man.getCutTexture( cut_man.faces[i][j].cut, *(video.getFrameTex()));
                         p_men[index].update( tmp_tex );
+                        //update position
                         if (enable_auto_spawn)p_men[index].spawn();
                         if (enable_varying_gravity)p_men[index].applyVaryingGravity(v_gravity_min, v_gravity_max, v_gravity_direction);
                         p_men[index].update();
@@ -76,20 +75,16 @@ void ofApp::update(){
                     else {
                         //we must create a new pman!
                         CutParticleManager _cpm(cut_man.faces[i][j].cut);
-                        p_man_gui.add(_cpm.gui); //createa gui panel for new manager
+                        _cpm.gui.setName(ofToString(index));
+                        p_man_gui.add(_cpm.gui); //create a gui panel for new manager
                         p_men.push_back(_cpm);
                     }
-                    //@TODO: finish checkPmen - currently doesnt removed unused pmen
-                    //checkPmen();
+
                 }
             }
-            
+            checkPmen();
         }
-
     }
-
-    
-
 }
 
 //--------------------------------------------------------------
@@ -150,21 +145,28 @@ void ofApp::draw(){
 
     ofPushStyle();
     p_draw.begin();
-
-        ofSetColor(pman_c, particle_fbo_alpha);
         for (auto& p : p_men) { p.draw(); }
-
-
     p_draw.end();
     ofPopStyle();
-
+    
     ofSetColor(bg_c);
     ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 
-    //draw "original" texture 
-    if (enable_orig)video.draw();
 
-    p_draw.draw(0,0);
+    if (enable_trails) {
+        ofPushStyle();
+        //draw "original" texture 
+        if (enable_orig)video.draw();
+
+        ofSetColor(pman_c, particle_fbo_alpha);
+        p_draw.draw(0, 0);
+        ofPopStyle();
+    }
+
+
+    if (enable_plain_draw)for (auto& p : p_men) { p.draw(); }
+
+
 
     ofEnableAlphaBlending();
 
@@ -197,12 +199,14 @@ void ofApp::drawDebug() {
 }
 
 //--------------------------------------------------------------
+// removed unwanted pmen 
+// this happens when u have multi faces - then the additional faces leave
+//--------------------------------------------------------------
 void ofApp::checkPmen() {
-    //this shouldnt go out of bounds with cut_man.faces[0]
-    //as it only gets called in update once tht has been checked...
-    if (p_men.size() > (cut_man.faces.size() * cut_man.faces[0].size())) {
-        //we have more p_men than faces / cuts!
-        //@TODO: delete the unwanted p_men!
+    if (cut_man.faces.size() > 0 && p_men.size() > (cut_man.faces.size() * cut_man.faces[0].size())) {
+        auto amt = cut_man.faces.size() * cut_man.faces[0].size();          //amt we want
+        p_men.erase(p_men.begin() + amt, p_men.begin() + p_men.size() );    //erase unwanted
+        updatePMenGui( amt );                                               //remove unwanted gui panels
     }
 }
 
@@ -338,6 +342,26 @@ void ofApp::drawGui(ofEventArgs& args) {
     gui.draw();
     p_man_gui.draw();
 }
+
+//--------------------------------------------------------------
+// where amt is the amount of panels we SHOULD have 
+// this function removed unwanted p men guis
+//--------------------------------------------------------------
+void ofApp::updatePMenGui( int amt ) {
+
+    vector<ofxBaseGui*> gs;
+    //back up ofParamGroups we want to keep
+    for (auto g : p_man_gui.getControlNames()) {
+        auto index = ofToInt(g);
+        if (index < amt)gs.push_back(p_man_gui.getControl(g));  //might need to not make this a pointer if clearning???
+    }
+    //delete them all
+    p_man_gui.clear();
+    //add back the ones we want 
+    for (auto g : gs)
+        p_man_gui.add(g);
+}
+
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
