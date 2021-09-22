@@ -96,16 +96,16 @@ void ofApp::update(){
 void ofApp::draw(){
 
     //---------------------
-    //draw to particle fbo
-    p_draw.begin();
-    ofPushStyle();
-    //@TODO: come up with other ways of controlling this apha
-    //		 using animate?
-        ofSetColor(pman_c, particle_fbo_alpha);
-        ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-        for (auto& p : p_men) { p.draw(); }
-    ofPopStyle();
-    p_draw.end();
+    ////draw to particle fbo
+    //p_draw.begin();
+    //ofPushStyle();
+    ////@TODO: come up with other ways of controlling this apha
+    ////		 using animate?
+    //    ofSetColor(pman_c, particle_fbo_alpha);
+    //    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+    //    for (auto& p : p_men) { p.draw(); }
+    //ofPopStyle();
+    //p_draw.end();
     //---------------------
 
     //---------------------
@@ -113,42 +113,58 @@ void ofApp::draw(){
     // @TODO: again test if this is actually how we want to draw... / tidy up!
     // draw to main fbo
 
+    //ofPushStyle();
+    //main_draw.begin();
+
+    //    if (!enable_trails) {
+    //        ofSetColor(bg_c);
+    //        ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+
+    //        //draw "uncut" texture 
+    //        if (enable_orig)
+    //            video.draw();
+    //    }
+
+
+    //    //blend so we only get particles + their trails
+    //    if (enable_trails) {
+    //        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    //        p_draw.draw(0, 0);
+    //    }
+
+    //main_draw.end();
+    //ofPopStyle();
+
+    //if (enable_trails) {
+    //    ofSetColor(bg_c);
+    //    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+
+    //    //draw "original" texture 
+    //    if (enable_orig)video.draw();
+    //}
+    //else {
+    //    main_draw.draw(0, 0);
+    //}
+
+    //if (enable_plain_draw)for (auto& p : p_men) { p.draw(); }
+
     ofPushStyle();
-    main_draw.begin();
+    p_draw.begin();
 
-        if (!enable_trails) {
-            ofSetColor(bg_c);
-            ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-
-            //draw "uncut" texture 
-            if (enable_orig)
-                video.draw();
-        }
+        ofSetColor(pman_c, particle_fbo_alpha);
+        for (auto& p : p_men) { p.draw(); }
 
 
-        //blend so we only get particles + their trails
-        if (enable_trails) {
-            glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-            p_draw.draw(0, 0);
-        }
-
-    main_draw.end();
+    p_draw.end();
     ofPopStyle();
 
-    if (enable_trails) {
-        ofSetColor(bg_c);
-        ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+    ofSetColor(bg_c);
+    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 
-        //draw "original" texture 
-        if (enable_orig)video.draw();
-    }
-    else {
-        main_draw.draw(0, 0);
-    }
+    //draw "original" texture 
+    if (enable_orig)video.draw();
 
-    if (enable_plain_draw)for (auto& p : p_men) { p.draw(); }
-
-    if (enable_debug)drawDebug();
+    p_draw.draw(0,0);
 
     ofEnableAlphaBlending();
 
