@@ -71,6 +71,8 @@ void ofApp::update(){
                         if (enable_auto_spawn)p_men[index].spawn();
                         if (enable_varying_gravity)p_men[index].applyVaryingGravity(v_gravity_min, v_gravity_max, v_gravity_direction);
                         p_men[index].update();
+                        //update enabled - so we dont draw p if cut has been disabled
+                        p_men[index].enabled = cut_man.faces[i][j].enabled;
                     }
                     else {
                         //we must create a new pman!
@@ -217,21 +219,15 @@ void ofApp::drawInfo() {
 //--------------------------------------------------------------
 void ofApp::initGui() {
 
-    //@TODO: tidy this - its a copy & paste job atm
-
     gui.setup("P R I M A R Y");
-
-    gui.add(bg_c.set("background", ofColor(255, 228, 246, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+    //48, 255, 297   //255, 70, 86
+    gui.add(bg_c.set("background", ofColor(46, 184, 139, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
     gui.add(enable_debug.set("enable debug", false));
     gui.add(enable_orig.set("enable orig", true));
-    //gui.add(blend_mode.set("blend mode", 0, 0, 5));
     gui.add(time_interval.set("export interval", 1000, 100, 50000));
 
     gui.add(enable_trails.set("enable trails", true));
-    //gui.add(enable_blend_min.set("enable blend min", false));
-    //gui.add(enable_blend_max.set("enable blend max", false));
     gui.add(enable_plain_draw.set("enable plain draw", true));
-    //gui.add(b_mode_selector.set("blend modes", 1, 0, blends.size() - 1));
     gui.add(enable_auto_spawn.set("enable auto spawning", false));
     gui.add(enable_varying_gravity.set("enable varying gravity", false));
     gui.add(v_gravity_direction.set("gravity direction", 0, 0, 3));
@@ -248,7 +244,6 @@ void ofApp::initGui() {
     particleGui.setName("P");
     particleGui.add(CutParticle::pcolor.set("color", ofColor(0, 0, 0, 100), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
     particleGui.add(CutParticle::tcolor.set("trail color", ofColor(0, 0, 0, 100), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
-    //particleGui.add(CutParticle::b_mode_selector.set("blend Mode Selector", 1, 0, blends.size() - 1));
 
     particleGui.add(CutParticle::r.set("radius", 10, 0, 1000));
     particleGui.add(CutParticle::enable_true_size.set("true size", true));
@@ -258,28 +253,12 @@ void ofApp::initGui() {
     particleGui.add(CutParticle::size_max.set("size max", 100, 0, 500));
     particleGui.add(CutParticle::mass_base.set("mass base", 11.0, 0.0, 500.0));
     particleGui.add(CutParticle::speed_limit.set("speed limit", 20.0, 0.0, 50.0));
-
-    //particleGui.add(CutParticle::seek_on.set("seek on", true));
-    //particleGui.add(CutParticle::seek_limit.set("seek limit", 50.0, 0.0, 50.0));
-    //particleGui.add(CutParticle::arrive_on.set("arrive on", true));
-    //particleGui.add(CutParticle::arrive_cap.set("arrive cap", 100, 0, 250));
-
     particleGui.add(CutParticle::trail.set("trail on", true));
     particleGui.add(CutParticle::enable_home_in_history.set("trail include home", false));
     particleGui.add(CutParticle::trail_wgt.set("trail weight", 5.0, 0.0, 10.0));
     particleGui.add(CutParticle::history_length.set("history length", 3, 0, 50));
 
-    //repelGui.setup("R E P E L");
-    //repelGui.add(enable_repel.set("repel enable", true));
-    //repelGui.add(repel.force_ctrl);
-
-        //attractGui.setup("A T T R A C T");
-    //attractGui.add(enable_attract.set("attract enable", false));
-    //attractGui.add(attract.force_ctrl);
-
     gui.add(particleGui);
-    //gui.add(repelGui);
-    //gui.add(attractGui);
 
     p_man_gui.setup("P MEN");
 

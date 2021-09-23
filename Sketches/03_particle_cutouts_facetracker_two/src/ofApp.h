@@ -41,11 +41,9 @@ public:
 
     ofxPanel gui;
 
-    //@TODO: update these / tidy - this is all from previous sketches
-    //      just getting baseline func in....
-    ofxPanel p_man_gui;
 
-    ofParameterGroup particleGui, repelGui, attractGui;
+    ofxPanel p_man_gui;
+    ofParameterGroup particleGui;
     ofParameter<ofColor> bg_c, pman_c;
     ofParameter<bool> enable_debug, enable_orig, enable_auto_spawn, enable_varying_gravity, enable_trails, enable_plain_draw;
     ofParameter<int> v_gravity_direction, particle_fbo_alpha;

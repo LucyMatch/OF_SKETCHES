@@ -116,8 +116,6 @@ public:
 				}
 			}
 			if(kill)faces.erase(faces.begin() + id);
-			//@TODO: here remove the stuff from gui too... 
-			//figure out how without removing eveyrthing
 		}
 	}
 

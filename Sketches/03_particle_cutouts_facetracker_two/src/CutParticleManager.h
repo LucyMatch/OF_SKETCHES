@@ -33,12 +33,14 @@ public:
 	CutParticleManager() {
 		orig_location = glm::vec2(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight()));
 		setLocation(orig_location);
+		enabled = true;
 		initGui();
 	};
 
 	CutParticleManager(glm::vec2 loc) {
 		orig_location = loc;
 		setLocation(loc);
+		enabled = true;
 		initGui();
 	};
 
@@ -46,6 +48,7 @@ public:
 		cut = c;
 		orig_location = c.getCenter();
 		setLocation(orig_location);
+		enabled = true;
 		initGui();
 	};
 
@@ -82,22 +85,24 @@ public:
 	}
 
 	virtual void draw() {
-		ofPushStyle();
-		ofSetColor(c);
-		for (auto& _p : p)
-			_p.draw();
-		ofPopStyle();
+		if (enabled) {
+			ofPushStyle();
+			ofSetColor(c);
+			for (auto& _p : p)
+				_p.draw();
+			ofPopStyle();
+		}
 	}
 
 	virtual void spawn() {
-		if (enable_limit && p.size() < limit) {
+		if (enabled && enable_limit && p.size() < limit) {
 			CutParticle _p(&frame, curr_location);
 			p.push_back(_p);
 		}
 	}
 
 	virtual void spawn(glm::vec2 loc) {
-		if (enable_limit && p.size() < limit) {
+		if (enabled && enable_limit && p.size() < limit) {
 			CutParticle _p(&frame, loc);
 			p.push_back(_p);
 		}
@@ -119,7 +124,7 @@ public:
 	}
 
 	void randomSpawn() {
-		spawn(glm::vec2(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetWidth())));
+		if(enabled)spawn(glm::vec2(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetWidth())));
 	}
 
 	void drawDebug() {
@@ -148,6 +153,8 @@ public:
 	BaseCut getCut() { return cut; }
 
 	vector<CutParticle> p;
+
+	bool enabled;
 
 	ofParameterGroup gui;
 	ofParameter<bool> enable_limit, enable_kill, enable_bounce, enable_live_cut;
