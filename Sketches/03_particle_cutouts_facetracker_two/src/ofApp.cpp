@@ -90,91 +90,39 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-    //---------------------
-    ////draw to particle fbo
-    //p_draw.begin();
-    //ofPushStyle();
-    ////@TODO: come up with other ways of controlling this apha
-    ////		 using animate?
-    //    ofSetColor(pman_c, particle_fbo_alpha);
-    //    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-    //    for (auto& p : p_men) { p.draw(); }
-    //ofPopStyle();
-    //p_draw.end();
-    //---------------------
-
-    //---------------------
-    // @TODO: test the bledning for trails is correct
-    // @TODO: again test if this is actually how we want to draw... / tidy up!
-    // draw to main fbo
-
-    //ofPushStyle();
-    //main_draw.begin();
-
-    //    if (!enable_trails) {
-    //        ofSetColor(bg_c);
-    //        ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-
-    //        //draw "uncut" texture 
-    //        if (enable_orig)
-    //            video.draw();
-    //    }
-
-
-    //    //blend so we only get particles + their trails
-    //    if (enable_trails) {
-    //        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-    //        p_draw.draw(0, 0);
-    //    }
-
-    //main_draw.end();
-    //ofPopStyle();
-
-    //if (enable_trails) {
-    //    ofSetColor(bg_c);
-    //    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-
-    //    //draw "original" texture 
-    //    if (enable_orig)video.draw();
-    //}
-    //else {
-    //    main_draw.draw(0, 0);
-    //}
-
-    //if (enable_plain_draw)for (auto& p : p_men) { p.draw(); }
-
     ofPushStyle();
     p_draw.begin();
         for (auto& p : p_men) { p.draw(); }
     p_draw.end();
     ofPopStyle();
-    
-    ofSetColor(bg_c);
-    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 
+    ofPushStyle();
+    main_draw.begin();
 
-    if (enable_trails) {
-        ofPushStyle();
-        //draw "original" texture 
+        ofSetColor(bg_c);
+        ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+
         if (enable_orig)video.draw();
 
-        ofSetColor(pman_c, particle_fbo_alpha);
-        p_draw.draw(0, 0);
+        ofPushStyle();
+            if (enable_trails) {
+                ofSetColor(pman_c, particle_fbo_alpha);
+                p_draw.draw(0, 0);
+            }
+            else {
+                for (auto& p : p_men) { p.draw(); }
+            }
         ofPopStyle();
-    }
+     
+    main_draw.end();
+    ofPopStyle();
 
+    main_draw.draw(0, 0);
 
     if (enable_plain_draw)for (auto& p : p_men) { p.draw(); }
 
-
-
-    ofEnableAlphaBlending();
-
-    if (enable_debug)
-        drawDebug();
-
-    if (show_info)
-        drawInfo();
+    if (enable_debug)drawDebug();
+    if (show_info)drawInfo();
     
 }
 
