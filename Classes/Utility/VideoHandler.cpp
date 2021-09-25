@@ -3,6 +3,9 @@
 //--------------------------------------------------------------
 VideoHandler::VideoHandler(glm::vec2 _dims) {
 	dims = _dims;
+	o_dims = _dims;
+	coords = glm::vec2(0, 0);
+	setOutputDims(_dims);
 	initGui();
 }
 
@@ -56,8 +59,14 @@ void VideoHandler::update() {
 	//cout << cam.isLoaded() << endl;
 
 	cam.update();
-	if (cam.isFrameNew())
+	if (cam.isFrameNew()) {
 		frame.setFromPixels(cam.getPixels());
+		if (enable_resizing) {
+			output.begin();
+				cam.draw(coords.x, coords.y, o_dims.x, o_dims.y);
+			output.end();
+		}
+	}
 
 }
 
@@ -71,7 +80,8 @@ void VideoHandler::draw() {
 	}
 
 	ofSetColor(c);
-	cam.draw(0, 0);
+	if (enable_resizing) {output.draw(0,0);}
+	else {cam.draw(0,0);}
 
 }
 
@@ -80,7 +90,6 @@ void VideoHandler::nxtFeed() {
 	curr_feed = ++curr_feed % feed_count;
 	cout << "curr feed = " << curr_feed << endl;
 	setup();
-	
 }
 
 //--------------------------------------------------------------
@@ -99,17 +108,36 @@ void VideoHandler::setDims(glm::vec2 _dims) {
 }
 
 //--------------------------------------------------------------
+void VideoHandler::setOutputDims(glm::vec2 _dims) {
+	o_dims = glm::vec2(_dims.y * (dims.x / dims.y), _dims.y);
+	coords = getOutputCoords();
+	output.allocate(o_dims.x, o_dims.y, GL_RGBA);
+}
+
+//--------------------------------------------------------------
 glm::vec2& VideoHandler::getDims() {
 	return dims;
 }
 
 //--------------------------------------------------------------
+glm::vec2& VideoHandler::getOutputCoords() {
+	return glm::vec2((ofGetWidth() - o_dims.x) / 2, (ofGetHeight() - o_dims.y) / 2);
+}
+
+//--------------------------------------------------------------
 ofTexture* VideoHandler::getFrameTex() {
+	if ( enable_resizing )return &output.getTexture();
 	return &frame.getTexture();
 }
 
 //--------------------------------------------------------------
 ofImage& VideoHandler::getFrameImg() {
+	if (enable_resizing) {
+		ofPixels pix;
+		output.readToPixels( pix );
+		output_frame.setFromPixels( pix );
+		return output_frame;
+	}
 	return frame;
 }
 
@@ -131,6 +159,7 @@ void VideoHandler::initGui() {
 	gui.add(c.set("video colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 	gui.add(bg_c.set("video bg colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 	gui.add(enable_video_bg.set("enable video bg", false));
+	gui.add(enable_resizing.set("enable resizing", true));
 
 }
 

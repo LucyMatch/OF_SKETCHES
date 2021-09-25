@@ -34,12 +34,13 @@ class VideoHandler {
 		void draw();
 
 		void initGui();
-
+		void setOutputDims(glm::vec2 _dims);
 		void setDims(glm::vec2 _dims);
 		void nxtFeed();
 		void prevFeed();
 
 		glm::vec2& getDims();
+		glm::vec2& getOutputCoords();
 		ofTexture* getFrameTex();
 		ofImage& getFrameImg();
 		string getVideoTitle();
@@ -56,10 +57,12 @@ class VideoHandler {
 		int curr_feed = 0, feed_count;
 		ofDirectory dir;
 
-		glm::vec2 dims;
-		ofImage frame;
+		glm::vec2 dims, o_dims, coords;
+		ofImage frame, output_frame;
+
+		ofFbo output;
 
 		ofParameterGroup gui;
 		ofParameter<ofColor> c, bg_c;
-		ofParameter<bool> enable_video_bg;
+		ofParameter<bool> enable_video_bg, enable_resizing;
 };
