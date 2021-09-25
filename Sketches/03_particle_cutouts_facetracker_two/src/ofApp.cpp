@@ -11,8 +11,9 @@ void ofApp::setup(){
     p_draw.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 
     //init vid manager
-    video.setDims(glm::vec2(1280, 720));
+    video.setDims( glm::vec2( 1280, 720 ) );
     video.setup();
+    video.setOutputDims( glm::vec2( ofGetWidth(),ofGetHeight() ) );
 
     ////init gui
     initGui();
@@ -46,7 +47,7 @@ void ofApp::update(){
 
     if (video.cam.isFrameNew()) {
 
-        tracker.update(video.cam); 
+        tracker.update(video.getFrameImg());
         auto t = tracker.getInstances();
 
         cut_man.update(t);
