@@ -40,7 +40,7 @@ class BaseCut {
 
 		}
 
-		void draw() {
+		virtual void draw() {
 			ofPushStyle();
 				ofSetColor(colour);
 				shape.setColor(colour);
