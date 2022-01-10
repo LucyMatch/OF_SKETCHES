@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <P_R_I_M_A_R_Y>
-	<background>237, 226, 255, 255</background>
+	<background>245, 255, 247, 255</background>
 	<enable_debug>0</enable_debug>
-	<enable_orig>1</enable_orig>
+	<enable_orig>0</enable_orig>
 	<export_interval>1000</export_interval>
 	<enable_trails>1</enable_trails>
-	<enable_plain_draw>1</enable_plain_draw>
-	<enable_auto_spawning>0</enable_auto_spawning>
+	<enable_plain_draw>0</enable_plain_draw>
+	<enable_auto_spawning>1</enable_auto_spawning>
 	<enable_varying_gravity>1</enable_varying_gravity>
-	<gravity_direction>1</gravity_direction>
+	<gravity_direction>3</gravity_direction>
 	<gravity_min>0.5</gravity_min>
-	<gravity_max>12.26</gravity_max>
+	<gravity_max>6.87</gravity_max>
 	<video_controls>
 		<video_colour>255, 227, 250, 255</video_colour>
 		<video_bg_colour>255, 255, 255, 255</video_bg_colour>
@@ -18,34 +18,34 @@
 		<enable_resizing>1</enable_resizing>
 	</video_controls>
 	<CUT_MANAGER>
-		<face_timeout>3520.41</face_timeout>
+		<face_timeout>357.143</face_timeout>
 		<enable_left_eye>0</enable_left_eye>
-		<enable_right_eye>0</enable_right_eye>
-		<enable_mouth>1</enable_mouth>
+		<enable_right_eye>1</enable_right_eye>
+		<enable_mouth>0</enable_mouth>
 		<left_eye_colour>255, 255, 255, 255</left_eye_colour>
-		<right_eye_colour>255, 255, 255, 255</right_eye_colour>
-		<mouth_colour>254, 189, 255, 255</mouth_colour>
+		<right_eye_colour>255, 249, 253, 255</right_eye_colour>
+		<mouth_colour>255, 177, 208, 255</mouth_colour>
 		<enable_clear>1</enable_clear>
 		<enable_subpath>0</enable_subpath>
 		<enable_curve>1</enable_curve>
 		<enable_scale>1</enable_scale>
-		<scale_x>1.43878</scale_x>
-		<scale_y>1.42347</scale_y>
-		<curve_reso>200</curve_reso>
 		<enable_shape_mode>0</enable_shape_mode>
+		<scale_x>2.69388</scale_x>
+		<scale_y>3</scale_y>
+		<curve_reso>200</curve_reso>
 		<cut_shape>0</cut_shape>
 	</CUT_MANAGER>
 	<particle_fbo_alpha_ctrl>255</particle_fbo_alpha_ctrl>
-	<pman_fbo_colour>247, 255, 233, 255</pman_fbo_colour>
+	<pman_fbo_colour>255, 236, 243, 255</pman_fbo_colour>
 	<P>
 		<color>0, 0, 0, 100</color>
 		<trail_color>0, 0, 0, 100</trail_color>
-		<radius>63</radius>
+		<radius>65</radius>
 		<true_size>0</true_size>
 		<random_size>1</random_size>
 		<continous_resize>0</continous_resize>
-		<size_min>32</size_min>
-		<size_max>168</size_max>
+		<size_min>50</size_min>
+		<size_max>137</size_max>
 		<mass_base>500</mass_base>
 		<speed_limit>7.90816</speed_limit>
 		<trail_on>1</trail_on>

@@ -301,21 +301,21 @@ void ofApp::keyPressed(int key) {
     case ',':
         video.prevFeed();
         break;
-    case 'x':
+    case '/':
         cut_man.exportCuts(video.getFrameTex());
         break;
     case 'b':
         show_info = !show_info;
         break;    
-    case 'z':
+    case '1':
         enable_interval_export = !enable_interval_export;
         break;
-    case 'p':
+    case 'x':
         //spawn 
         for (auto& p : p_men)
             p.spawn();
         break;
-    case 'o':
+    case 'z':
         //random spawn 
         for (auto& p : p_men)
             p.randomSpawn();
@@ -334,29 +334,41 @@ void ofApp::keyPressed(int key) {
         ofClear(0, 0, 0, 0);
         main_draw.end();
         break;
-    case '1':
+    case 'a' :
+        v_gravity_direction = 0;
+        break;
+    case 's':
+        v_gravity_direction = 1;
+        break;
+    case 'd':
+        v_gravity_direction = 2;
+        break;
+    case 'w':
+        v_gravity_direction = 3;
+        break;
+    case '0':
         //@TODO: once gui tidied up - update this to actually save all
         gui.saveToFile("1_gui.xml");
         break;
-    case '2':
+    case '9':
         gui.saveToFile("2_gui.xml");
         break;
-    case '3':
+    case '8':
         gui.saveToFile("3_gui.xml");
         break;
-    case '4':
+    case '7':
         gui.saveToFile("4_gui.xml");
         break;
-    case 'q':
+    case 'p':
         gui.loadFromFile("1_gui.xml");
         break;
-    case 'w':
+    case 'o':
         gui.loadFromFile("2_gui.xml");
         break;
-    case 'e':
+    case 'i':
         gui.loadFromFile("3_gui.xml");
         break;
-    case 'r':
+    case 'u':
         gui.loadFromFile("4_gui.xml");
         break;
     default:
