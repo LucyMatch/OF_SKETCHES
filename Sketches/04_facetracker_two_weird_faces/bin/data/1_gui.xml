@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<P_R_I_M_A_R_Y>
+	<background>59, 152, 110, 1</background>
+	<cuts_bg__colour>255, 221, 74, 255</cuts_bg__colour>
+	<cuts_colour>252, 243, 255, 255</cuts_colour>
+	<enable_debug>0</enable_debug>
+	<enable_orig>0</enable_orig>
+	<enable_trails>0</enable_trails>
+	<export_interval>1000</export_interval>
+	<video_controls>
+		<video_colour>255, 0, 174, 255</video_colour>
+		<video_bg_colour>255, 236, 240, 255</video_bg_colour>
+		<enable_video_bg>1</enable_video_bg>
+		<enable_resizing>1</enable_resizing>
+	</video_controls>
+	<CUT_MANAGER>
+		<face_timeout>816.327</face_timeout>
+		<enable_left_eye>1</enable_left_eye>
+		<enable_right_eye>1</enable_right_eye>
+		<enable_mouth>1</enable_mouth>
+		<left_eye_colour>255, 255, 255, 255</left_eye_colour>
+		<right_eye_colour>255, 255, 255, 255</right_eye_colour>
+		<mouth_colour>255, 239, 251, 255</mouth_colour>
+		<enable_clear>1</enable_clear>
+		<enable_subpath>0</enable_subpath>
+		<enable_curve>1</enable_curve>
+		<enable_scale>1</enable_scale>
+		<enable_shape_mode>1</enable_shape_mode>
+		<scale_x>3</scale_x>
+		<scale_y>3</scale_y>
+		<curve_reso>200</curve_reso>
+		<cut_shape>0</cut_shape>
+	</CUT_MANAGER>
+</P_R_I_M_A_R_Y>
