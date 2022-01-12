@@ -11,7 +11,11 @@ void ofApp::setup(){
     cuts_draw.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 
     // init vid manager
-    video.setDims(glm::vec2(1280, 720));
+    //video.setDims(glm::vec2(1280, 720));
+    video.setDims(glm::vec2(1920, 1080));
+    //video.setDims(glm::vec2(3840, 2160));
+    //3840 × 2160
+
     video.setup();
     video.setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
 

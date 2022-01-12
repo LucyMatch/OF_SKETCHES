@@ -20,7 +20,7 @@ toggles : ( these per landmark? - we want different effects per land mark)
 * video_feed
 * image_static
 * image_update
-* simple poly 
+* simple poly ( graphic class )
 
 * toggle single / multi 
 
@@ -35,3 +35,18 @@ toggles :
 * enable_random spawning
 * enable gravity
 * gravity direction / speed etc... 
+
+Particle new Spawn mode
+* circle burst spawn. origin is landmark center andc i.e. eyes burst out - radial and travel in spoawned direction. 
+
+
+Extra Graphics
+
+1. create the graphic class
+this class is given a location and draws  a variaty of poly shapes with different effects 
+is it actually an extension of base cut? are these just manually created cut types ?
+
+graphic class is used for landmark particle cut option as descibed above 
+
+but also a graphic manager is created per landmark ( the same way as Pmen ). this manager adds extra graphics behind the primary particle / landmark cut. so i.e. we could have a blue circle behind the right eye .... 
+
