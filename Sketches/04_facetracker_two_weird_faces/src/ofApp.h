@@ -14,10 +14,13 @@ public:
     void update();
     void draw();
 
+    void updateCutElements();
+
     void checkPmen();
-    void updatePmen();
+    void updatePmen( int index,  int i, int j );
 
     void initGui();
+    void updatePMenGui(int amt);
     void drawGui(ofEventArgs& args);
     void framerate();
     void drawDebug();
@@ -28,7 +31,7 @@ public:
     void keyPressed(int key);
     void mouseMoved(int x, int y);
 
-    ofFbo main_draw, cuts_draw;
+    ofFbo main_draw, cuts_draw, p_draw;
 
     VideoHandler video;
 
@@ -42,9 +45,11 @@ public:
     unsigned long time, time_elapsed;
 
     ofxPanel gui;
+    ofxPanel p_man_gui;
+    ofParameterGroup particleGui;
 
-    ofParameter<ofColor> bg_c, cuts_draw_color, cuts_color;
-    ofParameter<bool> enable_debug, enable_orig, enable_trails;
-    ofParameter<float> time_interval, cuts_draw_alpha;
+    ofParameter<ofColor> bg_c, cuts_draw_color, cuts_color, p_color;
+    ofParameter<bool> enable_debug, enable_orig, enable_cuts_draw, enable_p_draw, enable_trails;
+    ofParameter<float> time_interval, cuts_draw_alpha, p_draw_alpha;
 
 };

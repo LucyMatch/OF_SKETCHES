@@ -50,6 +50,16 @@ public:
 	
 
 	virtual void update() {
+
+		if (enable_auto_spawn) {
+			if (enable_random_spawn)
+				randomSpawn();
+			else
+				spawn();
+		}
+
+		if (enable_varying_gravity)applyVaryingGravity(v_gravity_min, v_gravity_max, v_gravity_direction);
+
 		for (int i = 0; i < p.size(); i++) {
 			p[i].update();
 
@@ -84,6 +94,20 @@ public:
 			ofSetColor(c);
 			for (auto& _p : p)
 				_p.draw();
+			ofPopStyle();
+		}
+	}
+
+	virtual void drawFBO() {
+		if (enabled) {
+			ofPushStyle();
+			fbo.begin();
+				ofSetColor(bg, bg_alpha);
+				ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+				ofSetColor(c);
+				for (auto& _p : p)
+					_p.draw();
+			fbo.end();
 			ofPopStyle();
 		}
 	}
@@ -133,30 +157,47 @@ public:
 		p.clear();
 	}
 
+	
 	void initGui() {
 		gui.setName("particle manager");
+		gui.add(bg.set("bg", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+		gui.add(bg_alpha.set("bg_alpha", 0, 0, 255));
+		gui.add(c.set("colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+		gui.add(db_c.set("debug colour", ofColor(125, 0, 0, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 		gui.add(enable_limit.set("enable limit", true));
 		gui.add(enable_live_cut.set("enable live frame updates", true));
 		gui.add(limit.set("limit amt", 100, 0, 500));
 		gui.add(enable_kill.set("enable kill on screen exit", true));
 		gui.add(enable_bounce.set("enable bounce", false));
-		gui.add(db_c.set("debug colour", ofColor(125, 0, 0, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
-		gui.add(c.set("colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+		gui.add(enable_auto_spawn.set("enable auto spawning", false));
+		gui.add(enable_random_spawn.set("enable random spawning", false));
+		gui.add(enable_varying_gravity.set("enable varying gravity", false));
+		gui.add(v_gravity_direction.set("gravity direction", 0, 0, 3));
+		gui.add(v_gravity_min.set("gravity min", 0.5, 0.5, 25));
+		gui.add(v_gravity_max.set("gravity max", 10, 0.5, 25));
 	}
 
 	BaseCut getCut() { return cut; }
+	ofFbo* getFBO() { return &fbo; }
+
+	/// 
+	/// 
+	/// 
 
 	vector<CutParticle> p;
 
 	bool enabled;
 
 	ofParameterGroup gui;
-	ofParameter<bool> enable_limit, enable_kill, enable_bounce, enable_live_cut;
-	ofParameter<int> limit;
-	ofParameter<ofColor> db_c, c;
+	ofParameter<bool> enable_limit, enable_kill, enable_bounce, enable_live_cut, enable_auto_spawn, enable_random_spawn, enable_varying_gravity;
+	ofParameter<int> limit, bg_alpha;
+	ofParameter<ofColor> db_c, c, bg;
+	ofParameter<int> v_gravity_direction;
+	ofParameter<float> v_gravity_min, v_gravity_max;
 
 private:
 	BaseCut cut;
+	ofFbo fbo;
 	ofTexture frame;
 	glm::vec2 orig_location, curr_location;
 };

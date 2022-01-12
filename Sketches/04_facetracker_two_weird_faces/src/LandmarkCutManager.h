@@ -213,8 +213,8 @@ public:
 		gui.add(PolyCuts::enable_curve.set("enable curve", true));
 		gui.add(PolyCuts::enable_scale.set("enable scale", false));
 		gui.add(PolyCuts::enable_shape_mode.set("enable shape mode", false));
-		gui.add(PolyCuts::scale_x.set("scale x", 1.0, 0.0, 3.0));
-		gui.add(PolyCuts::scale_y.set("scale y", 1.0, 0.0, 3.0));
+		gui.add(PolyCuts::scale_x.set("scale x", 1.0, 0.0, 5.0));
+		gui.add(PolyCuts::scale_y.set("scale y", 1.0, 0.0, 5.0));
 		gui.add(PolyCuts::curve_reso.set("curve reso", 200, 0, 1000));
 		gui.add(PolyCuts::shape_mode.set("cut shape", 0, 0, 4));
 	}
