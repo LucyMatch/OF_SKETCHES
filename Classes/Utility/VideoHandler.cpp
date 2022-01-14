@@ -60,11 +60,15 @@ void VideoHandler::update() {
 
 	cam.update();
 	if (cam.isFrameNew()) {
-		frame.setFromPixels(cam.getPixels());
 		if (enable_resizing) {
 			output.begin();
+				ofSetColor(bg_c);
+				ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 				cam.draw(coords.x, coords.y, o_dims.x, o_dims.y);
 			output.end();
+		}
+		else {
+			frame.setFromPixels(cam.getPixels());
 		}
 	}
 
