@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<P_R_I_M_A_R_Y>
+	<background>255, 227, 245, 255</background>
+	<cuts_layer_alpha>255</cuts_layer_alpha>
+	<p_layer_alpha>0</p_layer_alpha>
+	<cuts_colour>251, 248, 255, 255</cuts_colour>
+	<p_colour>250, 251, 255, 255</p_colour>
+	<cuts_draw_colour>255, 255, 255, 255</cuts_draw_colour>
+	<enable_debug>0</enable_debug>
+	<enable_orig>0</enable_orig>
+	<enable_cuts_draw>0</enable_cuts_draw>
+	<enable_particle_draw>1</enable_particle_draw>
+	<enable_trails>1</enable_trails>
+	<export_interval>1000</export_interval>
+	<video_controls>
+		<video_colour>12, 97, 99, 255</video_colour>
+		<video_bg_colour>255, 255, 255, 255</video_bg_colour>
+		<enable_video_bg>1</enable_video_bg>
+		<enable_resizing>0</enable_resizing>
+	</video_controls>
+	<CUT_MANAGER>
+		<face_timeout>51.0204</face_timeout>
+		<enable_left_eye>1</enable_left_eye>
+		<enable_right_eye>1</enable_right_eye>
+		<enable_mouth>1</enable_mouth>
+		<left_eye_colour>255, 255, 255, 255</left_eye_colour>
+		<right_eye_colour>255, 255, 255, 255</right_eye_colour>
+		<mouth_colour>255, 255, 255, 255</mouth_colour>
+		<enable_clear>1</enable_clear>
+		<enable_subpath>0</enable_subpath>
+		<enable_curve>1</enable_curve>
+		<enable_scale>1</enable_scale>
+		<enable_shape_mode>0</enable_shape_mode>
+		<scale_x>1.25</scale_x>
+		<scale_y>1.60714</scale_y>
+		<curve_reso>200</curve_reso>
+		<cut_shape>0</cut_shape>
+	</CUT_MANAGER>
+	<P>
+		<color>0, 0, 0, 100</color>
+		<trail_color>0, 0, 0, 100</trail_color>
+		<radius>107</radius>
+		<true_size>0</true_size>
+		<random_size>0</random_size>
+		<continous_resize>0</continous_resize>
+		<size_min>11</size_min>
+		<size_max>76</size_max>
+		<mass_base>68.8775</mass_base>
+		<speed_limit>1.27551</speed_limit>
+		<trail_on>0</trail_on>
+		<trail_include_home>0</trail_include_home>
+		<trail_weight>5</trail_weight>
+		<history_length>15</history_length>
+	</P>
+</P_R_I_M_A_R_Y>

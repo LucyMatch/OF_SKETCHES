@@ -100,16 +100,6 @@ void ofApp::draw(){
                 glBlendFunc(GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
             }
 
-            if (enable_cuts_draw) {
-                ofSetColor(cuts_draw_color);
-                if (enable_trails) {
-                    cuts_draw.draw(0, 0);
-                }
-                else {
-                    cut_man.draw(video.getFrameTex());
-                }
-            }
-
             if (enable_p_draw) {
                 ofSetColor(p_color);
                 if (enable_trails) {
@@ -117,6 +107,16 @@ void ofApp::draw(){
                 }
                 else {
                     for (auto& p : p_men) { p.draw(); }
+                }
+            }
+
+            if (enable_cuts_draw) {
+                ofSetColor(cuts_draw_color);
+                if (enable_trails) {
+                    cuts_draw.draw(0, 0);
+                }
+                else {
+                    cut_man.draw(video.getFrameTex());
                 }
             }
 
