@@ -10,65 +10,87 @@ VideoHandler::VideoHandler(glm::vec2 _dims) {
 }
 
 //--------------------------------------------------------------
-void VideoHandler::setup(string path) {
+void VideoHandler::setup(string _path, videoModes _mode) {
 
-#if _LOCAL > 0
-
-	dir.listDir(path);
-	dir.sort();
-
-	feed_count = (int)dir.size();
-
-	cam.load(dir.getPath(curr_feed));
-	cam.setVolume(0);
-	cam.play();
-
-#elif _WEBCAM > 0
-	cam.close();
-	cam.setVerbose(true);
-	cam.setDeviceID(curr_feed);
-
-	vector<ofVideoDevice> cams = cam.listDevices();
-	//cout << "listing cams myself" << endl;
-	//cout << cams.size() << endl;
-	//for (auto i : cams)
-	//	cout << i.deviceName << endl;
-
-	feed_count = cams.size();
-
-	cam.setup(dims.x, dims.y, true);
-#else 
-	//@TODO:
-	// 	   //make a class from ip cam sketch
-	// 	   //so we can load a bunch and cycle through which we are "pulling"
-	//	cam.setCameraName("handy cammy");
-	//	cam.setURI("http://192.168.1.137/axis-cgi/mjpg/video.cgi");
-	//cam.setCameraName("Spy Cam");
-	//cam.setURI("http://192.168.1.161/mjpg/video.mjpg?streamprofile=sixteen_nine_03");
-	//cam.setUsername("ofAdmin");
-	//cam.setPassword("openframeworks");
-	//cam.connect();
-#endif
-
+	mode = _mode;
+	vector<ofVideoDevice> cams;
+	
+	switch (mode) {
+		case VIDEO_LOCAL :
+			dir.listDir(path);
+			dir.sort();
+			feed_count = (int)dir.size();
+			local_cam.load(dir.getPath(curr_feed));
+			local_cam.setVolume(0);
+			local_cam.play();
+			break;
+		case VIDEO_WEBCAM :
+			web_cam.close();
+			web_cam.setVerbose(true);
+			web_cam.setDeviceID(curr_feed);
+			cams = web_cam.listDevices();
+			feed_count = cams.size();
+			web_cam.setup(dims.x, dims.y, true);
+			break;
+		case VIDEO_IP :
+			//	//@TODO:
+			//	// 	   //make a class from ip cam sketch
+			//	// 	   //so we can load a bunch and cycle through which we are "pulling"
+			//	//	cam.setCameraName("handy cammy");
+			//	//	cam.setURI("http://192.168.1.137/axis-cgi/mjpg/video.cgi");
+			//	//cam.setCameraName("Spy Cam");
+			//	//cam.setURI("http://192.168.1.161/mjpg/video.mjpg?streamprofile=sixteen_nine_03");
+			//	//cam.setUsername("ofAdmin");
+			//	//cam.setPassword("openframeworks");
+			//	//cam.connect();
+			break;
+		default :
+			break;
+	}
 
 }
 
 //--------------------------------------------------------------
 void VideoHandler::update() {
 
-	//cout << cam.isLoaded() << endl;
+	bool updated = false;
 
-	cam.update();
-	if (cam.isFrameNew()) {
+	switch (mode) {
+	case VIDEO_LOCAL:
+		local_cam.update();
+		updated = local_cam.isFrameNew();
+		break;
+	case VIDEO_WEBCAM:
+		web_cam.update();
+		updated = web_cam.isFrameNew();
+		break;
+	case VIDEO_IP:
+		break;
+	}
+
+	if (updated) {
 		if (enable_resizing) {
+			ofPushStyle();
+			ofPushMatrix();
 			output.begin();
 				ofSetColor(bg_c);
 				ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-				cam.draw(coords.x, coords.y, o_dims.x, o_dims.y);
+				if (enable_mirror) {
+					ofTranslate(ofGetWidth(), 0);
+					ofRotateYDeg(180);
+				}
+				if(mode == 0)local_cam.draw(coords.x, coords.y, o_dims.x, o_dims.y);
+				if(mode == 1)web_cam.draw(coords.x, coords.y, o_dims.x, o_dims.y);
+				//if (mode == 2)//@TODO
 			output.end();
+			ofPopMatrix();
+			ofPopStyle();
 		}
 		else {
-			frame.setFromPixels(cam.getPixels());
+			if (mode == 0)frame.setFromPixels(local_cam.getPixels());
+			if (mode == 1)frame.setFromPixels(web_cam.getPixels());
+			//if (mode == 2)//@TODO
+			if (enable_mirror)frame.mirror(false, true);
 		}
 	}
 
@@ -85,7 +107,11 @@ void VideoHandler::draw() {
 
 	ofSetColor(c);
 	if (enable_resizing) {output.draw(0,0);}
-	else {cam.draw(0,0);}
+	else {
+		glm::vec2 p(0,0), o = dims;
+		if (mode == 0)frame.draw(p.x, p.y, o.x, o.y);
+		if (mode == 1)frame.draw(p.x, p.y, o.x, o.y);
+	}
 
 }
 
@@ -93,7 +119,7 @@ void VideoHandler::draw() {
 void VideoHandler::nxtFeed() {
 	curr_feed = ++curr_feed % feed_count;
 	cout << "curr feed = " << curr_feed << endl;
-	setup();
+	setup(path, mode);
 }
 
 //--------------------------------------------------------------
@@ -101,14 +127,14 @@ void VideoHandler::prevFeed() {
 	curr_feed = --curr_feed % feed_count;
 	if (curr_feed < 0)curr_feed = feed_count -1;
 	cout << "curr feed = " << curr_feed << endl;
-	setup();
+	setup(path, mode);
 }
 
 
 //--------------------------------------------------------------
 void VideoHandler::setDims(glm::vec2 _dims) {
 	dims = _dims;
-	setup();
+	setup(path, mode);
 }
 
 //--------------------------------------------------------------
@@ -117,6 +143,26 @@ void VideoHandler::setOutputDims(glm::vec2 _dims) {
 	coords = getOutputCoords();
 	output.allocate(o_dims.x, o_dims.y, GL_RGBA);
 }
+
+//--------------------------------------------------------------
+void VideoHandler::setMode(videoModes _mode) {
+	mode = _mode;
+	setup(path, mode);
+}
+
+//--------------------------------------------------------------
+void VideoHandler::setMode(videoModes _mode, string _path) {
+	mode = _mode;
+	path = _path;
+	setup(path, mode);
+}
+
+//--------------------------------------------------------------
+void VideoHandler::setDirectory(string _path) {
+	path = _path;
+	setup(path, mode);
+}
+
 
 //--------------------------------------------------------------
 glm::vec2& VideoHandler::getDims() {
@@ -147,14 +193,30 @@ ofImage& VideoHandler::getFrameImg() {
 
 //--------------------------------------------------------------
 string VideoHandler::getVideoTitle() {
-#if _LOCAL > 0
-	return dir.getPath(curr_feed);
-#else 
-	return "live video feed";
-#endif
+	switch (mode) {
+	case VIDEO_LOCAL:
+		return dir.getPath(curr_feed);
+		break;
+	default:
+		return "live video feed";
+		break;
+	}
 }
 
-
+//--------------------------------------------------------------
+bool VideoHandler::isFrameNew() {
+	switch (mode) {
+	case VIDEO_LOCAL:
+		return local_cam.isFrameNew();
+		break;
+	case VIDEO_WEBCAM:
+		return web_cam.isFrameNew();
+		break;
+	default:
+		return true;
+		break;
+	}
+}
 
 //--------------------------------------------------------------
 void VideoHandler::initGui() {
@@ -164,6 +226,7 @@ void VideoHandler::initGui() {
 	gui.add(bg_c.set("video bg colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 	gui.add(enable_video_bg.set("enable video bg", false));
 	gui.add(enable_resizing.set("enable resizing", true));
+	gui.add(enable_mirror.set("enable mirror", true));
 
 }
 

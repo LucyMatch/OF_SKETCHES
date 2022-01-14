@@ -5,9 +5,6 @@
 #include "ofxGui.h"
 //@TODO : //#include "IPVideoGrabber.h"
 
-#define _LOCAL 0	//@TODO: local video trigger & set up
-#define _WEBCAM	1   //comment for ip cam ( todo )
-
 //@TODO:
 //			btns for looping through different ip cameras & webcams
 //			stuff for local videos & looping through them
@@ -19,50 +16,67 @@
 //			--> this code is somehwere in sketch folder 
 //			-->create an ipcam class that this class pulls in if ip is enabled
 // 
-//			additionally allow for stills in the system
-// 
-//mimap?
+//
 
 class VideoHandler {
 
 	public :
 
+		enum videoModes {
+			/// \Local Video from Directory
+			VIDEO_LOCAL = 0,
+			/// \Live Feed From Connected Webcams
+			VIDEO_WEBCAM = 1,
+			/// \Live Feed From Connected IPCams (@TODO)
+			VIDEO_IP = 2
+		};
+
 		VideoHandler(glm::vec2 _dims = glm::vec2(640,480));
 
-		void setup(string path = "videos");
+		void setup(string _path = "videos", videoModes _mode = VIDEO_WEBCAM );
 		void update();
 		void draw();
 
 		void initGui();
-		void setOutputDims(glm::vec2 _dims);
-		void setDims(glm::vec2 _dims);
 		void nxtFeed();
 		void prevFeed();
+
+		void setOutputDims(glm::vec2 _dims);
+		void setDims(glm::vec2 _dims);
+		void setMode(videoModes _mode);
+		void setMode(videoModes _mode, string _path);
+		void setDirectory(string _path);
 
 		glm::vec2& getDims();
 		glm::vec2& getOutputCoords();
 		ofTexture* getFrameTex();
 		ofImage& getFrameImg();
 		string getVideoTitle();
-
-	#if _LOCAL > 0
-		ofVideoPlayer cam;
-	#elif _WEBCAM > 0
-		ofVideoGrabber cam;
-	#else 
-		//todo
-		ofx::Video::IPVideoGrabber cam;
-	#endif
-
-		int curr_feed = 0, feed_count;
-		ofDirectory dir;
-
-		glm::vec2 dims, o_dims, coords;
-		ofImage frame, output_frame;
-
-		ofFbo output;
+		bool isFrameNew();
 
 		ofParameterGroup gui;
 		ofParameter<ofColor> c, bg_c;
-		ofParameter<bool> enable_video_bg, enable_resizing;
+		ofParameter<bool> enable_video_bg, enable_resizing, enable_mirror;
+
+	private :
+
+		ofVideoPlayer local_cam;
+		ofVideoGrabber web_cam;
+		//ofx::Video::IPVideoGrabber ip_cam;
+
+		//input
+		videoModes mode;
+		int curr_feed = 0, feed_count;
+
+		//local input
+		string path;
+		ofDirectory dir;
+
+		//output
+		glm::vec2 dims, o_dims, coords;
+
+		ofImage frame, output_frame;
+		ofFbo output;
+
+
 };
