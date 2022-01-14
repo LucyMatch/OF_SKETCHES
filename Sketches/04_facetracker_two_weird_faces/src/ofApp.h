@@ -31,6 +31,8 @@ public:
     void keyPressed(int key);
     void mouseMoved(int x, int y);
 
+    glm::vec2 canvas_dims;
+
     ofFbo main_draw, cuts_draw, p_draw;
 
     VideoHandler video;

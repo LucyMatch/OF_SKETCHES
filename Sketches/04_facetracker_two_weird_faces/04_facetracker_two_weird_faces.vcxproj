@@ -250,6 +250,7 @@
     <ClInclude Include="..\..\Classes\Utility\VideoHandler.h" />
     <ClInclude Include="src\CutParticle.h" />
     <ClInclude Include="src\CutParticleManager.h" />
+    <ClInclude Include="src\LocalMediaManager.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\LandmarkCutManager.h" />
     <ClInclude Include="src\PolyCuts.h" />

@@ -7,9 +7,6 @@
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\PolyCuts.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -162,6 +159,9 @@
     </ClCompile>
     <ClCompile Include="src\CutParticle.cpp">
       <Filter>src\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PolyCuts.cpp">
+      <Filter>src\Cuts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -387,15 +387,15 @@
     <Filter Include="src\Particles">
       <UniqueIdentifier>{1fd545b9-4c80-44dd-9c80-9ff69a91e43e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Cuts">
+      <UniqueIdentifier>{060f3394-6ebd-47fd-b437-f534111c3c12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Utilities">
+      <UniqueIdentifier>{f3604e81-4298-4292-a0a2-b9cc60ad4ecb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\LandmarkCutManager.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\PolyCuts.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\ofApp.h">
@@ -1459,6 +1459,15 @@
     </ClInclude>
     <ClInclude Include="src\CutParticleManager.h">
       <Filter>src\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LandmarkCutManager.h">
+      <Filter>src\Cuts</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PolyCuts.h">
+      <Filter>src\Cuts</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LocalMediaManager.h">
+      <Filter>src\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

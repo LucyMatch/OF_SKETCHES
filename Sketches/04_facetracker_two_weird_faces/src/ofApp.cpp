@@ -7,13 +7,15 @@ void ofApp::setup(){
     ofEnableSmoothing();
     ofEnableAlphaBlending();
 
-    main_draw.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
-    cuts_draw.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
-    p_draw.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
+    canvas_dims = glm::vec2(1920, 1080);
+
+    main_draw.allocate(canvas_dims.x, canvas_dims.y, GL_RGBA);
+    cuts_draw.allocate(canvas_dims.x, canvas_dims.y, GL_RGBA);
+    p_draw.allocate(canvas_dims.x, canvas_dims.y, GL_RGBA);
 
     // init vid manager
     //video.setDims(glm::vec2(1280, 720));
-    video.setDims(glm::vec2(1920, 1080));
+    video.setDims(canvas_dims);
     //video.setDims(glm::vec2(3840, 2160));
     //3840 × 2160
 
@@ -45,7 +47,7 @@ void ofApp::update(){
     // Update tracker when there are new frames
     // if yes also update cut manager
 
-    if (video.cam.isFrameNew()) {
+    if (video.isFrameNew()) {
 
         tracker.update(video.getFrameImg());
         auto t = tracker.getInstances();

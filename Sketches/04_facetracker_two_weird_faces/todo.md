@@ -50,3 +50,22 @@ graphic class is used for landmark particle cut option as descibed above
 
 but also a graphic manager is created per landmark ( the same way as Pmen ). this manager adds extra graphics behind the primary particle / landmark cut. so i.e. we could have a blue circle behind the right eye .... 
 
+Misc quick punch list 
+* cut particle toggle - to just draw the cut filled with colour - no texture
+* add more landmarks support
+* LocalMediaManager Class
+* bg options - using localMediaManager class
+* toggle for applying varying gravityy at spawn only
+* dont apply update varying gravity within rrange -> only used fixed value
+
+
+Larger List
+* layers + draw order
+* switch case Blendmode options
+* universal controls - a class for utility events
+    * fade alpha in / out on btn press
+    * toggle all spawning
+    * toggle all random spawning
+    * toggle all varying gravity
+    * clear all fbos
+
