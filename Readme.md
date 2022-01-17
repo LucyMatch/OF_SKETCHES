@@ -9,6 +9,14 @@ Contains Reusable classes I have created and Build upon. Currently these need to
 
 via > solution Explorer > Properties > C/C++ > General > Additional Include Directories
 
+@TODO : turn these into addon packages for easier import?
+
+**Examples :**
+
+Simple examples / sketches for easy reference + testing ;
+- usage of classes
+- patterns / typical snippets
+
 **Sketches :**
 
 This is where the sketches live 
