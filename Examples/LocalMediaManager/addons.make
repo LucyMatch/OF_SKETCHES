@@ -1,0 +1,4 @@
+ofxGui
+ofxThreadedImageLoader
+ofxPoco
+ofxIpVideoGrabber
