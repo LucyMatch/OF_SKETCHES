@@ -13,6 +13,7 @@ VideoHandler::VideoHandler(glm::vec2 _dims) {
 void VideoHandler::setup(string _path, videoModes _mode) {
 
 	mode = _mode;
+	path = _path;
 	vector<ofVideoDevice> cams;
 	
 	switch (mode) {
@@ -23,6 +24,10 @@ void VideoHandler::setup(string _path, videoModes _mode) {
 			local_cam.load(dir.getPath(curr_feed));
 			local_cam.setVolume(0);
 			local_cam.play();
+
+			cout << feed_count << endl;
+			cout << path << endl;
+
 			break;
 		case VIDEO_WEBCAM :
 			web_cam.close();
@@ -91,6 +96,7 @@ void VideoHandler::update() {
 			if (mode == 1)frame.setFromPixels(web_cam.getPixels());
 			//if (mode == 2)//@TODO
 			if (enable_mirror)frame.mirror(false, true);
+			frame.update();
 		}
 	}
 
@@ -118,7 +124,7 @@ void VideoHandler::draw() {
 //--------------------------------------------------------------
 void VideoHandler::nxtFeed() {
 	curr_feed = ++curr_feed % feed_count;
-	cout << "curr feed = " << curr_feed << endl;
+	cout << "curr feed = " << curr_feed << " - "<< getVideoTitle() << endl;
 	setup(path, mode);
 }
 
@@ -126,7 +132,7 @@ void VideoHandler::nxtFeed() {
 void VideoHandler::prevFeed() {
 	curr_feed = --curr_feed % feed_count;
 	if (curr_feed < 0)curr_feed = feed_count -1;
-	cout << "curr feed = " << curr_feed << endl;
+	cout << "curr feed = " << curr_feed << " - " << getVideoTitle() << endl;
 	setup(path, mode);
 }
 
@@ -219,14 +225,19 @@ bool VideoHandler::isFrameNew() {
 }
 
 //--------------------------------------------------------------
+bool VideoHandler::isDeactivated() {
+	return deactivate;
+}
+
+//--------------------------------------------------------------
 void VideoHandler::initGui() {
 
 	gui.setName("video controls");
 	gui.add(c.set("video colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 	gui.add(bg_c.set("video bg colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 	gui.add(enable_video_bg.set("enable video bg", false));
-	gui.add(enable_resizing.set("enable resizing", true));
-	gui.add(enable_mirror.set("enable mirror", true));
+	gui.add(enable_resizing.set("enable resizing", false));
+	gui.add(enable_mirror.set("enable mirror", false));
 
 }
 

@@ -1,22 +1,28 @@
-/*VideoHandler v1*/
+/*
+	v 2 - Video Handler
+	Lucy Matchett - 2022
+
+	Handles Video
+	Local + live feeds
+
+	@TODO:
+	* Ip Cameras
+	* Resolution options
+	* Scaling options
+	* ip : cams + cycling through all the options and loading json file
+		--> this code is somehwere in sketch folder
+		-->create an ipcam class that this class pulls in if ip is enabled
+	* other format / codec options + support
+	* Play controls - loop speed etc...
+
+*/
 #pragma once
 
 #include "ofMain.h"
 #include "ofxGui.h"
 //@TODO : //#include "IPVideoGrabber.h"
 
-//@TODO:
-//			btns for looping through different ip cameras & webcams
-//			stuff for local videos & looping through them
-// 
-//			maybe eventually stuff regarding resolution / number of pixels
-//			this scaling will become important!
-// 
-//			ip : cams + cycling through all the options and loading json file
-//			--> this code is somehwere in sketch folder 
-//			-->create an ipcam class that this class pulls in if ip is enabled
-// 
-//
+
 
 class VideoHandler {
 
@@ -52,13 +58,17 @@ class VideoHandler {
 		ofTexture* getFrameTex();
 		ofImage& getFrameImg();
 		string getVideoTitle();
-		bool isFrameNew();
+		bool isFrameNew(); 
+		bool isDeactivated();
 
 		ofParameterGroup gui;
 		ofParameter<ofColor> c, bg_c;
 		ofParameter<bool> enable_video_bg, enable_resizing, enable_mirror;
 
+		bool deactivate = false;
+
 	private :
+
 
 		ofVideoPlayer local_cam;
 		ofVideoGrabber web_cam;

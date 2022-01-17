@@ -1,3 +1,15 @@
+/*
+	v 1 - Image Handler
+	Lucy Matchett - 2021
+
+	Just loads a directory of images
+
+	@TODO:
+	* Add Other Image utilities - saving frames
+	* threaded Image loader
+	* maybe restructure in general this is really a directory handler
+
+*/
 #pragma once
 
 #include "ofMain.h"
@@ -23,6 +35,13 @@ public:
 	}
 
 	vector<ofTexture>& getImages() {return images;}
+
+	//--------------------------------------------------------------
+	bool isDeactivated() {
+		return deactivate;
+	}
+
+	bool deactivate = false;
 
 private:
 
