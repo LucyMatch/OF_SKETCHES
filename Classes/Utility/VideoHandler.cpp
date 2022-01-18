@@ -123,14 +123,14 @@ void VideoHandler::draw() {
 
 //--------------------------------------------------------------
 void VideoHandler::nxtFeed() {
-	curr_feed = ++curr_feed % feed_count;
+	curr_feed = (curr_feed + 1) % feed_count;
 	cout << "curr feed = " << curr_feed << " - "<< getVideoTitle() << endl;
 	setup(path, mode);
 }
 
 //--------------------------------------------------------------
 void VideoHandler::prevFeed() {
-	curr_feed = --curr_feed % feed_count;
+	curr_feed = curr_feed -1 % feed_count;
 	if (curr_feed < 0)curr_feed = feed_count -1;
 	cout << "curr feed = " << curr_feed << " - " << getVideoTitle() << endl;
 	setup(path, mode);

@@ -25,6 +25,13 @@ void ofApp::setup(){
     _video_feed.media_type = mediaTypes::VIDEO;
     local_default_video_feed_2 = media_man.createNewFeed(_video_feed);
 
+
+    //media man - testing image
+    //Feed img_feed;
+    //img_feed.path = "images/misc";
+    //img_feed.media_type = mediaTypes::IMAGE;
+    //local_default_image_feed = media_man.createNewFeed(img_feed);
+
 }
 
 //--------------------------------------------------------------
@@ -43,9 +50,17 @@ void ofApp::draw(){
     ofSetColor(bg_c);
     ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 
-    //if(local_default_video_feed->isFrameNew)
-    media_man.getFrameTexture(local_default_video_feed)->draw(0, 0);
-    media_man.getFrameTexture(local_default_video_feed_2)->draw(150, 150);
+    //float x = 0, y = 0;
+    //if (media_man.getFrameTexture(local_default_video_feed)->isAllocated()) {
+    //    x = media_man.getFrameTexture(local_default_video_feed)->getWidth();
+    //    y = media_man.getFrameTexture(local_default_video_feed)->getHeight();
+    //}
+
+    //media_man.getFrameTexture(local_default_video_feed)->draw(0, 0);
+
+    //media_man.getFrameTexture(local_default_video_feed_2)->draw(x, 0);
+
+    //media_man.getFrameTexture(local_default_image_feed)->draw(0, y);
     
     if (enable_debug) drawDebug();
 
@@ -80,11 +95,23 @@ void ofApp::drawGui(ofEventArgs& args) {
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     switch (key) {
-    case',':
+    case']':
         media_man.nxtVideo(local_default_video_feed);
         break;
-    case '.':
+    case '[':
         media_man.prevVideo(local_default_video_feed);
+        break;
+    case'.':
+        media_man.nxtVideo(local_default_video_feed_2);
+        break;
+    case ',':
+        media_man.prevVideo(local_default_video_feed_2);
+        break;
+    case'\'':
+        media_man.nxtImage(local_default_image_feed);
+        break;
+    case ';':
+        media_man.nxtImage(local_default_image_feed);
         break;
     case '0':
         gui.saveToFile("1_gui.xml");

@@ -51,9 +51,8 @@ public:
 		//sort out the media handler
 		if (_feed.media_type < 2) {
 			////image based types
-			ImageHandler ih = ImageHandler(_feed.path);
-			images.push_back(ih);
-			_feed.imgs = &images.back();
+			images.push_back(new ImageHandler(_feed.path));
+			_feed.imgs = images.back();
 		}
 		else if (_feed.media_type == 2) {
 			//video based types
@@ -70,8 +69,8 @@ public:
 		//add to array
 		feeds.push_back(_feed);
 
-		//return index of feed
-		return &feeds.back();
+		//return pointer of feed
+		return &feeds[_feed.id];
 	}
 	
 	void update() {
@@ -87,8 +86,11 @@ public:
 			if (f.media_type < 2) {
 				//image types
 				if (f.enable_slideshow) {
-					if (f.update_counter % f.slideshow_frequency == 0)
+					if (f.update_counter % f.slideshow_frequency == 0) {
 						f.isFrameNew = true;
+						nxtImage(&f);
+					}
+						
 				}
 			}
 			else if (f.media_type == 2) {
@@ -116,10 +118,10 @@ public:
 
 			switch (f.media_type) {
 			case VIDEO :
-				f.vids->getFrameTex()->draw(0,0);
+				f.vids->getFrameTex()->draw(pos.x,pos.y);
 				break;
 			case IMAGE :
-				f.imgs->getImages()[f.curr_image].draw(0,0);
+				f.imgs->getImages()[f.curr_image].draw(pos.x, pos.y);
 				break;
 			case IMAGE_COLLECTION :
 
@@ -174,7 +176,7 @@ public:
 		switch (_feed->media_type) {
 		case IMAGE_COLLECTION:
 		case IMAGE:
-			(*_feed).isFrameNew = false;
+			//(*_feed).isFrameNew = false;
 			return &_feed->imgs->getImages()[_feed->curr_image];
 			break;
 		case VIDEO:
@@ -224,7 +226,7 @@ public:
 				videos.erase(videos.begin() + i);
 		}
 		for (int i = 0; i < images.size(); i++) {
-			if (checkImageHandler(images[i]))
+			if (checkImageHandler(*images[i]))
 				images.erase(images.begin() + i);
 		}
 		for (int i = 0; i < feeds.size(); i++) {
@@ -257,6 +259,6 @@ private:
 
 	vector<Feed> feeds;
 	vector<VideoHandler*> videos;
-	vector<ImageHandler> images;
+	vector<ImageHandler*> images;
 
 };
