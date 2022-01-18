@@ -40,6 +40,8 @@ class ofApp : public ofBaseApp{
 		Feed* local_default_video_feed_2 = NULL;
 
 		Feed* local_default_image_feed = NULL;
+		Feed* local_image_collection = NULL;
+
 		vector<Feed*> local_image_feeds;
 
 

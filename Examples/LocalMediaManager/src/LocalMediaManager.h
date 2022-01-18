@@ -28,7 +28,7 @@ struct Feed {
 	mediaTypes media_type;							/// \Media type
 	string path;									/// \Path to media directory
 	bool enable_slideshow = false;					/// \If true image file updated to next in directory based on freq / is false static image
-	int slideshow_frequency = 5;					/// \Frames between Image updates
+	int slideshow_frequency = 60;					/// \Frames between Image updates
 	bool isFrameNew = false;						/// \True if media has been updated
 	VideoHandler* vids = NULL;						/// \Pointer to videohandler obj if applicable
 	ImageHandler* imgs = NULL;						/// \Pointer to imageHandler obj if applicable 
@@ -189,17 +189,20 @@ public:
 
 	ofTexture* getFrameTexture(Feed* _feed) {
 
-		switch (_feed->media_type) {
-		case IMAGE_COLLECTION:
-		case IMAGE:
-			(*_feed).isFrameNew = false;
-			return &_feed->imgs->getImages()[_feed->curr_image];
-			break;
-		case VIDEO:
-				return _feed->vids->getFrameTex();
-			break;
-		default:
+		//if its an active feed do the things
+		if (checkFeed(*_feed)) {
+			switch (_feed->media_type) {
+			case IMAGE_COLLECTION:
+			case IMAGE:
+				(*_feed).isFrameNew = false;
+				return &_feed->imgs->getImages()[_feed->curr_image];
 				break;
+			case VIDEO:
+				return _feed->vids->getFrameTex();
+				break;
+			default:
+				break;
+			}
 		}
 
 		return NULL;
@@ -209,21 +212,55 @@ public:
 
 		vector<ofTexture*> texs;
 
-		switch (_feed->media_type) {
-		case IMAGE_COLLECTION:
-			for (int i = 0; i < amt; i++) {
-				texs.push_back(&_feed->imgs->getImages()[_feed->curr_image]);
-				nxtImage(_feed);
+		//if its an active feed do the things
+		if (checkFeed(*_feed)) {
+
+			switch (_feed->media_type) {
+			case IMAGE_COLLECTION:
+				for (int i = 0; i < amt; i++) {
+					int index = (_feed->curr_image + i) % _feed->imgs->getImages().size();
+					texs.push_back(&_feed->imgs->getImages()[index]);
+				}
+				break;
+			case IMAGE:
+				for (int i = 0; i < amt; i++)
+					texs.push_back(&_feed->imgs->getImages()[_feed->curr_image]);
+				break;
+			case VIDEO:
+				for (int i = 0; i < amt; i++)
+					texs.push_back(_feed->vids->getFrameTex());
+				break;
 			}
-			break;
-		case IMAGE:
-			for (int i = 0; i < amt; i++)
-				texs.push_back(&_feed->imgs->getImages()[_feed->curr_image]);
-			break;
-		case VIDEO:
-			for (int i = 0; i < amt; i++)
-				texs.push_back(_feed->vids->getFrameTex());
-			break;
+
+		}
+
+		(*_feed).isFrameNew = false;
+		return texs;
+	}
+
+	vector<ofTexture*> getFrameTextures(Feed* _feed) {
+
+		vector<ofTexture*> texs;
+		int amt = (*_feed).collection_size;
+
+		//if its an active feed do the things
+		if (checkFeed(*_feed)) {
+			switch (_feed->media_type) {
+			case IMAGE_COLLECTION:
+				for (int i = 0; i < amt; i++) {
+					int index = (_feed->curr_image + i) % _feed->imgs->getImages().size();
+					texs.push_back(&_feed->imgs->getImages()[index]);
+				}
+				break;
+			case IMAGE:
+				for (int i = 0; i < amt; i++)
+					texs.push_back(&_feed->imgs->getImages()[_feed->curr_image]);
+				break;
+			case VIDEO:
+				for (int i = 0; i < amt; i++)
+					texs.push_back(_feed->vids->getFrameTex());
+				break;
+			}
 		}
 
 		(*_feed).isFrameNew = false;
@@ -268,8 +305,7 @@ public:
 
 private:
 
-	//vector<Feed> feeds;
-	Feed feeds[20];		//testing fixed amount of possible feeds for better ptr access
+	Feed feeds[20];		//fixed amount of possible feeds for better ptr access atm
 	vector<VideoHandler*> videos;
 	vector<ImageHandler*> images;
 

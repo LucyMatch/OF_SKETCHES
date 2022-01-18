@@ -25,12 +25,29 @@ void ofApp::setup(){
     _video_feed.media_type = mediaTypes::VIDEO;
     local_default_video_feed_2 = media_man.createNewFeed(_video_feed);
 
-
     //media man - testing image
     Feed img_feed;
     img_feed.path = "images/misc";
     img_feed.media_type = mediaTypes::IMAGE;
+    img_feed.enable_slideshow = true;
     local_default_image_feed = media_man.createNewFeed(img_feed);
+
+    Feed img_c_feed;
+    img_c_feed.path = "images/eyes"; 
+    img_c_feed.media_type = mediaTypes::IMAGE_COLLECTION;
+    img_c_feed.collection_size = 5;
+    local_image_collection = media_man.createNewFeed(img_c_feed);
+
+    //media man - testing image collections stored in vector
+//string img_dirs[] = { "clouds", "eyes", "rocks", "sky", "sky2" };
+//for (int i = 0; i < sizeof(img_dirs); i++) {
+//    Feed _feed;
+//    _feed.path = "images/" + img_dirs[i];
+//    _feed.media_type = mediaTypes::IMAGE_COLLECTION;
+//    _feed.collection_size = 5;
+//    //_feed.enable_slideshow = true;
+//    local_image_feeds.push_back(media_man.createNewFeed(_feed));
+//}
 
 }
 
@@ -62,8 +79,48 @@ void ofApp::draw(){
     if(local_default_video_feed_2 != NULL )
         media_man.getFrameTexture(local_default_video_feed_2)->draw(x, 0);
 
-    if (local_default_image_feed != NULL)
-        media_man.getFrameTexture(local_default_image_feed)->draw(0, y);
+    if (local_default_image_feed != NULL) {
+        ofPushMatrix();
+        ofTranslate(mouseX, mouseY);
+        ofScale(0.25);
+        media_man.getFrameTexture(local_default_image_feed)->draw(0, 0);
+        ofPopMatrix();
+    }
+
+
+    int w = ofGetWidth() / local_image_collection->collection_size, h;
+    int child_counter = 0;
+
+    
+
+
+    for (auto tex : media_man.getFrameTextures(local_image_collection)) {
+        h = (tex->getHeight() / tex->getWidth()) * w;
+        ofPushMatrix();
+        ofTranslate(child_counter * w, y);
+            tex->draw(0, 0, w, h);
+        ofPopMatrix();
+        child_counter++;
+    }
+
+
+    //int parent_counter = 0;
+
+    //for (const auto& f : local_image_feeds) {
+
+    //    int w = ofGetWidth() / f->collection_size, h;
+    //    int child_counter = 0;
+
+    //    for (auto tex : media_man.getFrameTextures(local_default_image_feed)) {
+    //        h = (tex->getHeight() / tex->getWidth()) * w;
+    //        ofPushMatrix();
+    //        ofTranslate(child_counter * w, parent_counter * h);
+    //        tex->draw(0, 0, w, h);
+    //        ofPopMatrix();
+    //        child_counter++;
+    //    }
+    //    parent_counter++;
+    //}
     
     if (enable_debug) drawDebug();
 
