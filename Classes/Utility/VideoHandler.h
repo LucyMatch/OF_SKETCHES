@@ -14,6 +14,7 @@
 		-->create an ipcam class that this class pulls in if ip is enabled
 	* other format / codec options + support
 	* Play controls - loop speed etc...
+	* Add proper deconstructor
 
 */
 #pragma once
@@ -52,6 +53,7 @@ class VideoHandler {
 		void setMode(videoModes _mode);
 		void setMode(videoModes _mode, string _path);
 		void setDirectory(string _path);
+		void setActive(bool status);
 
 		glm::vec2& getDims();
 		glm::vec2& getOutputCoords();
@@ -59,16 +61,15 @@ class VideoHandler {
 		ofImage& getFrameImg();
 		string getVideoTitle();
 		bool isFrameNew(); 
-		bool isDeactivated();
+		bool isActive();
 
 		ofParameterGroup gui;
 		ofParameter<ofColor> c, bg_c;
 		ofParameter<bool> enable_video_bg, enable_resizing, enable_mirror;
 
-		bool deactivate = false;
-
 	private :
 
+		bool active = true;
 
 		ofVideoPlayer local_cam;
 		ofVideoGrabber web_cam;

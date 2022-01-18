@@ -36,10 +36,10 @@ class ofApp : public ofBaseApp{
 		LocalMediaManager media_man;
 		VideoHandler video;
 
-		Feed* local_default_video_feed;
-		Feed* local_default_video_feed_2;
+		Feed* local_default_video_feed = NULL;
+		Feed* local_default_video_feed_2 = NULL;
 
-		Feed* local_default_image_feed;
+		Feed* local_default_image_feed = NULL;
 		vector<Feed*> local_image_feeds;
 
 

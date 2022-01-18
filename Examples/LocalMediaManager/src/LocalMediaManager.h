@@ -24,18 +24,18 @@ enum mediaTypes {
 };
 
 struct Feed {
-	int id;											/// \ID & index
+	int id = 0;										/// \ID & index
 	mediaTypes media_type;							/// \Media type
 	string path;									/// \Path to media directory
 	bool enable_slideshow = false;					/// \If true image file updated to next in directory based on freq / is false static image
 	int slideshow_frequency = 5;					/// \Frames between Image updates
 	bool isFrameNew = false;						/// \True if media has been updated
-	VideoHandler* vids;								/// \Pointer to videohandler obj
-	ImageHandler* imgs;								/// \Pointer to imageHandler obj
+	VideoHandler* vids = NULL;						/// \Pointer to videohandler obj if applicable
+	ImageHandler* imgs = NULL;						/// \Pointer to imageHandler obj if applicable 
 	int update_counter = 0;							/// \Running counter of updates - for slideshow frequency
 	int curr_image = 0;								/// \Current Image Index
 	int collection_size = 1;						/// \How many images are in a collection
-	bool dead = false;
+	bool active = false;							/// \Is this feed being used? or open for use?
 };
 
 class LocalMediaManager {
@@ -46,31 +46,45 @@ public:
 
 	Feed* createNewFeed(const Feed& new_feed) {
 
-		Feed _feed = new_feed;
+		bool created = false;
 
-		//sort out the media handler
-		if (_feed.media_type < 2) {
-			////image based types
-			images.push_back(new ImageHandler(_feed.path));
-			_feed.imgs = images.back();
+		//find first availble feed
+		//we have a fixed amount array
+		for (auto &f : feeds) {
+
+			if (!checkFeed(f)) {
+				//feed not being used!
+
+				f = new_feed;
+
+				//determine media type
+				if (f.media_type < 2) {
+					////image based types
+					images.push_back(new ImageHandler(f.path));
+					f.imgs = images[images.size() - 1];
+					created = true;
+				}
+				else if (f.media_type == 2) {
+					//video based types
+					VideoHandler* vh = new VideoHandler(glm::vec2(1920, 1080));
+					vh->setup(f.path, VideoHandler::VIDEO_LOCAL);
+					vh->setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
+					videos.push_back(vh);
+					f.vids = videos[videos.size()-1];
+					created = true;
+				}
+
+				if (created) {
+					//set the feed to active!
+					f.active = true;
+					return &f;	//check what we are returning here is correct....
+				}
+
+			}
 		}
-		else if (_feed.media_type == 2) {
-			//video based types
-			VideoHandler* vh = new VideoHandler(glm::vec2(1920, 1080));
-			vh->setup(_feed.path, VideoHandler::VIDEO_LOCAL);
-			vh->setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
-			videos.push_back(vh);
-			_feed.vids = videos.back();
-		}
 
-		//set id
-		_feed.id = feeds.size();
+		return NULL;
 
-		//add to array
-		feeds.push_back(_feed);
-
-		//return pointer of feed
-		return &feeds[_feed.id];
 	}
 	
 	void update() {
@@ -78,73 +92,75 @@ public:
 		for (auto v : videos)
 			v->update();
 
-		for (auto &f : feeds) {
+		for ( auto &f : feeds) {
 
-			f.update_counter++;
-
-			//check frames
-			if (f.media_type < 2) {
-				//image types
-				if (f.enable_slideshow) {
-					if (f.update_counter % f.slideshow_frequency == 0) {
-						f.isFrameNew = true;
-						nxtImage(&f);
+			//if its an active feed do the things
+			if (checkFeed(f)) {
+				//check frames
+				if (f.media_type < 2) {
+					//image types
+					if (f.enable_slideshow) {
+						if (f.update_counter % f.slideshow_frequency == 0) {
+							f.isFrameNew = true;
+							nxtImage(&f);
+						}
 					}
-						
+				}
+				else if (f.media_type == 2) {
+					//video types
+					f.isFrameNew = f.vids->isFrameNew();
 				}
 			}
-			else if (f.media_type == 2) {
-				//video types
-				f.isFrameNew = f.vids->isFrameNew();
-			}
 		}
-
-		checkFeeds();
-
 	}
 
 	void drawDebug() {
 
-		int amt = feeds.size();
+		int amt = sizeof(feeds);
 		int cols = 3;
 		int rows = glm::ceil(amt / cols);
 		glm::vec2 pos(0, 0);
 		int counter = 0;
 
-		for (auto f : feeds) {
+		for (auto &f : feeds) {
 
-			if (counter % cols != 0) pos.x = ofGetWidth() /cols ;
-			pos.y = glm::floor((counter / cols)) * (ofGetHeight() / 2);
+			//if its an active feed do the things
+			if (checkFeed(f)) {
 
-			switch (f.media_type) {
-			case VIDEO :
-				f.vids->getFrameTex()->draw(pos.x,pos.y);
-				break;
-			case IMAGE :
-				f.imgs->getImages()[f.curr_image].draw(pos.x, pos.y);
-				break;
-			case IMAGE_COLLECTION :
+				if (counter % cols != 0) pos.x = ofGetWidth() / cols;
+				pos.y = glm::floor((counter / cols)) * (ofGetHeight() / 2);
 
-					int cols = 2;
-					int rows = glm::ceil(f.collection_size / cols);
-					glm::vec2 nested_pos(0,0);
-				for (int i = 0; i < f.collection_size; i++) {
-					ofPushMatrix();
-					ofPushStyle();
+				switch (f.media_type) {
+				case VIDEO:
+					if (checkVideoHandler(*f.vids))
+						f.vids->getFrameTex()->draw(pos.x, pos.y);
+					break;
+				case IMAGE :
+					if (checkImageHandler( *f.imgs )) 
+						f.imgs->getImages()[f.curr_image].draw(pos.x, pos.y);
+					break;
+				case IMAGE_COLLECTION :
+					if (checkImageHandler( *f.imgs )) {
+						int cols = 2;
+						int rows = glm::ceil(f.collection_size / cols);
+						glm::vec2 nested_pos(0, 0);
+						for (int i = 0; i < f.collection_size; i++) {
+							ofPushMatrix();
+							ofPushStyle();
 
-					ofTranslate( nested_pos.x, nested_pos.y );
-					ofScale(0.25);
+							ofTranslate(nested_pos.x, nested_pos.y);
+							ofScale(0.25);
+							f.imgs->getImages()[f.curr_image].draw(pos.x, pos.y);
+							nxtImage(&f);
 
-					f.imgs->getImages()[f.curr_image].draw(pos.x, pos.y);
-					nxtImage(&f);
-
-					ofPopStyle();
-					ofPopMatrix();
+							ofPopStyle();
+							ofPopMatrix();
+						}
+					}
+					break;
 				}
-
-				break;
+				counter++;
 			}
-			counter++;
 		}
 	}
 
@@ -176,7 +192,7 @@ public:
 		switch (_feed->media_type) {
 		case IMAGE_COLLECTION:
 		case IMAGE:
-			//(*_feed).isFrameNew = false;
+			(*_feed).isFrameNew = false;
 			return &_feed->imgs->getImages()[_feed->curr_image];
 			break;
 		case VIDEO:
@@ -186,7 +202,7 @@ public:
 				break;
 		}
 
-		return new ofTexture;
+		return NULL;
 	}
 
 	vector<ofTexture*> getFrameTextures(Feed* _feed, int amt) {
@@ -214,37 +230,32 @@ public:
 		return texs;
 	}
 
-	void deleteFeed(Feed* _feed) {
-		_feed->dead = true;
-		if (_feed->vids)_feed->vids->deactivate = true;
-		if (_feed->imgs)_feed->imgs->deactivate = true;
+	void releaseFeed(Feed* _feed) {
+		_feed->active = false;
+		if (_feed->vids)_feed->vids->setActive(false);
+		if (_feed->imgs)_feed->imgs->setActive(false);
+		releaseHandlers();
 	}
 
-	void checkFeeds() {
-		for (int i = 0; i < videos.size(); i++) {
-			if (checkVideoHandler(*videos[i]))
-				videos.erase(videos.begin() + i);
-		}
+	void releaseHandlers() {
 		for (int i = 0; i < images.size(); i++) {
-			if (checkImageHandler(*images[i]))
-				images.erase(images.begin() + i);
+			if (!images[i]->isActive())images.erase( images.begin() + i );
 		}
-		for (int i = 0; i < feeds.size(); i++) {
-			if (checkFeed(feeds[i]))
-				feeds.erase(feeds.begin() + i);
+		for (int i = 0; i < videos.size(); i++) {
+			if (!videos[i]->isActive())videos.erase(videos.begin() + i);
 		}
 	}
-	
+
 	bool checkFeed(Feed& _feed) {
-		return _feed.dead;
+		return _feed.active;
 	}	
 	
 	bool checkVideoHandler(VideoHandler& v) {
-		return v.deactivate;
+		return v.isActive();
 	}	
 	
 	bool checkImageHandler(ImageHandler& i) {
-		return i.deactivate;
+		return i.isActive();
 	}
 
 	void initGui() {
@@ -257,7 +268,8 @@ public:
 
 private:
 
-	vector<Feed> feeds;
+	//vector<Feed> feeds;
+	Feed feeds[20];		//testing fixed amount of possible feeds for better ptr access
 	vector<VideoHandler*> videos;
 	vector<ImageHandler*> images;
 

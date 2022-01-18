@@ -7,8 +7,11 @@
 	@TODO:
 	* Add Other Image utilities - saving frames
 	* threaded Image loader
-	* maybe restructure in general this is really a directory handler
-
+	* restructure in general ( more like video handler )
+	*	so u call a set up / or load directory to load a new directory ( keep oG constructor way too for legacy code )
+	*	also then his handler would handle curr image / next image / 
+	*	calls to just retrieve one image / or a set of images ratrher than ALL images
+	* add proper deconstructor
 */
 #pragma once
 
@@ -18,6 +21,12 @@ class ImageHandler {
 
 public:
 
+	//--------------------------------------------------------------
+	ImageHandler( ) {}
+
+	//legacy way of using imageHandler....
+	//loads all images in directory ready for use
+	//--------------------------------------------------------------
 	ImageHandler( string path ) {
 		ofDirectory dir;
 		dir.listDir(path);
@@ -34,17 +43,18 @@ public:
 		}
 	}
 
+	//--------------------------------------------------------------
+	void setActive(bool status) {active = status;}
+
+	//--------------------------------------------------------------
 	vector<ofTexture>& getImages() {return images;}
 
 	//--------------------------------------------------------------
-	bool isDeactivated() {
-		return deactivate;
-	}
-
-	bool deactivate = false;
+	bool isActive() { return active;}
 
 private:
 
+	bool active = true;
 	vector<ofTexture> images;
 
 };

@@ -169,6 +169,10 @@ void VideoHandler::setDirectory(string _path) {
 	setup(path, mode);
 }
 
+//--------------------------------------------------------------
+void VideoHandler::setActive( bool status) {
+	active = status;
+}
 
 //--------------------------------------------------------------
 glm::vec2& VideoHandler::getDims() {
@@ -225,8 +229,8 @@ bool VideoHandler::isFrameNew() {
 }
 
 //--------------------------------------------------------------
-bool VideoHandler::isDeactivated() {
-	return deactivate;
+bool VideoHandler::isActive() {
+	return active;
 }
 
 //--------------------------------------------------------------

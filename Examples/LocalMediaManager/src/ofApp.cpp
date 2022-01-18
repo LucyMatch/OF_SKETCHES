@@ -19,7 +19,7 @@ void ofApp::setup(){
     video_feed.media_type = mediaTypes::VIDEO;
     local_default_video_feed = media_man.createNewFeed(video_feed);
 
-    //media man - test 2nd feed - simple video backgrounds
+    ////media man - test 2nd feed - simple video backgrounds
     Feed _video_feed;
     _video_feed.path = "videos";
     _video_feed.media_type = mediaTypes::VIDEO;
@@ -50,17 +50,20 @@ void ofApp::draw(){
     ofSetColor(bg_c);
     ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 
-    //float x = 0, y = 0;
-    //if (media_man.getFrameTexture(local_default_video_feed)->isAllocated()) {
-    //    x = media_man.getFrameTexture(local_default_video_feed)->getWidth();
-    //    y = media_man.getFrameTexture(local_default_video_feed)->getHeight();
-    //}
+    float x = 0, y = 0;
+    if (media_man.getFrameTexture(local_default_video_feed)->isAllocated()) {
+        x = media_man.getFrameTexture(local_default_video_feed)->getWidth();
+        y = media_man.getFrameTexture(local_default_video_feed)->getHeight();
+    }
 
-    //media_man.getFrameTexture(local_default_video_feed)->draw(0, 0);
+    if (local_default_video_feed != NULL)
+        media_man.getFrameTexture(local_default_video_feed)->draw(0, 0);
 
-    //media_man.getFrameTexture(local_default_video_feed_2)->draw(x, 0);
+    if(local_default_video_feed_2 != NULL )
+        media_man.getFrameTexture(local_default_video_feed_2)->draw(x, 0);
 
-    //media_man.getFrameTexture(local_default_image_feed)->draw(0, y);
+    if (local_default_image_feed != NULL)
+        media_man.getFrameTexture(local_default_image_feed)->draw(0, y);
     
     if (enable_debug) drawDebug();
 
