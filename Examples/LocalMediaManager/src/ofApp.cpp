@@ -30,8 +30,10 @@ void ofApp::setup(){
     img_feed.path = "images/misc";
     img_feed.media_type = mediaTypes::IMAGE;
     img_feed.enable_slideshow = true;
+    img_feed.slideshow_frequency = 5;
     local_default_image_feed = media_man.createNewFeed(img_feed);
 
+    //media man - testing image collection
     Feed img_c_feed;
     img_c_feed.path = "images/eyes"; 
     img_c_feed.media_type = mediaTypes::IMAGE_COLLECTION;
@@ -39,15 +41,16 @@ void ofApp::setup(){
     local_image_collection = media_man.createNewFeed(img_c_feed);
 
     //media man - testing image collections stored in vector
-//string img_dirs[] = { "clouds", "eyes", "rocks", "sky", "sky2" };
-//for (int i = 0; i < sizeof(img_dirs); i++) {
-//    Feed _feed;
-//    _feed.path = "images/" + img_dirs[i];
-//    _feed.media_type = mediaTypes::IMAGE_COLLECTION;
-//    _feed.collection_size = 5;
-//    //_feed.enable_slideshow = true;
-//    local_image_feeds.push_back(media_man.createNewFeed(_feed));
-//}
+    string img_dirs[] = { "clouds", "eyes", "rocks", "sky", "sky2" };
+    for(const auto &path : img_dirs){
+        Feed _feed;
+        _feed.media_type = mediaTypes::IMAGE_COLLECTION;
+        _feed.collection_size = 40;
+        _feed.path = "images/" + path;
+        _feed.enable_slideshow = true;
+        _feed.slideshow_frequency = 2;
+        local_image_feeds.push_back(media_man.createNewFeed(_feed));
+    }
 
 }
 
@@ -67,15 +70,18 @@ void ofApp::draw(){
     ofSetColor(bg_c);
     ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 
+
+    ofSetColor(c);
     float x = 0, y = 0;
-    if (media_man.getFrameTexture(local_default_video_feed)->isAllocated()) {
-        x = media_man.getFrameTexture(local_default_video_feed)->getWidth();
-        y = media_man.getFrameTexture(local_default_video_feed)->getHeight();
-    }
 
-    if (local_default_video_feed != NULL)
+    if (local_default_video_feed != NULL) {
+        if (media_man.getFrameTexture(local_default_video_feed)->isAllocated()) {
+            x = media_man.getFrameTexture(local_default_video_feed)->getWidth();
+            y = media_man.getFrameTexture(local_default_video_feed)->getHeight();
+        }
         media_man.getFrameTexture(local_default_video_feed)->draw(0, 0);
-
+    }
+       
     if(local_default_video_feed_2 != NULL )
         media_man.getFrameTexture(local_default_video_feed_2)->draw(x, 0);
 
@@ -87,40 +93,39 @@ void ofApp::draw(){
         ofPopMatrix();
     }
 
+    if (local_image_collection != NULL) {
+        int w = ofGetWidth() / local_image_collection->collection_size, h;
+        int child_counter = 0;
 
-    int w = ofGetWidth() / local_image_collection->collection_size, h;
-    int child_counter = 0;
-
-    
-
-
-    for (auto tex : media_man.getFrameTextures(local_image_collection)) {
-        h = (tex->getHeight() / tex->getWidth()) * w;
-        ofPushMatrix();
-        ofTranslate(child_counter * w, y);
+        for (auto tex : media_man.getFrameTextures(local_image_collection)) {
+            h = (tex->getHeight() / tex->getWidth()) * w;
+            ofPushMatrix();
+            ofTranslate(child_counter * w, y);
             tex->draw(0, 0, w, h);
-        ofPopMatrix();
-        child_counter++;
+            ofPopMatrix();
+            child_counter++;
+        }
     }
 
 
-    //int parent_counter = 0;
+    int parent_counter = 0;
+    int start_pad = 10;
 
-    //for (const auto& f : local_image_feeds) {
+    for (const auto& f : local_image_feeds) {
 
-    //    int w = ofGetWidth() / f->collection_size, h;
-    //    int child_counter = 0;
+        int new_w = (ofGetWidth()) / f->collection_size, h;
+        int child_counter = 0;
 
-    //    for (auto tex : media_man.getFrameTextures(local_default_image_feed)) {
-    //        h = (tex->getHeight() / tex->getWidth()) * w;
-    //        ofPushMatrix();
-    //        ofTranslate(child_counter * w, parent_counter * h);
-    //        tex->draw(0, 0, w, h);
-    //        ofPopMatrix();
-    //        child_counter++;
-    //    }
-    //    parent_counter++;
-    //}
+        for (auto tex : media_man.getFrameTextures(f)) {
+            h = (tex->getHeight() / tex->getWidth()) * new_w;
+            ofPushMatrix();
+            ofTranslate(child_counter * new_w, (parent_counter * h) + start_pad);
+            tex->draw(0, 0, new_w, h);
+            ofPopMatrix();
+            child_counter++;
+        }
+        parent_counter++;
+    }
     
     if (enable_debug) drawDebug();
 
@@ -140,7 +145,8 @@ void ofApp::initGui() {
 
     gui.setup("P R I M A R Y");
     //48, 255, 297   //255, 70, 86
-    gui.add(bg_c.set("background", ofColor(138, 184, 164, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+    gui.add(bg_c.set("background", ofColor(255, 70, 86, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+    gui.add(c.set("background", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
     gui.add(enable_debug.set("enable debug", false));
     gui.add(enable_info.set("enable info", false));
 
@@ -168,10 +174,14 @@ void ofApp::keyPressed(int key){
         media_man.prevVideo(local_default_video_feed_2);
         break;
     case'\'':
-        media_man.nxtImage(local_default_image_feed);
+        local_default_image_feed->enable_slideshow = !local_default_image_feed->enable_slideshow;
         break;
     case ';':
-        media_man.nxtImage(local_default_image_feed);
+        for (auto& f : local_image_feeds)
+            f->enable_slideshow = !f->enable_slideshow;
+        break;
+    case '/':
+        media_man.nxtImage(local_image_collection);
         break;
     case '0':
         gui.saveToFile("1_gui.xml");
@@ -238,24 +248,16 @@ void ofApp::drawInfo() {
 
     std::stringstream ss;
 
-    //@TODO: UPDATE THIS WITH RELEVANT INFO
-    // 
-    // ofToString formatting available in 0072+
-    //ss << "          Video Feed: " << video.getVideoTitle() << std::endl;
-    //ss << "          Export Interval: " << time_interval / 1000 << " /s" << std::endl;
-    //string enabled = (enable_interval_export) ? "yes" : "no";
-    //ss << "          Export Interval Active: " << enabled << std::endl;
     ss << "---------------------------------- " << std::endl;
     ss << " Key Controls " << std::endl;
-    ss << " Next Local Video              :  '.' " << std::endl;
-    ss << " Prev Local Video              :  ',' " << std::endl;
-    //ss << " Single Export           :  'x' " << std::endl;
-    //ss << " Toggle Interval Export  :  'z' " << std::endl;
-    //ss << " Toggle This Info        :  'b' " << std::endl;
-    //ss << " Spawn                   :  'p' " << std::endl;
-    //ss << " Random Spawn            :  'o' " << std::endl;
-    //ss << " Clear Particles         :  '-' " << std::endl;
-    //ss << " Clear Fbos              :  '=' " << std::endl;
+    ss << " Next Local Video 1                  :  ']' " << std::endl;
+    ss << " Prev Local Video  1                 :  '[' " << std::endl;    
+    ss << " Next Local Video 2                  :  '.' " << std::endl;
+    ss << " Prev Local Video  2                 :  ',' " << std::endl;
+    ss << " Save Screen Shot                    :  'ENTER' " << std::endl;
+    ss << " Toggle Curser Image SlideShow       :  ''' " << std::endl;
+    ss << " Toggle Multi Collections slideshow  :  ';' " << std::endl;
+    ss << " Next Image Set Collection           :  '/' " << std::endl;
 
 
     ofSetColor(255);

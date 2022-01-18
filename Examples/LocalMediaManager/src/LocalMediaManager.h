@@ -28,7 +28,7 @@ struct Feed {
 	mediaTypes media_type;							/// \Media type
 	string path;									/// \Path to media directory
 	bool enable_slideshow = false;					/// \If true image file updated to next in directory based on freq / is false static image
-	int slideshow_frequency = 60;					/// \Frames between Image updates
+	int slideshow_frequency = 1;					/// \Frames between Image updates
 	bool isFrameNew = false;						/// \True if media has been updated
 	VideoHandler* vids = NULL;						/// \Pointer to videohandler obj if applicable
 	ImageHandler* imgs = NULL;						/// \Pointer to imageHandler obj if applicable 
@@ -93,6 +93,8 @@ public:
 			v->update();
 
 		for ( auto &f : feeds) {
+
+			f.update_counter++;
 
 			//if its an active feed do the things
 			if (checkFeed(f)) {

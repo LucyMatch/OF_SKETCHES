@@ -18,15 +18,8 @@ void VideoHandler::setup(string _path, videoModes _mode) {
 	
 	switch (mode) {
 		case VIDEO_LOCAL :
-			dir.listDir(path);
-			dir.sort();
-			feed_count = (int)dir.size();
-			local_cam.load(dir.getPath(curr_feed));
-			local_cam.setVolume(0);
-			local_cam.play();
-
-			cout << feed_count << endl;
-			cout << path << endl;
+			
+			loadVideo();
 
 			break;
 		case VIDEO_WEBCAM :
@@ -53,6 +46,22 @@ void VideoHandler::setup(string _path, videoModes _mode) {
 			break;
 	}
 
+}
+
+//--------------------------------------------------------------
+void VideoHandler::loadVideo() {
+	dir.listDir(path);
+	dir.sort();
+	feed_count = (int)dir.size();
+
+	local_cam.stop();
+	local_cam.close();
+	local_cam.load(dir.getPath(curr_feed));
+	local_cam.setVolume(0);
+	local_cam.play();
+
+	cout << feed_count << endl;
+	cout << path << endl;
 }
 
 //--------------------------------------------------------------

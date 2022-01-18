@@ -41,6 +41,7 @@ class VideoHandler {
 		VideoHandler(glm::vec2 _dims = glm::vec2(640,480));
 
 		void setup(string _path = "videos", videoModes _mode = VIDEO_WEBCAM );
+		void loadVideo();
 		void update();
 		void draw();
 

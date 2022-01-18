@@ -46,7 +46,7 @@ class ofApp : public ofBaseApp{
 
 
 		ofxPanel gui;
-		ofParameter<ofColor> bg_c;
-		ofParameter<bool> enable_debug, enable_info;
+		ofParameter<ofColor> bg_c, c;
+		ofParameter<bool> enable_debug = false, enable_info = false;
 		
 };
