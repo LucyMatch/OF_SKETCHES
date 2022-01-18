@@ -27,10 +27,10 @@ void ofApp::setup(){
 
 
     //media man - testing image
-    //Feed img_feed;
-    //img_feed.path = "images/misc";
-    //img_feed.media_type = mediaTypes::IMAGE;
-    //local_default_image_feed = media_man.createNewFeed(img_feed);
+    Feed img_feed;
+    img_feed.path = "images/misc";
+    img_feed.media_type = mediaTypes::IMAGE;
+    local_default_image_feed = media_man.createNewFeed(img_feed);
 
 }
 
