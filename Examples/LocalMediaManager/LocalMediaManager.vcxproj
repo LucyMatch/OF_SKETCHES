@@ -203,9 +203,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Classes\Utility\ImageHandler.h" />
+    <ClInclude Include="..\..\Classes\Utility\LocalMediaManager.h" />
     <ClInclude Include="..\..\Classes\Utility\VideoHandler.h" />
     <ClInclude Include="src\ofApp.h" />
-    <ClInclude Include="src\LocalMediaManager.h" />
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src\ofxBaseGui.h" />
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src\ofxButton.h" />
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src\ofxColorPicker.h" />
