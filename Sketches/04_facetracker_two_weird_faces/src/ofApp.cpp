@@ -32,6 +32,13 @@ void ofApp::setup(){
     video_feed.media_type = mediaTypes::VIDEO;
     bg_feed = media_man.createNewFeed(video_feed);
 
+    //media man - test - simple feed for face texture to cut
+    Feed face_feed;
+    face_feed.path = "videos";
+    face_feed.resize = true;
+    face_feed.media_type = mediaTypes::VIDEO;
+    single_face_feed = media_man.createNewFeed(video_feed);
+
 }
 
 //--------------------------------------------------------------
@@ -69,14 +76,30 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
+    //@TODO: make functions for drawing all these fbos
+
     if (enable_cuts_draw) {
         //draw cuts / elemnts on seperate fbo so we can blend
         ofPushStyle();
         cuts_draw.begin();
+
             ofSetColor(255, 255, 255, cuts_draw_alpha);
             ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+
             ofSetColor(cuts_color);
-            cut_man.draw(video.getFrameTex());
+
+            ofTexture* tex;
+
+            //@TODO: seperate feed for cuts?? + toggle
+            if (enable_cut_feed && single_face_feed)
+                if (enable_face_resize)
+                    tex =  media_man.getFrameTextureReSized(single_face_feed);
+                else
+                    tex =  media_man.getFrameTexture(single_face_feed);
+            else
+                tex = video.getFrameTex();
+
+            cut_man.draw(tex);
         cuts_draw.end();
         ofPopStyle();
     }
@@ -118,16 +141,6 @@ void ofApp::draw(){
                 glBlendFunc(GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
             }
 
-            if (enable_cuts_draw) {
-                ofSetColor(cuts_draw_color);
-                if (enable_trails) {
-                    cuts_draw.draw(0, 0);
-                }
-                else {
-                    cut_man.draw(video.getFrameTex());
-                }
-            }
-
             if (enable_p_draw) {
                 ofSetColor(p_color);
                 if (enable_trails) {
@@ -135,6 +148,16 @@ void ofApp::draw(){
                 }
                 else {
                     for (auto& p : p_men) { p.draw(); }
+                }
+            }
+
+            if (enable_cuts_draw) {
+                ofSetColor(cuts_draw_color);
+                if (enable_trails) {
+                    cuts_draw.draw(0, 0);
+                }
+                else {
+                    cut_man.draw(video.getFrameTex());
                 }
             }
 
@@ -210,9 +233,20 @@ void ofApp::updatePmen(int index, int i, int j) {
         //pman_exists!
         //update cut ( shape )
         p_men[index].update(cut_man.faces[i][j].cut);
-        //update texture
+        //set input texture
+        //@TODO: - we are going to be adding more feed options - this will need to be broken out into a new class? or function?
+        //it could be cleaner..
+        ofTexture* tex;
+        if (enable_face_feed && single_face_feed)
+            if (enable_face_resize)
+                tex = media_man.getFrameTextureReSized(single_face_feed);
+            else
+                tex = media_man.getFrameTexture(single_face_feed);
+        else
+            tex = video.getFrameTex();
+        //update pmen texture
         ofTexture tmp_tex;
-        tmp_tex = cut_man.getCutTexture(cut_man.faces[i][j].cut, *(video.getFrameTex()));
+        tmp_tex = cut_man.getCutTexture(cut_man.faces[i][j].cut, *tex);
         p_men[index].update(tmp_tex);
         //update 
         p_men[index].update();
@@ -315,10 +349,12 @@ void ofApp::initGui() {
 
     feed_gui.clear();
     feed_gui.setName("FEEDS");
-    feed_gui.add(enable_bg_feed.set("enable bg video feed", true));
-    feed_gui.add(enable_bg_resize.set("enable bg resize", true));
-    feed_gui.add(bg_feed_c.set("background feed", ofColor(255, 0, 0, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
-
+    feed_gui.add(enable_bg_feed.set("bg feed", true));
+    feed_gui.add(enable_bg_resize.set("bg resize", true));
+    feed_gui.add(bg_feed_c.set("bg feed c", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+    feed_gui.add(enable_face_feed.set("face feed", true));
+    feed_gui.add(enable_face_resize.set("face resize", true));
+    feed_gui.add(enable_cut_feed.set("face cut feed", true));
     gui.add(feed_gui);
 
     gui.add(video.gui);
@@ -457,10 +493,16 @@ void ofApp::keyPressed(int key) {
         p_man_gui.loadFromFile("4_pmen_gui.xml");
         break;
     case'1':
-        media_man.nxtVideo(bg_feed);
+        media_man.prevVideo(bg_feed);
         break;
     case '2':
-        media_man.prevVideo(bg_feed);
+        media_man.nxtVideo(bg_feed);
+        break;    
+    case'3':
+        media_man.prevVideo(single_face_feed);
+        break;
+    case '4':
+        media_man.nxtVideo(single_face_feed);
         break;
     default:
         break;
