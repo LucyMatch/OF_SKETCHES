@@ -14,10 +14,7 @@ void ofApp::setup(){
     p_draw.allocate(canvas_dims.x, canvas_dims.y, GL_RGBA);
 
     // init vid manager
-    //video.setDims(glm::vec2(1280, 720));
     video.setDims(canvas_dims);
-    //video.setDims(glm::vec2(3840, 2160));
-    //3840 × 2160
 
     video.setup();
     video.setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
@@ -27,6 +24,12 @@ void ofApp::setup(){
     
     // Setup tracker
     tracker.setup();
+
+    //media man - test - simple video backgrounds
+    Feed video_feed;
+    video_feed.path = "videos";
+    video_feed.media_type = mediaTypes::VIDEO;
+    bg_feed = media_man.createNewFeed(video_feed);
 
 }
 
@@ -55,9 +58,11 @@ void ofApp::update(){
 
         //update the elements using cuts ie. particle manager / graphic manager
         updateCutElements();
-        
 
     }
+
+    //update media man - to update frames
+    media_man.update();
 }
 
 //--------------------------------------------------------------
@@ -96,6 +101,14 @@ void ofApp::draw(){
 
             //draw "uncut" texture 
             if (enable_orig) video.draw();
+
+            //TESTING DRAWING MEDIA MAN AS BG
+            //NOT WORKING
+            if (enable_bg_feed && bg_feed != NULL) {
+                ofSetColor(bg_feed_c);
+                ofDrawRectangle(0, 0, 250, 250);
+                media_man.getFrameTexture(bg_feed)->draw(0, 0);
+            }
 
             if (enable_trails) {
                 glEnable(GL_BLEND);
@@ -154,6 +167,8 @@ void ofApp::drawDebug() {
 
     for (auto& p : p_men)
         p.drawDebug();
+
+    media_man.drawDebug();
 
 }
 
@@ -296,6 +311,13 @@ void ofApp::initGui() {
     gui.add(enable_trails.set("enable trails", true));
     gui.add(time_interval.set("export interval", 1000, 100, 50000));
 
+    media_man_gui.clear();
+    media_man_gui.setName("FEEDS");
+    media_man_gui.add(enable_bg_feed.set("enable bg video feed", true));
+    media_man_gui.add(bg_feed_c.set("background feed", ofColor(255, 0, 0, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+
+    gui.add(media_man_gui);
+
     gui.add(video.gui);
     gui.add(cut_man.gui);
 
@@ -430,6 +452,12 @@ void ofApp::keyPressed(int key) {
     case 'u':
         gui.loadFromFile("4_gui.xml");
         p_man_gui.loadFromFile("4_pmen_gui.xml");
+        break;
+    case'1':
+        media_man.nxtVideo(bg_feed);
+        break;
+    case '2':
+        media_man.prevVideo(bg_feed);
         break;
     default:
         break;

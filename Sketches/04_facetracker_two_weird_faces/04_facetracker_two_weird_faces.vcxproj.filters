@@ -390,9 +390,6 @@
     <Filter Include="src\Cuts">
       <UniqueIdentifier>{060f3394-6ebd-47fd-b437-f534111c3c12}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Utilities">
-      <UniqueIdentifier>{f3604e81-4298-4292-a0a2-b9cc60ad4ecb}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h">
@@ -1466,8 +1463,8 @@
     <ClInclude Include="src\PolyCuts.h">
       <Filter>src\Cuts</Filter>
     </ClInclude>
-    <ClInclude Include="src\LocalMediaManager.h">
-      <Filter>src\Utilities</Filter>
+    <ClInclude Include="..\..\Classes\Utility\LocalMediaManager.h">
+      <Filter>src\external</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

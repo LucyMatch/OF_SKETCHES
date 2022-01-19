@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxGui.h"
 #include "ofxFaceTracker2.h"
+#include "LocalMediaManager.h"
 #include "VideoHandler.h"
 #include "PolyCuts.h"
 #include "LandmarkCutManager.h"
@@ -35,6 +36,9 @@ public:
 
     ofFbo main_draw, cuts_draw, p_draw;
 
+    LocalMediaManager media_man;
+    Feed* bg_feed = NULL;
+
     VideoHandler video;
 
     ofxFaceTracker2 tracker;
@@ -48,10 +52,13 @@ public:
 
     ofxPanel gui;
     ofxPanel p_man_gui;
+    ofParameterGroup media_man_gui;
     ofParameterGroup particleGui;
 
     ofParameter<ofColor> bg_c, cuts_draw_color, cuts_color, p_color;
+    ofParameter<ofColor> bg_feed_c;
     ofParameter<bool> enable_debug, enable_orig, enable_cuts_draw, enable_p_draw, enable_trails;
+    ofParameter<bool> enable_bg_feed;
     ofParameter<float> time_interval, cuts_draw_alpha, p_draw_alpha;
 
 };

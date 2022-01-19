@@ -247,10 +247,10 @@
     <ClInclude Include="..\..\Classes\Particle\ParticleManager.h" />
     <ClInclude Include="..\..\Classes\Utility\Cuts.h" />
     <ClInclude Include="..\..\Classes\Utility\ImageHandler.h" />
+    <ClInclude Include="..\..\Classes\Utility\LocalMediaManager.h" />
     <ClInclude Include="..\..\Classes\Utility\VideoHandler.h" />
     <ClInclude Include="src\CutParticle.h" />
     <ClInclude Include="src\CutParticleManager.h" />
-    <ClInclude Include="src\LocalMediaManager.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\LandmarkCutManager.h" />
     <ClInclude Include="src\PolyCuts.h" />
