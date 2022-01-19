@@ -28,6 +28,7 @@ void ofApp::setup(){
     //media man - test - simple video backgrounds
     Feed video_feed;
     video_feed.path = "videos";
+    video_feed.resize = false;
     video_feed.media_type = mediaTypes::VIDEO;
     bg_feed = media_man.createNewFeed(video_feed);
 
@@ -103,26 +104,18 @@ void ofApp::draw(){
             if (enable_orig) video.draw();
 
             //TESTING DRAWING MEDIA MAN AS BG
-            //NOT WORKING
             if (enable_bg_feed && bg_feed != NULL) {
                 ofSetColor(bg_feed_c);
-                ofDrawRectangle(0, 0, 250, 250);
-                media_man.getFrameTexture(bg_feed)->draw(0, 0);
+                
+                if(enable_bg_resize)
+                    media_man.getFrameTextureReSized(bg_feed)->draw(0,0);
+                else
+                    media_man.getFrameTexture(bg_feed)->draw(0, 0);
             }
 
             if (enable_trails) {
                 glEnable(GL_BLEND);
                 glBlendFunc(GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
-            }
-
-            if (enable_p_draw) {
-                ofSetColor(p_color);
-                if (enable_trails) {
-                    p_draw.draw(0, 0);
-                }
-                else {
-                    for (auto& p : p_men) { p.draw(); }
-                }
             }
 
             if (enable_cuts_draw) {
@@ -132,6 +125,16 @@ void ofApp::draw(){
                 }
                 else {
                     cut_man.draw(video.getFrameTex());
+                }
+            }
+
+            if (enable_p_draw) {
+                ofSetColor(p_color);
+                if (enable_trails) {
+                    p_draw.draw(0, 0);
+                }
+                else {
+                    for (auto& p : p_men) { p.draw(); }
                 }
             }
 
@@ -153,6 +156,8 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::drawDebug() {
 
+    media_man.drawDebug();
+
     // Draw tracker landmarks
     tracker.drawDebug();
 
@@ -167,8 +172,6 @@ void ofApp::drawDebug() {
 
     for (auto& p : p_men)
         p.drawDebug();
-
-    media_man.drawDebug();
 
 }
 
@@ -235,8 +238,6 @@ void ofApp::checkPmen() {
     }
 }
 
-
-
 //--------------------------------------------------------------
 void ofApp::intervalExport() {
     //reset time tracker
@@ -264,24 +265,25 @@ void ofApp::drawInfo() {
 
     std::stringstream ss;
 
-    //@TODO: UPDATE THIS WITH RELEVANT INFO
-    // 
-    // ofToString formatting available in 0072+
-    ss << "          Video Feed: " << video.getVideoTitle() << std::endl;
+    ss << "          Video Tracking Feed : " << video.getVideoTitle() << std::endl;
     ss << "          Export Interval: " << time_interval / 1000 << " /s" << std::endl;
     string enabled = (enable_interval_export) ? "yes" : "no";
     ss << "          Export Interval Active: " << enabled << std::endl;
     ss << "---------------------------------- " <<  std::endl;
     ss << " Key Controls " << std::endl;
-    ss << " Next Video              :  '.' " << std::endl;
-    ss << " Prev Video              :  ',' " << std::endl;
+    ss << " Next Tracking Video     :  '.' " << std::endl;
+    ss << " Prev Tracking Video     :  ',' " << std::endl;
     ss << " Single Export           :  'x' " << std::endl;
     ss << " Toggle Interval Export  :  'z' " << std::endl;
     ss << " Toggle This Info        :  'b' " << std::endl;
-    ss << " Spawn                   :  'p' " << std::endl;
-    ss << " Random Spawn            :  'o' " << std::endl;
-    ss << " Clear Particles         :  '-' " << std::endl;
-    ss << " Clear Fbos              :  '=' " << std::endl;
+    ss << " Spawn                   :  ']' " << std::endl;
+    ss << " Random Spawn            :  '[' " << std::endl;
+    ss << " gravity up              :  'w' " << std::endl;
+    ss << " gravity down            :  's' " << std::endl;
+    ss << " gravity left            :  'a' " << std::endl;
+    ss << " gravity right           :  'd' " << std::endl;
+    ss << " nxt bg feed content     :  '2' " << std::endl;
+    ss << " prev bg feed content    :  '1' " << std::endl;
 
 
     ofSetColor(255);
@@ -311,31 +313,32 @@ void ofApp::initGui() {
     gui.add(enable_trails.set("enable trails", true));
     gui.add(time_interval.set("export interval", 1000, 100, 50000));
 
-    media_man_gui.clear();
-    media_man_gui.setName("FEEDS");
-    media_man_gui.add(enable_bg_feed.set("enable bg video feed", true));
-    media_man_gui.add(bg_feed_c.set("background feed", ofColor(255, 0, 0, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+    feed_gui.clear();
+    feed_gui.setName("FEEDS");
+    feed_gui.add(enable_bg_feed.set("enable bg video feed", true));
+    feed_gui.add(enable_bg_resize.set("enable bg resize", true));
+    feed_gui.add(bg_feed_c.set("background feed", ofColor(255, 0, 0, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 
-    gui.add(media_man_gui);
+    gui.add(feed_gui);
 
     gui.add(video.gui);
     gui.add(cut_man.gui);
 
     particleGui.clear();
     particleGui.setName("P");
-    particleGui.add(CutParticle::pcolor.set("color", ofColor(0, 0, 0, 100), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+    particleGui.add(CutParticle::pcolor.set("color", ofColor(0, 0, 0, 0), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
     particleGui.add(CutParticle::tcolor.set("trail color", ofColor(0, 0, 0, 100), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
 
     particleGui.add(CutParticle::r.set("radius", 10, 0, 1000));
     particleGui.add(CutParticle::enable_true_size.set("true size", true));
     particleGui.add(CutParticle::enable_random_size.set("random size", false));
-    particleGui.add(CutParticle::enable_continous_resizing.set("continous resize", false));
+    //particleGui.add(CutParticle::enable_continous_resizing.set("continous resize", false));
     particleGui.add(CutParticle::size_min.set("size min", 11, 10, 500));
     particleGui.add(CutParticle::size_max.set("size max", 100, 0, 500));
     particleGui.add(CutParticle::mass_base.set("mass base", 11.0, 0.0, 500.0));
     particleGui.add(CutParticle::speed_limit.set("speed limit", 20.0, 0.0, 50.0));
     particleGui.add(CutParticle::trail.set("trail on", true));
-    particleGui.add(CutParticle::enable_home_in_history.set("trail include home", false));
+    //particleGui.add(CutParticle::enable_home_in_history.set("trail include home", false));
     particleGui.add(CutParticle::trail_wgt.set("trail weight", 5.0, 0.0, 10.0));
     particleGui.add(CutParticle::history_length.set("history length", 3, 0, 50));
 

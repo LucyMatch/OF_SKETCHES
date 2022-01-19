@@ -36,15 +36,24 @@ struct Feed {
 	int curr_image = 0;								/// \Current Image Index
 	int collection_size = 1;						/// \How many images are in a collection
 	bool active = false;							/// \Is this feed being used? or open for use?
+	bool resize = false;							/// \DO we want to save + calculate output dimensions
+	bool center = true;								/// \Do we want to save + calculate output dimensions so content is centered?
+	glm::vec2 output_pos;							///	\output x + y positions if resizing / center is activated these will be calced + saved here
+	glm::vec2 output_size;							/// \output dimensions same as above
+	glm::vec2 o_size;								/// \original content dimensions
+	bool dims_set = false;
 };
 
 class LocalMediaManager {
 
 public:
 
-	LocalMediaManager() {};
+	LocalMediaManager() {
+	};
 
 	Feed* createNewFeed(const Feed& new_feed) {
+
+		canvas.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 
 		bool created = false;
 
@@ -63,6 +72,7 @@ public:
 					images.push_back(new ImageHandler(f.path));
 					f.imgs = images[images.size() - 1];
 					created = true;
+					f.dims_set = true;
 				}
 				else if (f.media_type == 2) {
 					//video based types
@@ -77,6 +87,8 @@ public:
 				if (created) {
 					//set the feed to active!
 					f.active = true;
+					getOutputDims(&f);
+					getOutputPos(&f);
 					return &f;	//check what we are returning here is correct....
 				}
 
@@ -98,6 +110,13 @@ public:
 
 			//if its an active feed do the things
 			if (checkFeed(f)) {
+
+				//if dims arent set for this content set it
+				if (!f.dims_set) {
+					getOutputDims(&f);
+					getOutputPos(&f);
+				}
+
 				//check frames
 				if (f.media_type < 2) {
 					//image types
@@ -171,6 +190,7 @@ public:
 		cout << "feed " << _feed->id << " curr img index = " << _feed->curr_image << endl;
 		(*_feed).curr_image = ++(*_feed).curr_image % _feed->imgs->getImages().size();
 		cout << "feed " << _feed->id << " updated curr img index = " << _feed->curr_image << endl;
+		_feed->dims_set = false;
 	}
 
 	void prevImage(Feed* _feed) {
@@ -178,16 +198,19 @@ public:
 		(*_feed).curr_image = --(*_feed).curr_image % _feed->imgs->getImages().size();
 		if (_feed->curr_image < 0)(*_feed).curr_image = _feed->imgs->getImages().size();
 		cout << "feed " << _feed->id << " updated curr img index = " << _feed->curr_image << endl;
+		_feed->dims_set = false;
 	}
 
 	void nxtVideo(Feed* _feed) {
 		if (_feed->vids)
 			_feed->vids->nxtFeed();
+		_feed->dims_set = false;
 	}
 
 	void prevVideo(Feed* _feed) {
 		if (_feed->vids)
 			_feed->vids->prevFeed();
+		_feed->dims_set = false;
 	}
 
 	ofTexture* getFrameTexture(Feed* _feed) {
@@ -209,6 +232,47 @@ public:
 		}
 
 		return NULL;
+	}
+
+	ofTexture* getFrameTextureReSized(Feed* _feed) {
+
+		int x = 0, y = 0, w = _feed->o_size.x, h = _feed->o_size.y;
+
+		if (_feed->resize) {
+			w = _feed->output_size.x;
+			h = _feed->output_size.y;
+		}
+
+		if (_feed->center) {
+			x = _feed->output_pos.x;
+			y = _feed->output_pos.y;
+		}
+		ofPushStyle();
+		canvas.begin();
+
+		////if its an active feed do the things
+		if (checkFeed(*_feed)) {
+			switch (_feed->media_type) {
+			case IMAGE_COLLECTION:
+				//@TODO:
+			case IMAGE:
+				_feed->imgs->getImages()[_feed->curr_image].draw(x, y, w, h);
+				break;
+			case VIDEO:
+				_feed->vids->getFrameTex()->draw(x, y, w, h);
+				break;
+			default:
+				break;
+			}
+		}
+
+		canvas.end();
+		ofPopStyle();
+
+		//std::cout << canvas.getWidth() << " x " << canvas.getHeight() << std::endl;
+		//std::cout << "x = " << x << " y = " << y << " w = " << w << " h = " << h << std::endl;
+
+		return &canvas.getTexture();
 	}
 
 	vector<ofTexture*> getFrameTextures(Feed* _feed, int amt) {
@@ -270,6 +334,42 @@ public:
 		return texs;
 	}
 
+	glm::vec2 getOutputDims(Feed* _feed) {
+
+		glm::vec2 new_dim;
+		//get origin dims
+
+		if (_feed->media_type < 2)
+			_feed->o_size = glm::vec2(_feed->imgs->getImages()[_feed->curr_image].getWidth(), _feed->imgs->getImages()[_feed->curr_image].getHeight());
+		else
+			_feed->o_size = glm::vec2(_feed->vids->getFrameTex()->getWidth(), _feed->vids->getFrameTex()->getHeight());
+
+		new_dim.y = ofGetHeight();
+		new_dim.x = (_feed->o_size.x / _feed->o_size.y) * new_dim.y;
+
+		_feed->output_size = new_dim;
+		return new_dim;
+	}
+
+	glm::vec2 getOutputPos(Feed* _feed) {
+
+		glm::vec2 new_pos(0,0), content_size(0,0);
+		//get origin dims
+
+		if (_feed->resize)
+			content_size = _feed->output_size;
+		else
+			content_size = _feed->o_size;
+
+		if (_feed->center) {
+			new_pos.x = -(content_size.x / 2) + ofGetWidth() / 2;
+			new_pos.y = -(content_size.y / 2) + ofGetHeight() / 2;
+		}
+
+		_feed->output_pos = new_pos;
+		return new_pos;
+	}
+
 	void releaseFeed(Feed* _feed) {
 		_feed->active = false;
 		if (_feed->vids)_feed->vids->setActive(false);
@@ -307,6 +407,8 @@ public:
 	ofParameterGroup gui;
 
 private:
+
+	ofFbo canvas;
 
 	Feed feeds[20];		//fixed amount of possible feeds for better ptr access atm
 	vector<VideoHandler*> videos;
