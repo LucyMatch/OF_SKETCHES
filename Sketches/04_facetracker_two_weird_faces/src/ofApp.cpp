@@ -9,6 +9,7 @@ void ofApp::setup(){
 
     canvas_dims = glm::vec2(1920, 1080);
 
+    //allocate fbos
     main_draw.allocate(canvas_dims.x, canvas_dims.y, GL_RGBA);
     cuts_draw.allocate(canvas_dims.x, canvas_dims.y, GL_RGBA);
     p_draw.allocate(canvas_dims.x, canvas_dims.y, GL_RGBA);
@@ -21,14 +22,18 @@ void ofApp::setup(){
 
     // init gui
     initGui();
+
+    //set additional gui listeners
+    p_img_feed_index.addListener(this, &ofApp::updatePImgGroup);
     
     // Setup tracker
     tracker.setup();
 
+    //Media men
     //media man - test - simple video backgrounds
     Feed video_feed;
     video_feed.path = "videos";
-    video_feed.resize = false;
+    video_feed.resize = true;
     video_feed.media_type = mediaTypes::VIDEO;
     bg_feed = media_man.createNewFeed(video_feed);
 
@@ -38,6 +43,17 @@ void ofApp::setup(){
     face_feed.resize = true;
     face_feed.media_type = mediaTypes::VIDEO;
     single_face_feed = media_man.createNewFeed(video_feed);
+
+    //media man - testing image collections stored in vector
+    for (const auto& path : img_dirs) {
+        Feed _feed;
+        _feed.media_type = mediaTypes::IMAGE_COLLECTION;
+        _feed.collection_size = 40;
+        _feed.path = "images/" + path;
+        _feed.enable_slideshow = false;
+        _feed.slideshow_frequency = 2;
+        local_image_feeds.push_back(media_man.createNewFeed(_feed));
+    }
 
 }
 
@@ -91,13 +107,16 @@ void ofApp::draw(){
             ofTexture* tex;
 
             //@TODO: seperate feed for cuts?? + toggle
-            if (enable_cut_feed && single_face_feed)
+            //also break cutman draw into own function.. we have the same code below
+            if (enable_cut_feed && single_face_feed) {
                 if (enable_face_resize)
-                    tex =  media_man.getFrameTextureReSized(single_face_feed);
+                    tex = media_man.getFrameTextureReSized(single_face_feed);
                 else
-                    tex =  media_man.getFrameTexture(single_face_feed);
-            else
+                    tex = media_man.getFrameTexture(single_face_feed);
+            }
+            else {
                 tex = video.getFrameTex();
+            }
 
             cut_man.draw(tex);
         cuts_draw.end();
@@ -157,7 +176,20 @@ void ofApp::draw(){
                     cuts_draw.draw(0, 0);
                 }
                 else {
-                    cut_man.draw(video.getFrameTex());
+
+                    ofTexture* tex;
+
+                    //@TODO: seperate feed for cuts?? + toggle
+                    if (enable_cut_feed && single_face_feed) {
+                        if (enable_face_resize)
+                            tex = media_man.getFrameTextureReSized(single_face_feed);
+                        else
+                            tex = media_man.getFrameTexture(single_face_feed);
+                    }
+                    else {
+                        tex = video.getFrameTex();
+                    }
+                    cut_man.draw(tex);
                 }
             }
 
@@ -233,21 +265,23 @@ void ofApp::updatePmen(int index, int i, int j) {
         //pman_exists!
         //update cut ( shape )
         p_men[index].update(cut_man.faces[i][j].cut);
-        //set input texture
-        //@TODO: - we are going to be adding more feed options - this will need to be broken out into a new class? or function?
-        //it could be cleaner..
-        ofTexture* tex;
-        if (enable_face_feed && single_face_feed)
-            if (enable_face_resize)
-                tex = media_man.getFrameTextureReSized(single_face_feed);
+        //set input texture - if pmen accepting texture inputs
+        if (!p_men[index].enable_image_set) {
+            //@TODO: - we are going to be adding more feed options - this will need to be broken out into a new class? or function?
+            //it could be cleaner..
+            ofTexture* tex;
+            if (enable_face_feed && single_face_feed)
+                if (enable_face_resize)
+                    tex = media_man.getFrameTextureReSized(single_face_feed);
+                else
+                    tex = media_man.getFrameTexture(single_face_feed);
             else
-                tex = media_man.getFrameTexture(single_face_feed);
-        else
-            tex = video.getFrameTex();
-        //update pmen texture
-        ofTexture tmp_tex;
-        tmp_tex = cut_man.getCutTexture(cut_man.faces[i][j].cut, *tex);
-        p_men[index].update(tmp_tex);
+                tex = video.getFrameTex();
+            //update pmen texture
+            ofTexture tmp_tex = *tex;
+            if(p_men[index].enable_tex_cutting)tmp_tex = cut_man.getCutTexture(cut_man.faces[i][j].cut, *tex);
+            p_men[index].update(tmp_tex);
+        }
         //update 
         p_men[index].update();
         //update enabled - so we dont draw p if cut has been disabled
@@ -258,6 +292,8 @@ void ofApp::updatePmen(int index, int i, int j) {
         CutParticleManager _cpm(cut_man.faces[i][j].cut);
         _cpm.gui.setName(ofToString(index));
         p_man_gui.add(_cpm.gui); //create a gui panel for new manager
+        //testing adding an image set
+        _cpm.setImageSet(local_image_feeds[p_img_feed_index]->imgs->getImgCollectionPtr());
         p_men.push_back(_cpm);
     }
 
@@ -349,12 +385,13 @@ void ofApp::initGui() {
 
     feed_gui.clear();
     feed_gui.setName("FEEDS");
-    feed_gui.add(enable_bg_feed.set("bg feed", true));
+    feed_gui.add(enable_bg_feed.set("bg feed", false));
     feed_gui.add(enable_bg_resize.set("bg resize", true));
     feed_gui.add(bg_feed_c.set("bg feed c", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
-    feed_gui.add(enable_face_feed.set("face feed", true));
+    feed_gui.add(enable_face_feed.set("face feed", false));
     feed_gui.add(enable_face_resize.set("face resize", true));
-    feed_gui.add(enable_cut_feed.set("face cut feed", true));
+    feed_gui.add(enable_cut_feed.set("face cut feed", false));
+    feed_gui.add(p_img_feed_index.set("particle img set", 0, 0, 4));
     gui.add(feed_gui);
 
     gui.add(video.gui);
@@ -407,6 +444,19 @@ void ofApp::updatePMenGui(int amt) {
     //add back the ones we want 
     for (auto g : gs)
         p_man_gui.add(g);
+}
+
+//--------------------------------------------------------------
+// call back listener function for gui control
+// updates which image set is sent to pman if image sets are enabled
+//--------------------------------------------------------------
+void ofApp::updatePImgGroup(int& p_img_feed_index) {
+    //@TODO: eventually diff sets per pmen
+    for (auto p : p_men) {
+        //lets only update oens that are using sets
+        //that way we can test to see if diff sets looks good
+        p.setImageSet(local_image_feeds[p_img_feed_index]->imgs->getImgCollectionPtr());
+    }
 }
 
 //--------------------------------------------------------------

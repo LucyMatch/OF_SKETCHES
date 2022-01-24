@@ -29,8 +29,10 @@ public:
 
     void intervalExport();
 
+    //event call backs + listeners
     void keyPressed(int key);
     void mouseMoved(int x, int y);
+    void updatePImgGroup( int & p_img_feed_index );
 
     glm::vec2 canvas_dims;
 
@@ -38,6 +40,8 @@ public:
 
     LocalMediaManager media_man;
     Feed* bg_feed = NULL, *single_face_feed = NULL;
+    string img_dirs[5] = { "clouds", "eyes", "rocks", "sky", "sky2" };
+    vector<Feed*> local_image_feeds;
 
     VideoHandler video;
 
@@ -61,4 +65,5 @@ public:
     ofParameterGroup feed_gui;
     ofParameter<ofColor> bg_feed_c;
     ofParameter<bool> enable_bg_feed, enable_bg_resize, enable_face_feed, enable_face_resize, enable_cut_feed;
+    ofParameter<int> p_img_feed_index;
 };

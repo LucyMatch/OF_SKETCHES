@@ -114,14 +114,28 @@ public:
 
 	virtual void spawn() {
 		if (enabled && enable_limit && p.size() < limit) {
-			CutParticle _p(&frame, curr_location);
+			ofTexture* tex;
+			if (enable_image_set && img_set_valid) {
+				tex = &(*img_set)[img_set_counter];
+				nextImg();
+			}
+			else
+				tex = &frame;
+			CutParticle _p(tex, curr_location);
 			p.push_back(_p);
 		}
 	}
 
 	virtual void spawn(glm::vec2 loc) {
 		if (enabled && enable_limit && p.size() < limit) {
-			CutParticle _p(&frame, loc);
+			ofTexture* tex;
+			if (enable_image_set && img_set_valid) {
+				tex = &(*img_set)[img_set_counter];
+				nextImg();
+			}
+			else
+				tex = &frame;
+			CutParticle _p(tex, loc);
 			p.push_back(_p);
 		}
 	}
@@ -139,6 +153,16 @@ public:
 
 	void setLocation(glm::vec2 loc) {
 		curr_location = loc;
+	}
+
+	void setImageSet( vector<ofTexture>* imgs) {
+		img_set = imgs;
+		img_set_counter = 0;
+		img_set_valid = true;
+	}
+
+	void nextImg() {
+		img_set_counter = ++img_set_counter % ((*img_set).size());
 	}
 
 	void randomSpawn() {
@@ -175,6 +199,8 @@ public:
 		gui.add(v_gravity_direction.set("gravity direction", 0, 0, 3));
 		gui.add(v_gravity_min.set("gravity min", 0.5, 0.5, 25));
 		gui.add(v_gravity_max.set("gravity max", 10, 0.5, 25));
+		gui.add(enable_image_set.set("enable_image set particles", true));
+		gui.add(enable_tex_cutting.set("enable particle texture cutting", true));
 	}
 
 	BaseCut getCut() { return cut; }
@@ -189,7 +215,7 @@ public:
 	bool enabled;
 
 	ofParameterGroup gui;
-	ofParameter<bool> enable_limit, enable_kill, enable_bounce, enable_live_cut, enable_auto_spawn, enable_random_spawn, enable_varying_gravity;
+	ofParameter<bool> enable_limit, enable_kill, enable_bounce, enable_live_cut, enable_auto_spawn, enable_random_spawn, enable_varying_gravity, enable_image_set, enable_tex_cutting;
 	ofParameter<int> limit, bg_alpha;
 	ofParameter<ofColor> db_c, c, bg;
 	ofParameter<int> v_gravity_direction;
@@ -199,5 +225,8 @@ private:
 	BaseCut cut;
 	ofFbo fbo;
 	ofTexture frame;
+	vector<ofTexture>* img_set;	//frames can be disabled + cut particles can be displayed using a set of images stored here
+	int img_set_counter = 0;
+	bool img_set_valid = false;
 	glm::vec2 orig_location, curr_location;
 };
