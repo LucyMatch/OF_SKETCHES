@@ -50,6 +50,9 @@ public:
 	vector<ofTexture>& getImages() {return images;}
 
 	//--------------------------------------------------------------
+	vector<ofTexture>* getImgCollectionPtr() { return &images; }
+
+	//--------------------------------------------------------------
 	bool isActive() { return active;}
 
 private:

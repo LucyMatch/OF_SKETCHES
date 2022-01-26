@@ -36,7 +36,7 @@ struct Feed {
 	int curr_image = 0;								/// \Current Image Index
 	int collection_size = 1;						/// \How many images are in a collection
 	bool active = false;							/// \Is this feed being used? or open for use?
-	bool resize = false;							/// \DO we want to save + calculate output dimensions
+	bool resize = true;							/// \DO we want to save + calculate output dimensions
 	bool center = true;								/// \Do we want to save + calculate output dimensions so content is centered?
 	glm::vec2 output_pos;							///	\output x + y positions if resizing / center is activated these will be calced + saved here
 	glm::vec2 output_size;							/// \output dimensions same as above
