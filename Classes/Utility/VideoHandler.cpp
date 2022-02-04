@@ -31,18 +31,26 @@ void VideoHandler::setup(string _path, videoModes _mode) {
 			web_cam.setup(dims.x, dims.y, true);
 			break;
 		case VIDEO_IP :
-			//	//@TODO:
-			//	// 	   //make a class from ip cam sketch
-			//	// 	   //so we can load a bunch and cycle through which we are "pulling"
-			//	//	cam.setCameraName("handy cammy");
-			//	//	cam.setURI("http://192.168.1.137/axis-cgi/mjpg/video.cgi");
-			//	//cam.setCameraName("Spy Cam");
-			//	//cam.setURI("http://192.168.1.161/mjpg/video.mjpg?streamprofile=sixteen_nine_03");
-			//	//cam.setUsername("ofAdmin");
-			//	//cam.setPassword("openframeworks");
-			//	//cam.connect();
-			break;
-		default :
+			ip_info = ofx::Video::IpVideoGrabberSettings::fromFile(_path);
+
+			ofLogNotice("ofApp::setup()") << "Loaded " << ip_info.size() << " locations.";
+
+			feed_count = ip_info.size();
+
+			auto c = std::make_shared<ofx::Video::IPVideoGrabber>();
+			auto& settings = getCam();
+			c->setCameraName(settings.getName());
+			c->setUsername(settings.getUsername());
+			std::cout << settings.getUsername() << std::endl;
+			c->setPassword(settings.getPassword());
+			std::cout << settings.getPassword() << std::endl;
+			c->setURI(settings.getURL());
+			c->setPixelFormat(OF_PIXELS_RGBA);	//not hooked up to anything.. but i think why we cant set by pixels
+			c->connect();
+
+			ip_cam.reset();
+			ip_cam = c;
+
 			break;
 	}
 
@@ -79,36 +87,37 @@ void VideoHandler::update() {
 		updated = web_cam.isFrameNew();
 		break;
 	case VIDEO_IP:
+		ip_cam->update();
+		updated = ip_cam->isFrameNew();
 		break;
 	}
 
 	if (updated) {
-		if (enable_resizing) {
-			ofPushStyle();
-			ofPushMatrix();
-			output.begin();
+			if (enable_resizing) {
+				ofPushStyle();
+				ofPushMatrix();
+				output.begin();
 				ofSetColor(bg_c);
 				ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 				if (enable_mirror) {
 					ofTranslate(ofGetWidth(), 0);
 					ofRotateYDeg(180);
 				}
-				if(mode == 0)local_cam.draw(coords.x, coords.y, o_dims.x, o_dims.y);
-				if(mode == 1)web_cam.draw(coords.x, coords.y, o_dims.x, o_dims.y);
-				//if (mode == 2)//@TODO
-			output.end();
-			ofPopMatrix();
-			ofPopStyle();
-		}
-		else {
-			if (mode == 0)frame.setFromPixels(local_cam.getPixels());
-			if (mode == 1)frame.setFromPixels(web_cam.getPixels());
-			//if (mode == 2)//@TODO
-			if (enable_mirror)frame.mirror(false, true);
-			frame.update();
-		}
+				if (mode == 0)local_cam.draw(coords.x, coords.y, o_dims.x, o_dims.y);
+				if (mode == 1)web_cam.draw(coords.x, coords.y, o_dims.x, o_dims.y);
+				if (mode == 2)ip_cam->draw(coords.x, coords.y, o_dims.x, o_dims.y);
+				output.end();
+				ofPopMatrix();
+				ofPopStyle();
+			}
+			else {
+				if (mode == 0)frame.setFromPixels(local_cam.getPixels());
+				if (mode == 1)frame.setFromPixels(web_cam.getPixels());
+				if (mode == 2)frame.setFromPixels(ip_cam->getPixels());
+				if (enable_mirror)frame.mirror(false, true);
+				frame.update();
+			}
 	}
-
 }
 
 //--------------------------------------------------------------
@@ -124,10 +133,11 @@ void VideoHandler::draw() {
 	if (enable_resizing) {output.draw(0,0);}
 	else {
 		glm::vec2 p(0,0), o = dims;
-		if (mode == 0)frame.draw(p.x, p.y, o.x, o.y);
-		if (mode == 1)frame.draw(p.x, p.y, o.x, o.y);
+		frame.draw(p.x, p.y, o.x, o.y);
 	}
 
+	if (enable_videoinfo)
+		drawCamInfo(ip_cam);
 }
 
 //--------------------------------------------------------------
@@ -145,6 +155,10 @@ void VideoHandler::prevFeed() {
 	setup(path, mode);
 }
 
+//--------------------------------------------------------------
+ofx::Video::IpVideoGrabberSettings& VideoHandler::getCam() {
+	return ip_info[curr_feed];
+}
 
 //--------------------------------------------------------------
 void VideoHandler::setDims(glm::vec2 _dims) {
@@ -189,6 +203,11 @@ glm::vec2& VideoHandler::getDims() {
 }
 
 //--------------------------------------------------------------
+glm::vec2& VideoHandler::getODims() {
+	return o_dims;
+}
+
+//--------------------------------------------------------------
 glm::vec2& VideoHandler::getOutputCoords() {
 	return glm::vec2((ofGetWidth() - o_dims.x) / 2, (ofGetHeight() - o_dims.y) / 2);
 }
@@ -197,6 +216,36 @@ glm::vec2& VideoHandler::getOutputCoords() {
 ofTexture* VideoHandler::getFrameTex() {
 	if ( enable_resizing )return &output.getTexture();
 	return &frame.getTexture();
+}
+
+//--------------------------------------------------------------
+ofPixels VideoHandler::getFramePixels() {
+	if (enable_resizing) {
+		ofPixels pix;
+		output.readToPixels(pix);
+		return pix;
+	}
+	return frame.getPixels();
+}
+
+//--------------------------------------------------------------
+ofPixels VideoHandler::getOriginalPixels() {
+	switch (mode) {
+	case VIDEO_LOCAL:
+		return local_cam.getPixels();
+		break;
+	case VIDEO_WEBCAM:
+		return web_cam.getPixels();
+		break;
+	case VIDEO_IP:
+		return ip_cam->getPixels();
+		break;
+	}
+}
+
+//--------------------------------------------------------------
+ofFbo& VideoHandler::getOutputFBO() {
+	return output;
 }
 
 //--------------------------------------------------------------
@@ -230,6 +279,9 @@ bool VideoHandler::isFrameNew() {
 		break;
 	case VIDEO_WEBCAM:
 		return web_cam.isFrameNew();
+		break;	
+	case VIDEO_IP:
+		return ip_cam->isFrameNew();
 		break;
 	default:
 		return true;
@@ -243,6 +295,31 @@ bool VideoHandler::isActive() {
 }
 
 //--------------------------------------------------------------
+void VideoHandler::drawCamInfo(std::shared_ptr<ofx::Video::IPVideoGrabber>& g) {
+	float kbps = g->getBitRate() / 1000.0f; // kilobits / second, not kibibits / second
+	float fps = g->getFrameRate();
+
+	std::stringstream ss;
+
+	// ofToString formatting available in 0072+
+	ss << "          NAME: " << g->getCameraName() << std::endl;
+	ss << "          HOST: " << g->getHost() << std::endl;
+	ss << "           FPS: " << ofToString(fps, 2/*,13,' '*/) << std::endl;
+	ss << "          Kb/S: " << ofToString(kbps, 2/*,13,' '*/) << std::endl;
+	ss << " #Bytes Recv'd: " << ofToString(g->getNumBytesReceived(), 0/*,10,' '*/) << std::endl;
+	ss << "#Frames Recv'd: " << ofToString(g->getNumFramesReceived(), 0/*,10,' '*/) << std::endl;
+	ss << "Auto Reconnect: " << (g->getAutoReconnect() ? "YES" : "NO") << std::endl;
+	ss << " Needs Connect: " << (g->getNeedsReconnect() ? "YES" : "NO") << std::endl;
+	ss << "Time Till Next: " << g->getTimeTillNextAutoRetry() << " ms" << std::endl;
+	ss << "Num Reconnects: " << ofToString(g->getReconnectCount()) << std::endl;
+	ss << "Max Reconnects: " << ofToString(g->getMaxReconnects()) << std::endl;
+	ss << "  Connect Fail: " << (g->hasConnectionFailed() ? "YES" : "NO");
+
+	ofSetColor(255);
+	ofDrawBitmapString(ss.str(), 10, 10 + 12);
+}
+
+//--------------------------------------------------------------
 void VideoHandler::initGui() {
 
 	gui.setName("video controls");
@@ -251,6 +328,7 @@ void VideoHandler::initGui() {
 	gui.add(enable_video_bg.set("enable video bg", false));
 	gui.add(enable_resizing.set("enable resizing", false));
 	gui.add(enable_mirror.set("enable mirror", false));
+	gui.add(enable_videoinfo.set("enable info", false));
 
 }
 
