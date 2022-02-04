@@ -199,7 +199,7 @@ public:
 		gui.add(v_gravity_direction.set("gravity direction", 0, 0, 3));
 		gui.add(v_gravity_min.set("gravity min", 0.5, 0.5, 25));
 		gui.add(v_gravity_max.set("gravity max", 10, 0.5, 25));
-		gui.add(enable_image_set.set("enable_image set particles", true));
+		gui.add(enable_image_set.set("enable_image set particles", false));
 		gui.add(enable_tex_cutting.set("enable particle texture cutting", true));
 	}
 

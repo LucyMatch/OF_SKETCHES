@@ -452,7 +452,7 @@ void ofApp::updatePMenGui(int amt) {
 //--------------------------------------------------------------
 void ofApp::updatePImgGroup(int& p_img_feed_index) {
     //@TODO: eventually diff sets per pmen
-    for (auto p : p_men) {
+    for (auto &p : p_men) {
         //lets only update oens that are using sets
         //that way we can test to see if diff sets looks good
         p.setImageSet(local_image_feeds[p_img_feed_index]->imgs->getImgCollectionPtr());

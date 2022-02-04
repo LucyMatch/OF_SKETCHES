@@ -67,42 +67,115 @@ public:
 		if (faces.size() > index) {
 			for (auto& c : faces[index]) {
 				/*
-				*	current solve for how many instances of polycuts
-				*	this approaches features as singletons not faces
-				*	this structure was designed for export utility
+				*	@TODO: JUST MOVE THIS TO PARAMETER GUI EVENT LISTENERS..... 
+				*			SO WEHEN VAL IS UPDATED WE TRIGGER CALLBACK TO SET THESE VALS...
 				*/
-				if (c.feature == ofxFaceTracker2Landmarks::Feature::LEFT_EYE) {
-					if (enable_left_eye != c.enabled)c.enabled = enable_left_eye;
-					c.cut.colour = left_eye_c;
+				switch (c.feature) {
+					case(ofxFaceTracker2Landmarks::Feature::LEFT_EYE) :
+						if (enable_left_eye != c.enabled)c.enabled = enable_left_eye;
+						c.cut.colour = left_eye_c;
+						break;					
+					case(ofxFaceTracker2Landmarks::Feature::RIGHT_EYE) :
+						if (enable_right_eye != c.enabled)c.enabled = enable_right_eye;
+						c.cut.colour = right_eye_c;
+						break;
+					case(ofxFaceTracker2Landmarks::Feature::OUTER_MOUTH):
+						if (enable_mouth != c.enabled)c.enabled = enable_mouth;
+						c.cut.colour = mouth_c;
+						break;					
+					case(ofxFaceTracker2Landmarks::Feature::INNER_MOUTH):
+						if (enable_innermouth != c.enabled)c.enabled = enable_innermouth;
+						c.cut.colour = c_innermouth;
+						break;
+					case(ofxFaceTracker2Landmarks::Feature::LEFT_EYEBROW) :
+						if (enable_leftbrow != c.enabled)c.enabled = enable_leftbrow;
+						c.cut.colour = c_leftbrow;
+						break;
+					case(ofxFaceTracker2Landmarks::Feature::RIGHT_EYEBROW) :
+						if (enable_rightbrow != c.enabled)c.enabled = enable_rightbrow;
+						c.cut.colour = c_rightbrow;
+						break;
+					//case(ofxFaceTracker2Landmarks::Feature::LEFT_EYE_TOP) :
+					//	if (enable_lefteyetop != c.enabled)c.enabled = enable_lefteyetop;
+					//	c.cut.colour = c_lefteyetop;
+					//	break;
+					//case(ofxFaceTracker2Landmarks::Feature::RIGHT_EYE_TOP) :
+					//	if (enable_righteyetop != c.enabled)c.enabled = enable_righteyetop;
+					//	c.cut.colour = c_righteyetop;
+					//	break;
+					case(ofxFaceTracker2Landmarks::Feature::LEFT_JAW) :
+						if (enable_leftjaw != c.enabled)c.enabled = enable_leftjaw;
+						c.cut.colour = c_leftjaw;
+						break;
+					case(ofxFaceTracker2Landmarks::Feature::RIGHT_JAW) :
+						if (enable_rightjaw != c.enabled)c.enabled = enable_rightjaw;
+						c.cut.colour = c_rightjaw;
+						break;
+					//case(ofxFaceTracker2Landmarks::Feature::JAW) :
+					//	if (enable_jaw != c.enabled)c.enabled = enable_jaw;
+					//	c.cut.colour = c_jaw;
+					//	break;
+					//case(ofxFaceTracker2Landmarks::Feature::NOSE_BRIDGE) :
+					//	if (enable_nosebridge != c.enabled)c.enabled = enable_nosebridge;
+					//	c.cut.colour = c_nosebridge;
+					//	break;
+					case(ofxFaceTracker2Landmarks::Feature::NOSE_BASE) :
+						if (enable_nosebase != c.enabled)c.enabled = enable_nosebase;
+						c.cut.colour = c_nosebase;
+						break;
+					case(ofxFaceTracker2Landmarks::Feature::FACE_OUTLINE) :
+						if (enable_outline != c.enabled)c.enabled = enable_outline;
+						c.cut.colour = c_outline;
+						break;
 				}
-				if (c.feature == ofxFaceTracker2Landmarks::Feature::RIGHT_EYE) {
-					if (enable_right_eye != c.enabled)c.enabled = enable_right_eye;
-					c.cut.colour = right_eye_c;
-				}
-				if (c.feature == ofxFaceTracker2Landmarks::Feature::OUTER_MOUTH) {
-					if (enable_mouth != c.enabled)c.enabled = enable_mouth;
-					c.cut.colour = mouth_c;
-				}
-				c.cut.update(lm.getImageFeature(c.feature));
+				if(c.enabled)
+					c.cut.update(lm.getImageFeature(c.feature));
 			}
 		}
 	}
 
 	void initNewFace() {
-		PolyCuts re("left eye"), le("right eye"), m("mouth");
+		PolyCuts le("left eye"), re("right eye"), m("mouth");
+		PolyCuts let("left eye top"), ret("right eye top"), lb("left brow"), rb("right brow");
+		PolyCuts lj("left jaw"), rj("right jaw"), j("jaw");
+		PolyCuts im("inner mouth");
+		PolyCuts nbr("nose bridge"), nb("nose base");
+		PolyCuts o("face outline");
 
 		struct LandmarkCut
-			lefteye {
-			ofxFaceTracker2Landmarks::Feature::LEFT_EYE, re, true, re.label
-		},
-			righteye{ ofxFaceTracker2Landmarks::Feature::RIGHT_EYE, le, true, le.label },
-				mouth{ ofxFaceTracker2Landmarks::Feature::OUTER_MOUTH, m, true, m.label };
+			lefteye {ofxFaceTracker2Landmarks::Feature::LEFT_EYE, le, true, le.label},
+			righteye{ ofxFaceTracker2Landmarks::Feature::RIGHT_EYE, re, true, re.label },
+			mouth{ ofxFaceTracker2Landmarks::Feature::OUTER_MOUTH, m, true, m.label },
+			leftbrow{ ofxFaceTracker2Landmarks::Feature::LEFT_EYEBROW, lb, true, lb.label },
+			rightbrow{ ofxFaceTracker2Landmarks::Feature::RIGHT_EYEBROW, rb, true, rb.label },
+			lefteyetop{ ofxFaceTracker2Landmarks::Feature::LEFT_EYE_TOP, let, true, let.label },
+			righteyetop{ ofxFaceTracker2Landmarks::Feature::RIGHT_EYE_TOP, ret, true, ret.label }	,		
+			leftjaw{ ofxFaceTracker2Landmarks::Feature::LEFT_JAW, lj, true, lj.label },
+			rightjaw{ ofxFaceTracker2Landmarks::Feature::RIGHT_JAW, rj, true, rj.label },
+			jaw{ ofxFaceTracker2Landmarks::Feature::JAW, j, true, j.label },
+			innermouth{ ofxFaceTracker2Landmarks::Feature::INNER_MOUTH, im, true, im.label },
+			nosebridge{ ofxFaceTracker2Landmarks::Feature::NOSE_BRIDGE, nbr, true, nbr.label },
+			nosebase{ ofxFaceTracker2Landmarks::Feature::NOSE_BASE, nb, true, nb.label },
+			outline{ ofxFaceTracker2Landmarks::Feature::FACE_OUTLINE, o, true, o.label };
 
 			vector<LandmarkCut> face;
 
+			face.push_back(outline);
+			//face.push_back(jaw);
+			face.push_back(leftjaw);
+			face.push_back(rightjaw);
+			//face.push_back(nosebridge);
+			face.push_back(nosebase);
+			face.push_back(mouth);
+			face.push_back(innermouth);
+			face.push_back(leftbrow);
+			face.push_back(rightbrow);
 			face.push_back(lefteye);
 			face.push_back(righteye);
-			face.push_back(mouth);
+			//face.push_back(lefteyetop);
+			//face.push_back(righteyetop);
+			
+
 
 			faces.push_back(face);
 	}
@@ -197,32 +270,89 @@ public:
 		gui.clear();
 		gui.setName("CUT MANAGER");
 
-		gui.add(timeout.set("face timeout", 0.0, 0.0, 10000.0));
-
-		gui.add(enable_left_eye.set("enable left eye", true));
-		gui.add(enable_right_eye.set("enable right eye", true));
-		gui.add(enable_mouth.set("enable mouth", true));
-
-		gui.add(left_eye_c.set("left eye colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
-		gui.add(right_eye_c.set("right eye colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
-		gui.add(mouth_c.set("mouth colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+		gui.add(timeout.set("face timeout", 0.0, 10.0, 10000.0));
 
 		///add static cuts gui
-		gui.add(PolyCuts::enable_clear.set("enable clear", true));
-		gui.add(PolyCuts::enable_subpath.set("enable subpath", false));
 		gui.add(PolyCuts::enable_curve.set("enable curve", true));
 		gui.add(PolyCuts::enable_scale.set("enable scale", false));
 		gui.add(PolyCuts::enable_shape_mode.set("enable shape mode", false));
 		gui.add(PolyCuts::scale_x.set("scale x", 1.0, 0.0, 5.0));
 		gui.add(PolyCuts::scale_y.set("scale y", 1.0, 0.0, 5.0));
-		gui.add(PolyCuts::curve_reso.set("curve reso", 200, 0, 1000));
 		gui.add(PolyCuts::shape_mode.set("cut shape", 0, 0, 4));
+
+		gui.add(enable_left_eye.set("enable left eye", true));
+		gui.add(enable_right_eye.set("enable right eye", true));
+		gui.add(enable_mouth.set("enable mouth", true));
+		gui.add(enable_leftbrow.set("enable left brow", true));
+		gui.add(enable_rightbrow.set("enable right brow", true));
+		//gui.add(enable_lefteyetop.set("enable left eye top", true));
+		//gui.add(enable_righteyetop.set("enable right eye top", true));
+		gui.add(enable_leftjaw.set("enable left jaw", true));
+		gui.add(enable_rightjaw.set("enable right jaw", true));
+		//gui.add(enable_jaw.set("enable jaw", true));
+		gui.add(enable_innermouth.set("enable inner mouth", true));
+		//gui.add(enable_nosebridge.set("enable nose bridge", true));
+		gui.add(enable_nosebase.set("enable nose base", true));
+		gui.add(enable_outline.set("enable outline", true));
+
+		gui.add(left_eye_c.set("left eye colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+		gui.add(right_eye_c.set("right eye colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+		gui.add(mouth_c.set("mouth colour", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+
+		gui.add(c_leftbrow.set("left brow c", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+		gui.add(c_rightbrow.set("right brow c", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+		//gui.add(c_lefteyetop.set("left eye top c", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+		//gui.add(c_righteyetop.set("right eye top c", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+		gui.add(c_leftjaw.set("left jaw c", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+		gui.add(c_rightjaw.set("right jaw c", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+		//gui.add(c_jaw.set("jaw c", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+		gui.add(c_innermouth.set("inner mouth", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+		//gui.add(c_nosebridge.set("nose bridge", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+		gui.add(c_nosebase.set("nose base", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+		gui.add(c_outline.set("outline", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+
+
+
+		//we never update these 
+		//gui.add(PolyCuts::curve_reso.set("curve reso", 200, 0, 1000));
+		//gui.add(PolyCuts::enable_clear.set("enable clear", true));
+		//gui.add(PolyCuts::enable_subpath.set("enable subpath", false));
+		PolyCuts::curve_reso.set("curve reso", 200, 0, 1000);
+		PolyCuts::enable_clear.set("enable clear", true);
+		PolyCuts::enable_subpath.set("enable subpath", false);
 	}
 
 	ofParameterGroup gui;
 	ofParameter<bool> enable_left_eye, enable_right_eye, enable_mouth;
 	ofParameter<ofColor> left_eye_c, right_eye_c, mouth_c;
 	ofParameter<float> timeout;
+
+	//@WIP : new ones testing out
+	ofParameter<bool>
+		enable_leftbrow,
+		enable_rightbrow,
+		enable_lefteyetop,
+		enable_righteyetop,
+		enable_leftjaw,
+		enable_rightjaw,
+		enable_jaw,
+		enable_innermouth,
+		enable_nosebridge,
+		enable_nosebase,
+		enable_outline;
+
+	ofParameter<ofColor>
+		c_leftbrow,
+		c_rightbrow,
+		c_lefteyetop,
+		c_righteyetop,
+		c_leftjaw,
+		c_rightjaw,
+		c_jaw,
+		c_innermouth,
+		c_nosebridge,
+		c_nosebase,
+		c_outline;
 
 	vector< vector<LandmarkCut> > faces;
 
