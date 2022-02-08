@@ -6,12 +6,8 @@
 	Local + live feeds
 
 	@TODO:
-	* Ip Cameras
-	* Resolution options
-	* Scaling options
-	* ip : cams + cycling through all the options and loading json file
-		--> this code is somehwere in sketch folder
-		-->create an ipcam class that this class pulls in if ip is enabled
+	* Resolution / scaling need a clear approach! 
+	*	will have to retro fit older sketches but worth it
 	* other format / codec options + support
 	* Play controls - loop speed etc...
 	* Add proper deconstructor
