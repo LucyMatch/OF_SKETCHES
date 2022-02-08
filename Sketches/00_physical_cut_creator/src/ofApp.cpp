@@ -37,12 +37,17 @@ void ofApp::draw(){
 
     ofSetColor(255,255,255,255);
 
-    video.getFrameTex()->draw(0,0, video.getODims().x, video.getODims().y);
+    if(enable_bg_video)
+        video.getFrameTex()->draw(0,0, video.getODims().x, video.getODims().y);
+
+    if(enable_shape_data)
+        shape.drawData();
 
     shape.draw();
 
     if (enable_debug) drawDebug();
     if (enable_info) drawInfo();
+    if (shape.set_canvas) shape.drawLiveFOVConfig(mouseX, mouseY);
 }
 
 //--------------------------------------------------------------
@@ -54,9 +59,11 @@ void ofApp::drawDebug() {
 void ofApp::initGui() {
 
     gui.setup("P R I M A R Y");
-    gui.add(bg_c.set("background", ofColor(255, 70, 86, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+    gui.add(bg_c.set("background", ofColor(247, 237, 226, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
     gui.add(enable_debug.set("enable debug", false));
     gui.add(enable_info.set("enable info", false));
+    gui.add(enable_bg_video.set("enable bg vid", false));
+    gui.add(enable_shape_data.set("enable shape data", false));
 
     gui.add(video.gui);
     gui.add(shape.gui);
@@ -110,7 +117,10 @@ void ofApp::keyPressed(int key) {
         break;
     case ']':
         video.nxtFeed();
-        break;    
+        break;   
+    case '/':
+        shape.setFOV(true);
+        break;
     case ' ':
        shape.learn_background = true;
         break;
@@ -152,6 +162,11 @@ void ofApp::keyPressed(int key) {
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
 
+}
+//--------------------------------------------------------------
+void ofApp::mousePressed(int x, int y, int button){
+    std::cout << "in mouse pressed" << std::endl;
+    if (shape.set_canvas) shape.setFOV(x, y);
 }
 
 //--------------------------------------------------------------

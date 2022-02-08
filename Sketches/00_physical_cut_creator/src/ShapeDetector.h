@@ -25,7 +25,17 @@ public :
 
 	void update( ofPixels p );
 	void draw();
+	void drawData();
+
+	void sizeImgs(int w, int h);
+
 	void setOutputDims(glm::vec2 d);
+
+	void setFOV(bool state);
+	void setFOV(int x, int y);
+	void drawFOV();
+	void drawLiveFOVConfig(int x, int y);
+
 
 	void drawDebug();
 	void initGui();
@@ -39,11 +49,14 @@ public :
 	ofParameterGroup gui;
 	ofParameter<int> diff_thresh;
 	ofParameter<int> cmin, cmax, considered;
-	ofParameter<bool> choles, capprox;
+	ofParameter<bool> choles, capprox, enable_FOV;
 
 	//key press vars
-	bool learn_background = true;
+	bool learn_background = true, set_canvas = false;
+
 
 	glm::vec2 output_dims;
+	ofRectangle FOV;
+	bool FOV_origin = false;
 
 };

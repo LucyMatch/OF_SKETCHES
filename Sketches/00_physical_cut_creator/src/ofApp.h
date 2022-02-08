@@ -19,6 +19,7 @@ class ofApp : public ofBaseApp{
 
 		void keyPressed(int key);
 		void mouseDragged(int x, int y, int button);
+		void mousePressed(int x, int y, int button);
 		void windowResized(int w, int h);
 
 		glm::vec2 canvas_dims;
@@ -31,6 +32,9 @@ class ofApp : public ofBaseApp{
 		
 		ofxPanel gui;
 		ofParameter<ofColor> bg_c;
-		ofParameter<bool> enable_debug = false, enable_info = false;
+		ofParameter<bool> enable_debug = false, 
+			enable_info = false, 
+			enable_bg_video = false, 
+			enable_shape_data = false;
 
 };

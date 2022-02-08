@@ -13,6 +13,10 @@ void ShapeDetector::update(ofPixels p) {
 
     if (p.getWidth() > 0) {
 
+        //check sizing
+        if (p.getWidth() != colorImg.getWidth() || p.getHeight() != colorImg.getHeight())
+            sizeImgs( p.getWidth(),p.getHeight());
+
         colorImg.setFromPixels(p);
         grayImage = colorImg;
 
@@ -38,6 +42,59 @@ void ShapeDetector::update(ofPixels p) {
 
 //--------------------------------------------------------------
 void ShapeDetector::draw() {
+
+    //hardcoding some colors...
+    int c = 0;
+    ofColor cs[] = {ofColor(246, 189, 96), ofColor(245, 202, 195) , ofColor(132, 165, 157) , ofColor(242, 132, 130) };
+
+    //just drawing them - really i sthink we wanna keep track + store them - maybe they are an extension of base cut? or i extend blobs?
+    //i think thats what blobs does though.... need to review how that works
+
+    ofPushStyle();
+
+    for (auto b : contourFinder.blobs) {
+
+        //fill
+        ofSetColor(cs[c]);
+        ofFill();
+        ofSetLineWidth(0);
+        ofSetPolyMode(OF_POLY_WINDING_NONZERO);
+        ofBeginShape();
+        for (auto p : b.pts) {
+            ofVertex(p);
+        }
+        /*ofVertex(b.pts[b.nPts]);*/
+        ofEndShape();
+
+        //outline
+        ofSetColor(ofColor(0,0,0));
+        ofNoFill();
+        ofSetLineWidth(5);
+        ofBeginShape();
+        for (auto p : b.pts) {
+            ofVertex(p);
+        }
+        /*ofVertex(b.pts[b.nPts]);*/
+        ofEndShape();
+        //b.draw();
+
+        
+        //if (b.hole) {
+        //    ofDrawBitmapString("hole",
+        //        b.boundingRect.getCenter().x,
+        //        b.boundingRect.getCenter().y);
+        //}
+
+        c = ++c % std::size(cs);
+
+    }
+
+    ofPopStyle();
+
+}
+
+//--------------------------------------------------------------
+void ShapeDetector::drawData() {
     contourFinder.draw();
 
     for (auto b : contourFinder.blobs) {
@@ -72,7 +129,17 @@ void ShapeDetector::drawDebug() {
 }
 
 //--------------------------------------------------------------
+void ShapeDetector::sizeImgs(int w, int h) {
+    colorImg.allocate(w, h);
+    grayImage.allocate(w, h);
+    grayBg.allocate(w, h);
+    grayDiff.allocate(w, h);
+    learn_background = true;
+}
+
+//--------------------------------------------------------------
 void ShapeDetector::initGui() {
+    gui.add(enable_FOV.set("enable FOV", false));
     gui.add(diff_thresh.set("diff threshold", 80, 0, 500));
     gui.add(cmin.set("contour min", 20, 0, 1000));
     gui.add(cmax.set("contour max", 500, 0, 1920 * 1080));
@@ -84,4 +151,49 @@ void ShapeDetector::initGui() {
 //--------------------------------------------------------------
 void ShapeDetector::setOutputDims(glm::vec2 d) {
     output_dims = d;
+}
+
+//--------------------------------------------------------------
+void ShapeDetector::setFOV(bool state){
+    if (state) {
+        FOV.set(ofRectangle());
+        set_canvas = true;
+        FOV_origin = false;
+    }
+    else {
+        set_canvas = false;
+    }
+}
+
+//--------------------------------------------------------------
+void ShapeDetector::setFOV(int x, int y) {
+    if (!FOV_origin) {
+        FOV.setPosition(x, y);
+        FOV_origin = true;
+    }
+    else{
+        FOV.setWidth(abs(FOV.getX() - x));
+        FOV.setHeight(abs(FOV.getY() - y));
+        setFOV(false);
+    }
+}
+
+//--------------------------------------------------------------
+void ShapeDetector::drawFOV() {
+    ofDrawRectangle(FOV);
+}
+
+//--------------------------------------------------------------
+void ShapeDetector::drawLiveFOVConfig(int x, int y) {
+    ofPushStyle();
+    ofSetColor(ofColor(255, 255, 255, 50));
+    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+    ofSetColor(ofColor(255, 255, 255, 255));
+    colorImg.draw(0, 0);
+    if (FOV_origin) {
+        ofSetColor(ofColor(255, 0, 0, 150));
+        ofNoFill();
+        ofDrawRectangle(FOV.getX(), FOV.getY(), abs(FOV.getX() - x), abs(FOV.getY() - y));
+    }
+    ofPopStyle();
 }

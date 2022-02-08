@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<P_R_I_M_A_R_Y>
+	<background>247, 237, 226, 255</background>
+	<enable_debug>0</enable_debug>
+	<enable_info>0</enable_info>
+	<enable_bg_vid>0</enable_bg_vid>
+	<enable_shape_data>0</enable_shape_data>
+	<video_controls>
+		<video_colour>255, 255, 255, 255</video_colour>
+		<video_bg_colour>255, 255, 255, 255</video_bg_colour>
+		<enable_video_bg>0</enable_video_bg>
+		<enable_resizing>0</enable_resizing>
+		<enable_mirror>0</enable_mirror>
+		<enable_info>0</enable_info>
+	</video_controls>
+	<group>
+		<enable_FOV>0</enable_FOV>
+		<diff_threshold>127</diff_threshold>
+		<contour_min>40</contour_min>
+		<contour_max>2073600</contour_max>
+		<contour_considered>10</contour_considered>
+		<contour_holes>1</contour_holes>
+		<contour_approximation>0</contour_approximation>
+	</group>
+</P_R_I_M_A_R_Y>
