@@ -67,6 +67,9 @@
     <ClCompile Include="..\..\Classes\Utility\VideoHandler.cpp">
       <Filter>src\external classes</Filter>
     </ClCompile>
+    <ClCompile Include="src\ShapeDetector.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -1165,6 +1168,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Classes\Utility\VideoHandler.h">
       <Filter>src\external classes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ShapeDetector.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

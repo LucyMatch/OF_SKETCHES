@@ -206,6 +206,7 @@
     <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxOpenCv\src\ofxCvShortImage.cpp" />
     <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxPoco\src\ofxXmlPoco.cpp" />
     <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxIpVideoGrabber\src\IPVideoGrabber.cpp" />
+    <ClCompile Include="src\ShapeDetector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Classes\Utility\VideoHandler.h" />
@@ -517,6 +518,7 @@
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxOpenCv\libs\opencv\include\opencv2\videoio\legacy\constants_c.h" />
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxPoco\src\ofxXmlPoco.h" />
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxIpVideoGrabber\src\IPVideoGrabber.h" />
+    <ClInclude Include="src\ShapeDetector.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

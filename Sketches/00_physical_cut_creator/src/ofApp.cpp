@@ -14,10 +14,7 @@ void ofApp::setup(){
     video.setup("ip_cam/cams.json", VideoHandler::VIDEO_IP);
     video.setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
 
-    //colorImg.allocate(video.getODims().x, video.getODims().y);
-    //grayImage.allocate(video.getODims().x, video.getODims().y);
-    //grayBg.allocate(video.getODims().x, video.getODims().y);
-    //grayDiff.allocate(video.getODims().x, video.getODims().y);
+    shape.setOutputDims(glm::vec2(video.getODims().x, video.getODims().y));
 
     initGui();
 
@@ -29,28 +26,8 @@ void ofApp::update(){
 
     video.update();
 
-    if (video.isFrameNew()) {
-
-        colorImg.setFromPixels(video.getOriginalPixels());
-
-        grayImage = colorImg;
-
-        if (learn_background) {
-            grayBg = grayImage;
-            learn_background = false;
-        }
-
-        grayDiff.absDiff(grayBg, grayImage);
-        grayDiff.threshold(diff_thresh);
-
-        //quick resize
-        ofxCvGrayscaleImage _temp = grayDiff;
-        _temp.resize(video.getODims().x, video.getODims().y);
-
-        //find contours
-        contourFinder.findContours(_temp, cmin, cmax, considered, choles, capprox);
-
-    }
+    if (video.isFrameNew())
+        shape.update(video.getFramePixels());
 }
 
 //--------------------------------------------------------------
@@ -61,25 +38,8 @@ void ofApp::draw(){
     ofSetColor(255,255,255,255);
 
     video.getFrameTex()->draw(0,0, video.getODims().x, video.getODims().y);
-    contourFinder.draw();
 
-    for (auto b : contourFinder.blobs) {
-
-
-        ofSetColor(ofColor(255,0,0));
-        ofRectangle r = b.boundingRect;
-        ofDrawRectangle(r);
-        
-        ofSetColor(255);
-        b.draw();
-
-        
-        if (b.hole) {
-            ofDrawBitmapString("hole",
-                b.boundingRect.getCenter().x,
-                b.boundingRect.getCenter().y);
-        }
-    }
+    shape.draw();
 
     if (enable_debug) drawDebug();
     if (enable_info) drawInfo();
@@ -87,37 +47,19 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::drawDebug() {
-    int cols = 2, width = 0, height = 0, x = 0, y = 0;
-    width = ofGetWidth() / cols;
-    height = width * (video.getDims().y / video.getDims().x);
-
-    video.getFrameImg().draw(x, y, width, height);
-    colorImg.draw(x + width, y, width, height);
-    grayImage.draw(x, y + height, width, height);
-    grayBg.draw(x + width, y + height, width, height);
-    grayDiff.draw(x , y + (height*2), width, height);
-    contourFinder.draw(x + width  , y + (height*2), width, height);
-
+    shape.drawDebug();
 }
 
 //--------------------------------------------------------------
 void ofApp::initGui() {
 
     gui.setup("P R I M A R Y");
-    //   //255, 70, 86
-    gui.add(bg_c.set("background", ofColor(48, 255, 297, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+    gui.add(bg_c.set("background", ofColor(255, 70, 86, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
     gui.add(enable_debug.set("enable debug", false));
     gui.add(enable_info.set("enable info", false));
-    gui.add(diff_thresh.set("diff threshold", 80, 0, 500));
-
-    gui.add(cmin.set("contour min", 20, 0, 1000));
-    gui.add(cmax.set("contour max", 500, 0, 1920*1080));
-    gui.add(considered.set("contour considered", 10, 0, 100));
-    gui.add(choles.set("contour holes", true));
-    gui.add(capprox.set("contour approximation", false));
 
     gui.add(video.gui);
-
+    gui.add(shape.gui);
 }
 
 //--------------------------------------------------------------
@@ -170,7 +112,7 @@ void ofApp::keyPressed(int key) {
         video.nxtFeed();
         break;    
     case ' ':
-        learn_background = true;
+       shape.learn_background = true;
         break;
     case '0':
         gui.saveToFile("1_gui.xml");
@@ -214,6 +156,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-
+    video.setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
+    shape.setOutputDims(glm::vec2(video.getODims().x, video.getODims().y));
 }
 

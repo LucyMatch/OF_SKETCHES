@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "Videohandler.h"
-#include "ofxOpenCv.h"
+#include "ShapeDetector.h"
 
 class ofApp : public ofBaseApp{
 
@@ -24,12 +24,7 @@ class ofApp : public ofBaseApp{
 		glm::vec2 canvas_dims;
 
 		VideoHandler video;
-
-		ofxCvContourFinder 	contourFinder;
-		ofxCvColorImage			colorImg;
-		ofxCvGrayscaleImage 	grayImage;
-		ofxCvGrayscaleImage 	grayBg;
-		ofxCvGrayscaleImage 	grayDiff;
+		ShapeDetector shape;
 
 		//gui + controlls
 		//---------------
@@ -37,11 +32,5 @@ class ofApp : public ofBaseApp{
 		ofxPanel gui;
 		ofParameter<ofColor> bg_c;
 		ofParameter<bool> enable_debug = false, enable_info = false;
-		ofParameter<int> diff_thresh;
-		ofParameter<int> cmin, cmax, considered;
-		ofParameter<bool> choles, capprox;
-
-		//key press vars
-		bool learn_background = true;
 
 };
