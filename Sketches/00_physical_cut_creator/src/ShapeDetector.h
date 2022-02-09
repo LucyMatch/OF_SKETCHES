@@ -24,12 +24,18 @@ public :
 	ShapeDetector();
 
 	void update( ofPixels p );
+	void update( ofTexture tex );
 	void draw();
-	void drawData();
 
+	void drawVideo();
+	void drawData();
+	void drawDebug();
+	void initGui();
 	void sizeImgs(int w, int h);
 
 	void setOutputDims(glm::vec2 d);
+	void calcOutputDims();
+	glm::vec2 getCurrentDims();
 
 	void setFOV(bool state);
 	void setFOV(int x, int y);
@@ -37,8 +43,6 @@ public :
 	void drawLiveFOVConfig(int x, int y);
 
 
-	void drawDebug();
-	void initGui();
 
 	ofxCvContourFinder 	contourFinder;
 	ofxCvColorImage			colorImg;
@@ -49,14 +53,13 @@ public :
 	ofParameterGroup gui;
 	ofParameter<int> diff_thresh;
 	ofParameter<int> cmin, cmax, considered;
-	ofParameter<bool> choles, capprox, enable_FOV;
+	ofParameter<bool> choles, capprox, enable_FOV, enable_fullscreen;
 
 	//key press vars
 	bool learn_background = true, set_canvas = false;
 
-
-	glm::vec2 output_dims;
-	ofRectangle FOV;
+	glm::vec2 output_dims, fov_output_dims;
+	ofRectangle FOV = ofRectangle(0, 0, 100, 100);
 	bool FOV_origin = false;
 
 };

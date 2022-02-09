@@ -8,9 +8,6 @@ ShapeDetector::ShapeDetector() {
 //--------------------------------------------------------------
 void ShapeDetector::update(ofPixels p) {
 
-    //@TODO : if using canvas field - draw subsection 
-    //we want it centered + resized to full screen
-
     if (p.getWidth() > 0) {
 
         //check sizing
@@ -31,13 +28,33 @@ void ShapeDetector::update(ofPixels p) {
         ofxCvGrayscaleImage _temp = grayDiff;
 
         //if output dims > 0 then we want to resize
-        if (output_dims.x > 0 || output_dims.y > 0) {
+        if (enable_fullscreen)
             _temp.resize(output_dims.x, output_dims.y);
-        }
 
         //find contours
         contourFinder.findContours(_temp, cmin, cmax, considered, choles, capprox);
     }
+}
+
+//--------------------------------------------------------------
+void ShapeDetector::update(ofTexture tex) {
+    ofFbo fbo;
+    if(enable_FOV)
+        fbo.allocate(FOV.width, FOV.height, GL_RGB);
+    else
+        fbo.allocate(tex.getWidth(), tex.getHeight(), GL_RGB);
+
+    fbo.begin();
+    if (enable_FOV)
+        tex.drawSubsection(0, 0, FOV.width, FOV.height, FOV.getX(), FOV.getY());
+    else
+        tex.draw(0,0);
+    fbo.end();
+
+    ofPixels p;
+    fbo.readToPixels(p);
+
+    update(p);
 }
 
 //--------------------------------------------------------------
@@ -94,6 +111,14 @@ void ShapeDetector::draw() {
 }
 
 //--------------------------------------------------------------
+void ShapeDetector::drawVideo() {
+    if (enable_fullscreen)
+        colorImg.draw(0,0,output_dims.x, output_dims.y);
+    else
+        colorImg.draw(0,0);
+}
+
+//--------------------------------------------------------------
 void ShapeDetector::drawData() {
     contourFinder.draw();
 
@@ -135,11 +160,13 @@ void ShapeDetector::sizeImgs(int w, int h) {
     grayBg.allocate(w, h);
     grayDiff.allocate(w, h);
     learn_background = true;
+    calcOutputDims();
 }
 
 //--------------------------------------------------------------
 void ShapeDetector::initGui() {
     gui.add(enable_FOV.set("enable FOV", false));
+    gui.add(enable_fullscreen.set("fullscreen", false));
     gui.add(diff_thresh.set("diff threshold", 80, 0, 500));
     gui.add(cmin.set("contour min", 20, 0, 1000));
     gui.add(cmax.set("contour max", 500, 0, 1920 * 1080));
@@ -154,9 +181,33 @@ void ShapeDetector::setOutputDims(glm::vec2 d) {
 }
 
 //--------------------------------------------------------------
+void ShapeDetector::calcOutputDims() {
+
+    //basing off colorImg as origin reference... 
+    //as it will always be sized correctly for the incoming texture dimensions
+    glm::vec2 temp;
+
+    //keeping aspect ratio we want to scale to full screen.
+    if (colorImg.getWidth() > colorImg.getHeight())
+        temp = glm::vec2( ofGetHeight() * ( colorImg.getWidth() / colorImg.getHeight() ), ofGetHeight());
+    else 
+        temp = glm::vec2( ofGetWidth(), ofGetWidth() * ( colorImg.getHeight() / colorImg.getWidth() ) );
+
+    setOutputDims(temp);
+}
+
+//--------------------------------------------------------------
+glm::vec2 ShapeDetector::getCurrentDims() {
+    if (enable_fullscreen)
+        return output_dims;
+    else
+        return glm::vec2(colorImg.getWidth(), colorImg.getHeight());
+}
+
+//--------------------------------------------------------------
 void ShapeDetector::setFOV(bool state){
     if (state) {
-        FOV.set(ofRectangle());
+        FOV.set(ofRectangle(0,0,ofGetWidth(), ofGetHeight()));
         set_canvas = true;
         FOV_origin = false;
     }
@@ -193,7 +244,8 @@ void ShapeDetector::drawLiveFOVConfig(int x, int y) {
     if (FOV_origin) {
         ofSetColor(ofColor(255, 0, 0, 150));
         ofNoFill();
-        ofDrawRectangle(FOV.getX(), FOV.getY(), abs(FOV.getX() - x), abs(FOV.getY() - y));
+        //ofDrawRectangle(FOV.getX(), FOV.getY(), abs(FOV.getX() - x), abs(FOV.getY() - y));
+        ofDrawRectangle(FOV.getX(), FOV.getY(), x - FOV.getX() ,  y - FOV.getY() );
     }
     ofPopStyle();
 }

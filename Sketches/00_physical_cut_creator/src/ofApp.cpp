@@ -9,12 +9,11 @@ void ofApp::setup(){
     ofEnableAlphaBlending();
 
     canvas_dims = glm::vec2(1920, 1080);
-
     video.setDims(canvas_dims);
     video.setup("ip_cam/cams.json", VideoHandler::VIDEO_IP);
     video.setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
 
-    shape.setOutputDims(glm::vec2(video.getODims().x, video.getODims().y));
+    //shape.setOutputDims(glm::vec2(video.getODims().x, video.getODims().y));
 
     initGui();
 
@@ -27,7 +26,8 @@ void ofApp::update(){
     video.update();
 
     if (video.isFrameNew())
-        shape.update(video.getFramePixels());
+        //shape.update(video.getFramePixels());
+        shape.update(*video.getFrameTex());
 }
 
 //--------------------------------------------------------------
@@ -37,13 +37,22 @@ void ofApp::draw(){
 
     ofSetColor(255,255,255,255);
 
-    if(enable_bg_video)
-        video.getFrameTex()->draw(0,0, video.getODims().x, video.getODims().y);
+    ofPushMatrix();
+    ofPushStyle();
+    if (enable_manual_scale)ofScale(manual_scale, manual_scale);
+    auto temp = shape.getCurrentDims();
+    ofTranslate( (ofGetWidth()/2) - (temp.x /2), (ofGetHeight()/2) - (temp.y/2));
 
-    if(enable_shape_data)
-        shape.drawData();
+        if (enable_bg_video) 
+            shape.drawVideo();
 
-    shape.draw();
+        if(enable_shape_data)
+            shape.drawData();
+
+        shape.draw();
+
+    ofPopStyle();
+    ofPopMatrix();
 
     if (enable_debug) drawDebug();
     if (enable_info) drawInfo();
@@ -64,6 +73,8 @@ void ofApp::initGui() {
     gui.add(enable_info.set("enable info", false));
     gui.add(enable_bg_video.set("enable bg vid", false));
     gui.add(enable_shape_data.set("enable shape data", false));
+    gui.add(enable_manual_scale.set("enable manual scaling", false));
+    gui.add(manual_scale.set("manual scale", 1, 0, 5));
 
     gui.add(video.gui);
     gui.add(shape.gui);

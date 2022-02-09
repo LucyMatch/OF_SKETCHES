@@ -35,6 +35,8 @@ class ofApp : public ofBaseApp{
 		ofParameter<bool> enable_debug = false, 
 			enable_info = false, 
 			enable_bg_video = false, 
-			enable_shape_data = false;
+			enable_shape_data = false,
+			enable_manual_scale = false;
+		ofParameter<float> manual_scale;
 
 };
