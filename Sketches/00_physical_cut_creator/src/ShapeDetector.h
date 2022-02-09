@@ -33,8 +33,8 @@ public :
 	void initGui();
 	void sizeImgs(int w, int h);
 
-	void setOutputDims(glm::vec2 d);
-	void calcOutputDims();
+	void setFullscreenDims(glm::vec2 d);
+	void calcFullscreenDims();
 	glm::vec2 getCurrentDims();
 
 	void setFOV(bool state);
@@ -53,12 +53,13 @@ public :
 	ofParameterGroup gui;
 	ofParameter<int> diff_thresh;
 	ofParameter<int> cmin, cmax, considered;
-	ofParameter<bool> choles, capprox, enable_FOV, enable_fullscreen;
+	ofParameter<bool> choles, capprox, enable_FOV, enable_fullscreen, enable_manual_scale;
+	ofParameter<float> manual_scale;
 
 	//key press vars
 	bool learn_background = true, set_canvas = false;
 
-	glm::vec2 output_dims, fov_output_dims;
+	glm::vec2 fullscreen_dims;
 	ofRectangle FOV = ofRectangle(0, 0, 100, 100);
 	bool FOV_origin = false;
 

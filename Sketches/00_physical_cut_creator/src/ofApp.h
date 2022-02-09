@@ -32,11 +32,9 @@ class ofApp : public ofBaseApp{
 		
 		ofxPanel gui;
 		ofParameter<ofColor> bg_c;
-		ofParameter<bool> enable_debug = false, 
-			enable_info = false, 
-			enable_bg_video = false, 
-			enable_shape_data = false,
-			enable_manual_scale = false;
-		ofParameter<float> manual_scale;
+		ofParameter<bool> enable_debug = false,
+			enable_info = false,
+			enable_bg_video = false,
+			enable_shape_data = false;
 
 };

@@ -28,8 +28,8 @@ void ShapeDetector::update(ofPixels p) {
         ofxCvGrayscaleImage _temp = grayDiff;
 
         //if output dims > 0 then we want to resize
-        if (enable_fullscreen)
-            _temp.resize(output_dims.x, output_dims.y);
+        if (enable_fullscreen || enable_manual_scale)
+            _temp.resize(getCurrentDims().x, getCurrentDims().y);
 
         //find contours
         contourFinder.findContours(_temp, cmin, cmax, considered, choles, capprox);
@@ -112,10 +112,7 @@ void ShapeDetector::draw() {
 
 //--------------------------------------------------------------
 void ShapeDetector::drawVideo() {
-    if (enable_fullscreen)
-        colorImg.draw(0,0,output_dims.x, output_dims.y);
-    else
-        colorImg.draw(0,0);
+    colorImg.draw(0,0, getCurrentDims().x, getCurrentDims().y);
 }
 
 //--------------------------------------------------------------
@@ -160,13 +157,15 @@ void ShapeDetector::sizeImgs(int w, int h) {
     grayBg.allocate(w, h);
     grayDiff.allocate(w, h);
     learn_background = true;
-    calcOutputDims();
+    calcFullscreenDims();
 }
 
 //--------------------------------------------------------------
 void ShapeDetector::initGui() {
     gui.add(enable_FOV.set("enable FOV", false));
     gui.add(enable_fullscreen.set("fullscreen", false));
+    gui.add(enable_manual_scale.set("enable manual Scaling", false));
+    gui.add(manual_scale.set("manual scale", 1, 0.01, 25));
     gui.add(diff_thresh.set("diff threshold", 80, 0, 500));
     gui.add(cmin.set("contour min", 20, 0, 1000));
     gui.add(cmax.set("contour max", 500, 0, 1920 * 1080));
@@ -176,12 +175,12 @@ void ShapeDetector::initGui() {
 }
 
 //--------------------------------------------------------------
-void ShapeDetector::setOutputDims(glm::vec2 d) {
-    output_dims = d;
+void ShapeDetector::setFullscreenDims(glm::vec2 d) {
+    fullscreen_dims = d;
 }
 
 //--------------------------------------------------------------
-void ShapeDetector::calcOutputDims() {
+void ShapeDetector::calcFullscreenDims() {
 
     //basing off colorImg as origin reference... 
     //as it will always be sized correctly for the incoming texture dimensions
@@ -193,13 +192,15 @@ void ShapeDetector::calcOutputDims() {
     else 
         temp = glm::vec2( ofGetWidth(), ofGetWidth() * ( colorImg.getHeight() / colorImg.getWidth() ) );
 
-    setOutputDims(temp);
+    setFullscreenDims(temp);
 }
 
 //--------------------------------------------------------------
 glm::vec2 ShapeDetector::getCurrentDims() {
     if (enable_fullscreen)
-        return output_dims;
+        return fullscreen_dims;
+    else if (enable_manual_scale)
+        return glm::vec2(colorImg.getWidth() * manual_scale, colorImg.getHeight() * manual_scale);
     else
         return glm::vec2(colorImg.getWidth(), colorImg.getHeight());
 }

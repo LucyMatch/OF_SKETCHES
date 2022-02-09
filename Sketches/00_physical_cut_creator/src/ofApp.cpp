@@ -39,9 +39,8 @@ void ofApp::draw(){
 
     ofPushMatrix();
     ofPushStyle();
-    if (enable_manual_scale)ofScale(manual_scale, manual_scale);
     auto temp = shape.getCurrentDims();
-    ofTranslate( (ofGetWidth()/2) - (temp.x /2), (ofGetHeight()/2) - (temp.y/2));
+    ofTranslate((ofGetWidth() / 2) - (temp.x / 2), (ofGetHeight() / 2) - (temp.y / 2));
 
         if (enable_bg_video) 
             shape.drawVideo();
@@ -71,10 +70,8 @@ void ofApp::initGui() {
     gui.add(bg_c.set("background", ofColor(247, 237, 226, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
     gui.add(enable_debug.set("enable debug", false));
     gui.add(enable_info.set("enable info", false));
-    gui.add(enable_bg_video.set("enable bg vid", false));
+    gui.add(enable_bg_video.set("enable bg vid", true));
     gui.add(enable_shape_data.set("enable shape data", false));
-    gui.add(enable_manual_scale.set("enable manual scaling", false));
-    gui.add(manual_scale.set("manual scale", 1, 0, 5));
 
     gui.add(video.gui);
     gui.add(shape.gui);
@@ -183,6 +180,6 @@ void ofApp::mousePressed(int x, int y, int button){
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
     video.setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
-    shape.setOutputDims(glm::vec2(video.getODims().x, video.getODims().y));
+    shape.setFullscreenDims(glm::vec2(video.getODims().x, video.getODims().y));
 }
 
