@@ -6,6 +6,7 @@
 	Goal is to create a real time input for digital collages
 	This class will detect "cut shapes" within a field
 	so these can be used to mask digital textures etc...
+	no tracking
 
 	@TODO:
 	* Blob Modifications / simplifications / smoothing etc
@@ -25,11 +26,13 @@ public :
 
 	void update( ofPixels p );
 	void update( ofTexture tex );
-	void draw();
 
+	void drawPaths();
+	void drawShapes();
 	void drawVideo();
 	void drawData();
 	void drawDebug();
+
 	void initGui();
 	void sizeImgs(int w, int h);
 
@@ -42,7 +45,7 @@ public :
 	void drawFOV();
 	void drawLiveFOVConfig(int x, int y);
 
-
+	void setPalette(vector<ofColor> p);
 
 	ofxCvContourFinder 	contourFinder;
 	ofxCvColorImage			colorImg;
@@ -54,7 +57,7 @@ public :
 	ofParameter<int> diff_thresh;
 	ofParameter<int> cmin, cmax, considered;
 	ofParameter<bool> choles, capprox, enable_FOV, enable_fullscreen, enable_manual_scale;
-	ofParameter<float> manual_scale;
+	ofParameter<float> manual_scale, path_simplification, outline_width;
 
 	//key press vars
 	bool learn_background = true, set_canvas = false;
@@ -62,5 +65,7 @@ public :
 	glm::vec2 fullscreen_dims;
 	ofRectangle FOV = ofRectangle(0, 0, 100, 100);
 	bool FOV_origin = false;
+
+	vector<ofColor> palette;
 
 };

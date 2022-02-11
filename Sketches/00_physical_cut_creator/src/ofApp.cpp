@@ -8,12 +8,14 @@ void ofApp::setup(){
     ofEnableSmoothing();
     ofEnableAlphaBlending();
 
+    palettes.load();
+    setPalette();
+
     canvas_dims = glm::vec2(1920, 1080);
     video.setDims(canvas_dims);
-    video.setup("ip_cam/cams.json", VideoHandler::VIDEO_IP);
+    video.setup();
+    //video.setup("ip_cam/cams.json", VideoHandler::VIDEO_IP);
     video.setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
-
-    //shape.setOutputDims(glm::vec2(video.getODims().x, video.getODims().y));
 
     initGui();
 
@@ -26,7 +28,6 @@ void ofApp::update(){
     video.update();
 
     if (video.isFrameNew())
-        //shape.update(video.getFramePixels());
         shape.update(*video.getFrameTex());
 }
 
@@ -48,10 +49,26 @@ void ofApp::draw(){
         if(enable_shape_data)
             shape.drawData();
 
-        shape.draw();
+        if(enable_shape_draw)
+            shape.drawShapes();
+
+        if(enable_shape_path)
+            shape.drawPaths();
 
     ofPopStyle();
     ofPopMatrix();
+
+    if (enable_palette_preview) {
+        auto p = palettes.getPalette(curr_palette);
+        auto size = ofGetWidth() / palettes.getNColours(curr_palette);
+        int count = 0;
+        ofPushStyle();
+        for (auto c : *palettes.getPalette(curr_palette)) {
+            ofSetColor(c);
+            ofDrawRectangle(size * count++, 0, size, size);
+        }
+        ofPopStyle();
+    }
 
     if (enable_debug) drawDebug();
     if (enable_info) drawInfo();
@@ -68,15 +85,30 @@ void ofApp::initGui() {
 
     gui.setup("P R I M A R Y");
     gui.add(bg_c.set("background", ofColor(247, 237, 226, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+    gui.add(curr_palette.set("current palette",0, 0, palettes.getNPalettes()-1 ));
     gui.add(enable_debug.set("enable debug", false));
     gui.add(enable_info.set("enable info", false));
     gui.add(enable_bg_video.set("enable bg vid", true));
     gui.add(enable_shape_data.set("enable shape data", false));
+    gui.add(enable_shape_draw.set("enable shape draw", false));
+    gui.add(enable_shape_path.set("enable shape path draw", false));
+    gui.add(enable_palette_preview.set("enable palette preview", false));
 
     gui.add(video.gui);
     gui.add(shape.gui);
 }
 
+//--------------------------------------------------------------
+//alt the palette + send the colours where they are needed
+//we dont want bg colour to be sent to children...
+//---------------------------------------------------------------
+void ofApp::setPalette() {
+    vector<ofColor> temp;
+    for (int i = 0; i < palettes.getNColours(curr_palette); i++) {
+        if (i != bg_c_index)temp.push_back(*palettes.getColour(curr_palette, i));
+    }
+    shape.setPalette(temp);
+}
 //--------------------------------------------------------------
 void ofApp::drawGui(ofEventArgs& args) {
     gui.draw();
@@ -132,6 +164,16 @@ void ofApp::keyPressed(int key) {
     case ' ':
        shape.learn_background = true;
         break;
+    case 'c':
+        //reset background colour to palette colour
+        bg_c = *palettes.getColour( curr_palette, bg_c_index );
+        break;
+    case 'v':
+        //nxt color in palette is bg colour
+        bg_c_index = ++bg_c_index % palettes.getNColours(curr_palette);
+        bg_c = *palettes.getColour(curr_palette, bg_c_index);
+        setPalette();
+        break;
     case '0':
         gui.saveToFile("1_gui.xml");
         break;
@@ -169,7 +211,6 @@ void ofApp::keyPressed(int key) {
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-
 }
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){

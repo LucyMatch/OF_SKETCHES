@@ -58,21 +58,16 @@ void ShapeDetector::update(ofTexture tex) {
 }
 
 //--------------------------------------------------------------
-void ShapeDetector::draw() {
+void ShapeDetector::drawShapes() {
 
-    //hardcoding some colors...
     int c = 0;
-    ofColor cs[] = {ofColor(246, 189, 96), ofColor(245, 202, 195) , ofColor(132, 165, 157) , ofColor(242, 132, 130) };
-
-    //just drawing them - really i sthink we wanna keep track + store them - maybe they are an extension of base cut? or i extend blobs?
-    //i think thats what blobs does though.... need to review how that works
 
     ofPushStyle();
 
     for (auto b : contourFinder.blobs) {
 
         //fill
-        ofSetColor(cs[c]);
+        ofSetColor(palette[c]);
         ofFill();
         ofSetLineWidth(0);
         ofSetPolyMode(OF_POLY_WINDING_NONZERO);
@@ -86,7 +81,7 @@ void ShapeDetector::draw() {
         //outline
         ofSetColor(ofColor(0,0,0));
         ofNoFill();
-        ofSetLineWidth(5);
+        ofSetLineWidth(outline_width);
         ofBeginShape();
         for (auto p : b.pts) {
             ofVertex(p);
@@ -102,7 +97,45 @@ void ShapeDetector::draw() {
         //        b.boundingRect.getCenter().y);
         //}
 
-        c = ++c % std::size(cs);
+        c = ++c % std::size(palette);
+
+    }
+
+    ofPopStyle();
+
+}
+
+
+//--------------------------------------------------------------
+void ShapeDetector::drawPaths() {
+
+    int c = 0;
+
+    ofPushStyle();
+
+    for (auto b : contourFinder.blobs) {
+
+        ofPath path;
+        path.setCurveResolution(200);
+        path.setFillColor(palette[c]);
+
+        ofPath outline;
+        outline.setColor(ofColor(0, 0, 0));
+        outline.setFilled(false);
+        outline.setStrokeWidth(outline_width);
+
+        for (auto p : b.pts) {
+            path.curveTo(p);
+            outline.curveTo(p);
+        }
+
+        path.simplify(path_simplification);
+        outline.simplify(path_simplification);
+
+        path.draw();
+        outline.draw();
+
+        c = ++c % std::size(palette);
 
     }
 
@@ -165,7 +198,9 @@ void ShapeDetector::initGui() {
     gui.add(enable_FOV.set("enable FOV", false));
     gui.add(enable_fullscreen.set("fullscreen", false));
     gui.add(enable_manual_scale.set("enable manual Scaling", false));
-    gui.add(manual_scale.set("manual scale", 1, 0.01, 25));
+    gui.add(manual_scale.set("manual scale", 1, 0.1, 25));
+    gui.add(outline_width.set("outline width", 1, 0, 10));
+    gui.add(path_simplification.set("path simplification", 1, 0, 2));
     gui.add(diff_thresh.set("diff threshold", 80, 0, 500));
     gui.add(cmin.set("contour min", 20, 0, 1000));
     gui.add(cmax.set("contour max", 500, 0, 1920 * 1080));
@@ -250,3 +285,9 @@ void ShapeDetector::drawLiveFOVConfig(int x, int y) {
     }
     ofPopStyle();
 }
+
+//--------------------------------------------------------------
+void ShapeDetector::setPalette(vector<ofColor> p) {
+    palette = p;
+}
+

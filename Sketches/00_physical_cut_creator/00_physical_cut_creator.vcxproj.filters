@@ -70,6 +70,9 @@
     <ClCompile Include="src\ShapeDetector.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Classes\Utility\ColourPalette.cpp">
+      <Filter>src\external classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -1171,6 +1174,9 @@
     </ClInclude>
     <ClInclude Include="src\ShapeDetector.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Classes\Utility\ColourPalette.h">
+      <Filter>src\external classes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

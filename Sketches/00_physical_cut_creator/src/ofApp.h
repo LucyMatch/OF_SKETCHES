@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "Videohandler.h"
 #include "ShapeDetector.h"
+#include "ColourPalette.h"
 
 class ofApp : public ofBaseApp{
 
@@ -10,6 +11,8 @@ class ofApp : public ofBaseApp{
 		void setup();
 		void update();
 		void draw();
+
+		void setPalette();
 
 		void initGui();	//called by main
 		void drawGui(ofEventArgs& args);
@@ -26,6 +29,8 @@ class ofApp : public ofBaseApp{
 
 		VideoHandler video;
 		ShapeDetector shape;
+		ColourPalette palettes;
+		int bg_c_index = 0;
 
 		//gui + controlls
 		//---------------
@@ -35,6 +40,11 @@ class ofApp : public ofBaseApp{
 		ofParameter<bool> enable_debug = false,
 			enable_info = false,
 			enable_bg_video = false,
-			enable_shape_data = false;
+			enable_shape_data = false,
+			enable_shape_draw = false,
+			enable_shape_path = false,
+			enable_palette_preview = false;
+		ofParameter<int> curr_palette;
+
 
 };

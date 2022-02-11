@@ -168,7 +168,10 @@ void VideoHandler::setDims(glm::vec2 _dims) {
 
 //--------------------------------------------------------------
 void VideoHandler::setOutputDims(glm::vec2 _dims) {
-	o_dims = glm::vec2(_dims.y * (dims.x / dims.y), _dims.y);
+	if(_dims.x > _dims.y)
+		o_dims = glm::vec2(_dims.y * (dims.x / dims.y), _dims.y);
+	else
+		o_dims = glm::vec2(_dims.x, _dims.x * ( dims.y / dims.x ));
 	coords = getOutputCoords();
 	output.allocate(o_dims.x, o_dims.y, GL_RGBA);
 }
