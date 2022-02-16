@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<P_R_I_M_A_R_Y>
+	<background>247, 237, 226, 255</background>
+	<current_palette>0</current_palette>
+	<enable_debug>0</enable_debug>
+	<enable_info>0</enable_info>
+	<enable_bg_vid>1</enable_bg_vid>
+	<enable_shape_data>0</enable_shape_data>
+	<enable_shape_draw>0</enable_shape_draw>
+	<enable_shape_path_draw>0</enable_shape_path_draw>
+	<enable_palette_preview>0</enable_palette_preview>
+	<video_controls>
+		<video_colour>255, 255, 255, 255</video_colour>
+		<video_bg_colour>255, 255, 255, 255</video_bg_colour>
+		<enable_video_bg>0</enable_video_bg>
+		<enable_resizing>0</enable_resizing>
+		<enable_mirror>0</enable_mirror>
+		<enable_info>0</enable_info>
+	</video_controls>
+	<group>
+		<method>
+			<enable_BG_Learning>0</enable_BG_Learning>
+			<bg_learning_time>0</bg_learning_time>
+			<bg_threshold>10</bg_threshold>
+			<enable_colour_tracking>0</enable_colour_tracking>
+			<c_track_mode_hue___sat>0</c_track_mode_hue___sat>
+		</method>
+		<contours>
+			<contour_threshold>80</contour_threshold>
+			<contour_min>20</contour_min>
+			<contour_max>500</contour_max>
+			<contour_holes>1</contour_holes>
+			<contour_invert>0</contour_invert>
+		</contours>
+		<output>
+			<enable_FOV>0</enable_FOV>
+			<fullscreen>0</fullscreen>
+			<enable_manual_Scaling>0</enable_manual_Scaling>
+			<manual_scale>1</manual_scale>
+			<outline_width>1</outline_width>
+		</output>
+	</group>
+</P_R_I_M_A_R_Y>
