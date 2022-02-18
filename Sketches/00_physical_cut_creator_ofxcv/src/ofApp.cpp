@@ -3,6 +3,8 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 
+    std::cout << "main setup" << std::endl;
+
     ofSetFrameRate(60);
     ofSetVerticalSync(false);
     ofEnableSmoothing();
@@ -12,10 +14,11 @@ void ofApp::setup() {
     setPalette();
 
     canvas_dims = glm::vec2(1920, 1080);
+    
+    video.setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
     video.setDims(canvas_dims);
-    video.setup();
     video.setup("ip_cam/cams.json", VideoHandler::VIDEO_IP);
-    //video.setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
+
 
     initGui();
 
@@ -28,7 +31,7 @@ void ofApp::update() {
     video.update();
 
     if (video.isFrameNew())
-        shape.update(*video.getFrameTex());
+        if(video.getFrameTex())shape.update(*video.getFrameTex());
 }
 
 //--------------------------------------------------------------
@@ -49,11 +52,12 @@ void ofApp::draw() {
     if (enable_shape_data)
         shape.drawData();
 
-    if (enable_shape_draw)
-        shape.drawShapes();
-
-    if (enable_shape_path)
-        shape.drawPaths();
+    if (enable_poly_graphics) {
+        auto ps = shape.getPolys();
+        graphics.counter = 0;
+        for (auto p : ps)
+            graphics.draw(p);
+    }   
 
     ofPopStyle();
     ofPopMatrix();
@@ -90,12 +94,12 @@ void ofApp::initGui() {
     gui.add(enable_info.set("enable info", false));
     gui.add(enable_bg_video.set("enable bg vid", true));
     gui.add(enable_shape_data.set("enable shape data", false));
-    gui.add(enable_shape_draw.set("enable shape draw", false));
-    gui.add(enable_shape_path.set("enable shape path draw", false));
+    gui.add(enable_poly_graphics.set("enable poly graphics", false));
     gui.add(enable_palette_preview.set("enable palette preview", false));
 
     gui.add(video.gui);
     gui.add(shape.gui);
+    gui.add(graphics.gui);
 }
 
 //--------------------------------------------------------------
@@ -108,6 +112,7 @@ void ofApp::setPalette() {
         if (i != bg_c_index)temp.push_back(*palettes.getColour(curr_palette, i));
     }
     shape.setPalette(temp);
+    graphics.setPalette(temp);
 }
 //--------------------------------------------------------------
 void ofApp::drawGui(ofEventArgs& args) {
@@ -218,13 +223,9 @@ void ofApp::mousePressed(int x, int y, int button) {
     if (shape.set_canvas) 
         shape.setFOV(x, y);
     else {
-        ofTexture t;
-        t.allocate(video.getFramePixels());
-        t.draw(0,0);
-        if (x < video.getFramePixels().getWidth() && y < video.getFramePixels().getHeight()) {
-            //shape.target_colour = video.getFramePixels().getColor(x, y);
-        }
-            
+        ofImage tmp;
+        tmp.grabScreen(x, y, 1, 1);
+        shape.setFinderColour(tmp.getColor(0, 0));
     }
 }
 

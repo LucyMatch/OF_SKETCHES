@@ -7,13 +7,13 @@
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\main.cpp">
+    <ClCompile Include="src\ShapeDetector.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\ofApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\ShapeDetector.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\of_v0.10.1_vs2017_release\addons\ofxGui\src\ofxSlider.cpp">
@@ -67,6 +67,9 @@
     <ClCompile Include="..\..\of_v0.10.1_vs2017_release\addons\ofxOpenCv\src\ofxCvContourFinder.cpp">
       <Filter>addons\ofxOpenCv\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\of_v0.10.1_vs2017_release\addons\ofxPoco\src\ofxXmlPoco.cpp">
+      <Filter>addons\ofxPoco\src</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\of_v0.10.1_vs2017_release\addons\ofxCv\libs\CLD\src\ETF.cpp">
       <Filter>addons\ofxCv\libs\CLD\src</Filter>
     </ClCompile>
@@ -105,9 +108,6 @@
     </ClCompile>
     <ClCompile Include="..\..\of_v0.10.1_vs2017_release\addons\ofxCv\libs\ofxCv\src\Wrappers.cpp">
       <Filter>addons\ofxCv\libs\ofxCv\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\of_v0.10.1_vs2017_release\addons\ofxPoco\src\ofxXmlPoco.cpp">
-      <Filter>addons\ofxPoco\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\of_v0.10.1_vs2017_release\addons\ofxIpVideoGrabber\src\IPVideoGrabber.cpp">
       <Filter>addons\ofxIpVideoGrabber\src</Filter>
@@ -282,6 +282,12 @@
     <Filter Include="addons\ofxOpenCv\libs\opencv\include\opencv">
       <UniqueIdentifier>{C867B0DE-B007-11B8-C182-5344}</UniqueIdentifier>
     </Filter>
+    <Filter Include="addons\ofxPoco">
+      <UniqueIdentifier>{3256AE3E-9B29-EA27-C842-CE6B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxPoco\src">
+      <UniqueIdentifier>{C7D4269D-D8A9-A7BB-531B-98DA}</UniqueIdentifier>
+    </Filter>
     <Filter Include="addons\ofxCv">
       <UniqueIdentifier>{A9C1150B-C1CB-2BC0-0F32-ED3B}</UniqueIdentifier>
     </Filter>
@@ -315,12 +321,6 @@
     <Filter Include="addons\ofxCv\libs\ofxCv\src">
       <UniqueIdentifier>{D4F40DFE-7BFE-9E37-3B94-006C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="addons\ofxPoco">
-      <UniqueIdentifier>{3256AE3E-9B29-EA27-C842-CE6B}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxPoco\src">
-      <UniqueIdentifier>{C7D4269D-D8A9-A7BB-531B-98DA}</UniqueIdentifier>
-    </Filter>
     <Filter Include="addons\ofxIpVideoGrabber">
       <UniqueIdentifier>{839E8972-32B5-FB54-4E4B-C9E0}</UniqueIdentifier>
     </Filter>
@@ -328,17 +328,20 @@
       <UniqueIdentifier>{4E7C034E-4240-1974-DC53-709B}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\external">
-      <UniqueIdentifier>{d7dcea4c-d765-439d-ae71-eeb39d0e1278}</UniqueIdentifier>
+      <UniqueIdentifier>{24834071-359b-4232-a95c-c5c9b6fbd13b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\ofApp.h">
+    <ClInclude Include="src\ShapeDetector.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\ShapeDetector.h">
+    <ClInclude Include="src\PolyGraphics.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofApp.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\of_v0.10.1_vs2017_release\addons\ofxGui\src\ofxBaseGui.h">
@@ -1394,6 +1397,9 @@
     <ClInclude Include="..\..\of_v0.10.1_vs2017_release\addons\ofxOpenCv\libs\opencv\include\opencv\cv.hpp">
       <Filter>addons\ofxOpenCv\libs\opencv\include\opencv</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\of_v0.10.1_vs2017_release\addons\ofxPoco\src\ofxXmlPoco.h">
+      <Filter>addons\ofxPoco\src</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\of_v0.10.1_vs2017_release\addons\ofxCv\src\ofxCv.h">
       <Filter>addons\ofxCv\src</Filter>
     </ClInclude>
@@ -1441,9 +1447,6 @@
     </ClInclude>
     <ClInclude Include="..\..\of_v0.10.1_vs2017_release\addons\ofxCv\libs\ofxCv\include\ofxCv\Wrappers.h">
       <Filter>addons\ofxCv\libs\ofxCv\include\ofxCv</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\of_v0.10.1_vs2017_release\addons\ofxPoco\src\ofxXmlPoco.h">
-      <Filter>addons\ofxPoco\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\of_v0.10.1_vs2017_release\addons\ofxIpVideoGrabber\src\IPVideoGrabber.h">
       <Filter>addons\ofxIpVideoGrabber\src</Filter>

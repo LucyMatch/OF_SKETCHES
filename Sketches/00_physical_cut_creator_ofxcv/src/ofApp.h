@@ -4,6 +4,7 @@
 #include "Videohandler.h"
 #include "ShapeDetector.h"
 #include "ColourPalette.h"
+#include "PolyGraphics.h"
 
 class ofApp : public ofBaseApp {
 
@@ -30,6 +31,7 @@ public:
 	VideoHandler video;
 	ShapeDetector shape;
 	ColourPalette palettes;
+	PolyGraphics graphics;
 	int bg_c_index = 0;
 
 	//gui + controlls
@@ -41,8 +43,7 @@ public:
 		enable_info = false,
 		enable_bg_video = false,
 		enable_shape_data = false,
-		enable_shape_draw = false,
-		enable_shape_path = false,
+		enable_poly_graphics = false,
 		enable_palette_preview = false;
 	ofParameter<int> curr_palette;
 

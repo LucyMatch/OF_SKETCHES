@@ -28,8 +28,6 @@ public :
 	void update( ofPixels p );
 	void update( ofTexture tex );
 
-	void drawPaths();
-	void drawShapes();
 	void drawInput();
 	void drawData();
 	void drawDebug();
@@ -47,6 +45,9 @@ public :
 	void drawLiveFOVConfig(int x, int y);
 
 	void setPalette(vector<ofColor> p);
+	void setFinderColour( ofColor c );
+
+	vector<ofPolyline> getPolys();
 
 	//callbacks / listeners
 	void updateContourMode(bool& enable_color_track);
@@ -70,8 +71,8 @@ public :
 	//GUI
 	ofParameterGroup gui;
 	ofParameter<int> cthreshold, cmin, cmax;
-	ofParameter<bool> choles, cinvert;
-	ofParameter<bool> enable_bg_learning, enable_colour_track, colour_track_mode;
+	ofParameter<bool> choles, cinvert, csimplify;
+	ofParameter<bool> enable_bg_learning, bg_ignore_learning_rate, enable_colour_track, colour_track_mode;
 	ofParameter<float> bg_threshold, bg_learning_time;
 	ofParameter<bool> enable_FOV, enable_fullscreen, enable_manual_scale;
 	ofParameter<float> manual_scale, outline_width;

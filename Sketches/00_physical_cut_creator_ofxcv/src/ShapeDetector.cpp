@@ -24,14 +24,8 @@ void ShapeDetector::update(ofPixels p) {
                 learn_background = false;
             }
 
-            if (bg_learning_time > 0) {
-                background.setLearningTime(bg_learning_time);
-                background.setIgnoreForeground(false);
-            }
-            else {
-                background.setIgnoreForeground(true);
-            }
-            
+            background.setLearningTime(bg_learning_time);
+            background.setIgnoreForeground(bg_ignore_learning_rate);
             background.setThresholdValue(bg_threshold);
             background.update(p, bg_thresh_result);
             bg_thresh_result.update();
@@ -42,12 +36,13 @@ void ShapeDetector::update(ofPixels p) {
         if (enable_colour_track) 
             finder.setTargetColor(target_colour, colour_track_mode ? TRACK_COLOR_HS : TRACK_COLOR_RGB);
 
+            finder.setSortBySize(true);
             finder.setMinArea(cmin);
             finder.setMaxArea(cmax);
             finder.setInvert(cinvert);
             finder.setThreshold(cthreshold);
             finder.setFindHoles(choles);
-            //@TODO: add more settings to gui - simplification etc
+            finder.setSimplify(csimplify);
 
             //resize here
             //OF_INTERPOLATE_NEAREST_NEIGHBOR =1 OF_INTERPOLATE_BILINEAR =2 OF_INTERPOLATE_BICUBIC =3
@@ -55,9 +50,9 @@ void ShapeDetector::update(ofPixels p) {
                 frame.resize(getCurrentDims().x, getCurrentDims().y, OF_INTERPOLATE_NEAREST_NEIGHBOR);
 
             finder.findContours( frame );
-
-            finder.setSortBySize(true);
     }
+    
+    
 }
 
 //--------------------------------------------------------------
@@ -82,90 +77,8 @@ void ShapeDetector::update(ofTexture tex) {
 }
 
 //--------------------------------------------------------------
-void ShapeDetector::drawShapes() {
-
-    int c = 0;
-
-    ofPushStyle();
-
-    for (auto poly : finder.getPolylines()) {
-
-        //fill
-        ofSetColor(palette[c]);
-        ofFill();
-        ofSetLineWidth(0);
-        ofSetPolyMode(OF_POLY_WINDING_NONZERO);
-        ofBeginShape();
-        for (auto p : poly.getVertices()) {
-            ofVertex(p);
-        }
-        ofEndShape();
-
-        ofPolyline _p = poly;
-
-        _p.simplify(0.5f);
-
-        //outline
-        ofSetColor(ofColor(0,0,0));
-        ofNoFill();
-        ofSetLineWidth(outline_width);
-        ofBeginShape();
-        for (auto p : _p.getVertices()) {
-            ofVertex(p);
-        }
-        ofEndShape();
-
-        c = ++c % std::size(palette);
-
-    }
-
-    ofPopStyle();
-
-}
-
-//--------------------------------------------------------------
-void ShapeDetector::drawPaths() {
-
-    int c = 0;
-
-    ofPushStyle();
-
-    int n = finder.size();
-    for (int i = 0; i < n; i++) {
-
-        auto cont = finder.getContour(i);
-
-        ofPath path;
-        path.setCurveResolution(200);
-        path.setFillColor(palette[c]);
-
-        ofPath outline;
-        outline.setColor(ofColor(0, 0, 0));
-        outline.setFilled(false);
-        outline.setStrokeWidth(outline_width);
-
-        for (auto p : cont) {
-            path.curveTo(p.x, p.y);
-            outline.curveTo(p.x, p.y);
-        }
-
-        path.simplify(0.5f);
-        outline.simplify(0.5f);
-
-        path.draw();
-        outline.draw();
-
-        c = ++c % std::size(palette);
-
-    }
-
-    ofPopStyle(); 
-
-}
-
-//--------------------------------------------------------------
 void ShapeDetector::drawInput() {
-    output_frame.draw(0, 0, getCurrentDims().x, getCurrentDims().y);
+    if(output_frame.isAllocated())output_frame.draw(0, 0, getCurrentDims().x, getCurrentDims().y);
 }
 
 //--------------------------------------------------------------
@@ -179,15 +92,15 @@ void ShapeDetector::drawData() {
         }
     }
 
-
 }
 
 //--------------------------------------------------------------
 void ShapeDetector::drawDebug() {
 
-    output_frame.draw(0,0);
+    if (output_frame.isAllocated())
+        output_frame.draw(0,0);
 
-    if(enable_bg_learning)
+    if(enable_bg_learning && bg_thresh_result.isAllocated())
         bg_thresh_result.draw(0,0);
 
     if (enable_colour_track) {
@@ -217,13 +130,12 @@ void ShapeDetector::initGui() {
     _output.add(enable_fullscreen.set("fullscreen", false));
     _output.add(enable_manual_scale.set("enable manual Scaling", false));
     _output.add(manual_scale.set("manual scale", 1, 0.1, 25));
-    _output.add(outline_width.set("outline width", 1, 0, 10));
-    //_output.add(path_simplification.set("path simplification", 1, 0, 2));
 
     ofParameterGroup _method;
     _method.setName("method");
     _method.add(enable_bg_learning.set("enable BG Learning", false));
     _method.add(bg_learning_time.set("bg learning time", 0, 0, 30));
+    _method.add(bg_ignore_learning_rate.set("bg ignore learning time", true));
     _method.add(bg_threshold.set("bg threshold", 10, 0, 255));
     _method.add(enable_colour_track.set("enable colour tracking", false));
     _method.add(colour_track_mode.set("c track mode hue / sat", false));
@@ -232,10 +144,11 @@ void ShapeDetector::initGui() {
     ofParameterGroup _contours;
     _contours.setName("contours");
     _contours.add(cthreshold.set("contour threshold", 80, 0, 255));
-    _contours.add(cmin.set("contour min", 20, 0, 1000));
-    _contours.add(cmax.set("contour max", 500, 0, 1920 * 1080));
+    _contours.add(cmin.set("contour min", 0, 0, 5000));
+    _contours.add(cmax.set("contour max", 10000, 0, 1920 * 1080));
     _contours.add(choles.set("contour holes", true));
     _contours.add(cinvert.set("contour invert", false));
+    _contours.add(csimplify.set("contour simplify", false));
 
     gui.add(_method);
     gui.add(_contours);
@@ -332,5 +245,15 @@ void ShapeDetector::setPalette(vector<ofColor> p) {
 void ShapeDetector::updateContourMode(bool& enable_color_track) {
     std::cout << "updating contour color tracking to : " << enable_color_track << std::endl;
     finder.setUseTargetColor(enable_color_track);
+}
+
+//--------------------------------------------------------------
+void ShapeDetector::setFinderColour( ofColor c) {
+    target_colour = c;
+}
+
+//--------------------------------------------------------------
+vector<ofPolyline> ShapeDetector::getPolys() {
+    return finder.getPolylines();
 }
 

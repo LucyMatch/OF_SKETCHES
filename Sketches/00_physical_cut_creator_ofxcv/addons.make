@@ -1,5 +1,5 @@
 ofxGui
 ofxOpenCv
-ofxCv
 ofxPoco
+ofxCv
 ofxIpVideoGrabber
