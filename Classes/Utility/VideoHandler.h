@@ -75,7 +75,7 @@ class VideoHandler {
 
 	private :
 
-		bool active = true;
+		bool active = false;
 
 		ofVideoPlayer local_cam;
 		ofVideoGrabber web_cam;

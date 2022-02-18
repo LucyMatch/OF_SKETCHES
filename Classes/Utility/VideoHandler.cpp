@@ -54,6 +54,8 @@ void VideoHandler::setup(string _path, videoModes _mode) {
 			break;
 	}
 
+	active = true;
+
 }
 
 //--------------------------------------------------------------
@@ -163,7 +165,7 @@ ofx::Video::IpVideoGrabberSettings& VideoHandler::getCam() {
 //--------------------------------------------------------------
 void VideoHandler::setDims(glm::vec2 _dims) {
 	dims = _dims;
-	setup(path, mode);
+	if (active)setup(path, mode);
 }
 
 //--------------------------------------------------------------
@@ -218,7 +220,7 @@ glm::vec2& VideoHandler::getOutputCoords() {
 //--------------------------------------------------------------
 ofTexture* VideoHandler::getFrameTex() {
 	if ( enable_resizing )return &output.getTexture();
-	return &frame.getTexture();
+	if( frame.isAllocated() )return &frame.getTexture();
 }
 
 //--------------------------------------------------------------
@@ -228,7 +230,7 @@ ofPixels VideoHandler::getFramePixels() {
 		output.readToPixels(pix);
 		return pix;
 	}
-	return frame.getPixels();
+	if (frame.isAllocated())return frame.getPixels();
 }
 
 //--------------------------------------------------------------
@@ -259,7 +261,7 @@ ofImage& VideoHandler::getFrameImg() {
 		output_frame.setFromPixels( pix );
 		return output_frame;
 	}
-	return frame;
+	if (frame.isAllocated())return frame;
 }
 
 //--------------------------------------------------------------
