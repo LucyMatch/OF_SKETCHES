@@ -38,10 +38,10 @@ public:
 
     ofFbo main_draw, cuts_draw, p_draw;
 
-    LocalMediaManager media_man;
-    Feed* bg_feed = NULL, *single_face_feed = NULL;
-    string img_dirs[5] = { "clouds", "eyes", "rocks", "sky", "sky2" };
-    vector<Feed*> local_image_feeds;
+    //LocalMediaManager media_man;
+    //Feed* bg_feed = NULL, *single_face_feed = NULL;
+    //string img_dirs[5] = { "clouds", "eyes", "rocks", "sky", "sky2" };
+    //vector<Feed*> local_image_feeds;
 
     VideoHandler video;
 
@@ -62,8 +62,8 @@ public:
     ofParameter<bool> enable_debug, enable_orig, enable_cuts_draw, enable_p_draw, enable_trails;
     ofParameter<float> time_interval, cuts_draw_alpha, p_draw_alpha;
 
-    ofParameterGroup feed_gui;
-    ofParameter<ofColor> bg_feed_c;
-    ofParameter<bool> enable_bg_feed, enable_bg_resize, enable_face_feed, enable_face_resize, enable_cut_feed;
-    ofParameter<int> p_img_feed_index;
+    //ofParameterGroup feed_gui;
+    //ofParameter<ofColor> bg_feed_c;
+    //ofParameter<bool> enable_bg_feed, enable_bg_resize, enable_face_feed, enable_face_resize, enable_cut_feed;
+    //ofParameter<int> p_img_feed_index;
 };

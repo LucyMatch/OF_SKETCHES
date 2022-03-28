@@ -15,45 +15,44 @@ void ofApp::setup(){
     p_draw.allocate(canvas_dims.x, canvas_dims.y, GL_RGBA);
 
     // init vid manager
-    video.setDims(canvas_dims);
-
-    video.setup();
     video.setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
+    video.setDims(canvas_dims);
+    video.setup();
 
     // init gui
     initGui();
 
     //set additional gui listeners
-    p_img_feed_index.addListener(this, &ofApp::updatePImgGroup);
+    //p_img_feed_index.addListener(this, &ofApp::updatePImgGroup);
     
     // Setup tracker
     tracker.setup();
 
     //Media men
     //media man - test - simple video backgrounds
-    Feed video_feed;
-    video_feed.path = "videos";
-    video_feed.resize = true;
-    video_feed.media_type = mediaTypes::VIDEO;
-    bg_feed = media_man.createNewFeed(video_feed);
+    //Feed video_feed;
+    //video_feed.path = "videos";
+    //video_feed.resize = true;
+    //video_feed.media_type = mediaTypes::VIDEO;
+    //bg_feed = media_man.createNewFeed(video_feed);
 
-    //media man - test - simple feed for face texture to cut
-    Feed face_feed;
-    face_feed.path = "videos";
-    face_feed.resize = true;
-    face_feed.media_type = mediaTypes::VIDEO;
-    single_face_feed = media_man.createNewFeed(video_feed);
+    ////media man - test - simple feed for face texture to cut
+    //Feed face_feed;
+    //face_feed.path = "videos";
+    //face_feed.resize = true;
+    //face_feed.media_type = mediaTypes::VIDEO;
+    //single_face_feed = media_man.createNewFeed(video_feed);
 
-    //media man - testing image collections stored in vector
-    for (const auto& path : img_dirs) {
-        Feed _feed;
-        _feed.media_type = mediaTypes::IMAGE_COLLECTION;
-        _feed.collection_size = 40;
-        _feed.path = "images/" + path;
-        _feed.enable_slideshow = false;
-        _feed.slideshow_frequency = 2;
-        local_image_feeds.push_back(media_man.createNewFeed(_feed));
-    }
+    ////media man - testing image collections stored in vector
+    //for (const auto& path : img_dirs) {
+    //    Feed _feed;
+    //    _feed.media_type = mediaTypes::IMAGE_COLLECTION;
+    //    _feed.collection_size = 40;
+    //    _feed.path = "images/" + path;
+    //    _feed.enable_slideshow = false;
+    //    _feed.slideshow_frequency = 2;
+    //    local_image_feeds.push_back(media_man.createNewFeed(_feed));
+    //}
 
 }
 
@@ -86,7 +85,7 @@ void ofApp::update(){
     }
 
     //update media man - to update frames
-    media_man.update();
+   // media_man.update();
 }
 
 //--------------------------------------------------------------
@@ -108,15 +107,15 @@ void ofApp::draw(){
 
             //@TODO: seperate feed for cuts?? + toggle
             //also break cutman draw into own function.. we have the same code below
-            if (enable_cut_feed && single_face_feed) {
-                if (enable_face_resize)
-                    tex = media_man.getFrameTextureReSized(single_face_feed);
-                else
-                    tex = media_man.getFrameTexture(single_face_feed);
-            }
-            else {
+            //if (enable_cut_feed && single_face_feed) {
+            //    if (enable_face_resize)
+            //        tex = media_man.getFrameTextureReSized(single_face_feed);
+            //    else
+            //        tex = media_man.getFrameTexture(single_face_feed);
+            //}
+            //else {
                 tex = video.getFrameTex();
-            }
+            //}
 
             cut_man.draw(tex);
         cuts_draw.end();
@@ -146,14 +145,14 @@ void ofApp::draw(){
             if (enable_orig) video.draw();
 
             //TESTING DRAWING MEDIA MAN AS BG
-            if (enable_bg_feed && bg_feed != NULL) {
-                ofSetColor(bg_feed_c);
-                
-                if(enable_bg_resize)
-                    media_man.getFrameTextureReSized(bg_feed)->draw(0,0);
-                else
-                    media_man.getFrameTexture(bg_feed)->draw(0, 0);
-            }
+            //if (enable_bg_feed && bg_feed != NULL) {
+            //    ofSetColor(bg_feed_c);
+            //    
+            //    if(enable_bg_resize)
+            //        media_man.getFrameTextureReSized(bg_feed)->draw(0,0);
+            //    else
+            //        media_man.getFrameTexture(bg_feed)->draw(0, 0);
+            //}
 
             if (enable_trails) {
                 glEnable(GL_BLEND);
@@ -180,15 +179,15 @@ void ofApp::draw(){
                     ofTexture* tex;
 
                     //@TODO: seperate feed for cuts?? + toggle
-                    if (enable_cut_feed && single_face_feed) {
-                        if (enable_face_resize)
-                            tex = media_man.getFrameTextureReSized(single_face_feed);
-                        else
-                            tex = media_man.getFrameTexture(single_face_feed);
-                    }
-                    else {
+                    //if (enable_cut_feed && single_face_feed) {
+                    //    if (enable_face_resize)
+                    //        tex = media_man.getFrameTextureReSized(single_face_feed);
+                    //    else
+                    //        tex = media_man.getFrameTexture(single_face_feed);
+                    //}
+                    //else {
                         tex = video.getFrameTex();
-                    }
+                    //}
                     cut_man.draw(tex);
                 }
             }
@@ -211,7 +210,7 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::drawDebug() {
 
-    media_man.drawDebug();
+    //media_man.drawDebug();
 
     // Draw tracker landmarks
     tracker.drawDebug();
@@ -270,12 +269,12 @@ void ofApp::updatePmen(int index, int i, int j) {
             //@TODO: - we are going to be adding more feed options - this will need to be broken out into a new class? or function?
             //it could be cleaner..
             ofTexture* tex;
-            if (enable_face_feed && single_face_feed)
-                if (enable_face_resize)
-                    tex = media_man.getFrameTextureReSized(single_face_feed);
-                else
-                    tex = media_man.getFrameTexture(single_face_feed);
-            else
+            //if (enable_face_feed && single_face_feed)
+            //    if (enable_face_resize)
+            //        tex = media_man.getFrameTextureReSized(single_face_feed);
+            //    else
+            //        tex = media_man.getFrameTexture(single_face_feed);
+            //else
                 tex = video.getFrameTex();
             //update pmen texture
             ofTexture tmp_tex = *tex;
@@ -293,7 +292,7 @@ void ofApp::updatePmen(int index, int i, int j) {
         _cpm.gui.setName(ofToString(index));
         p_man_gui.add(_cpm.gui); //create a gui panel for new manager
         //testing adding an image set
-        _cpm.setImageSet(local_image_feeds[p_img_feed_index]->imgs->getImgCollectionPtr());
+        //_cpm.setImageSet(local_image_feeds[p_img_feed_index]->imgs->getImgCollectionPtr());
         p_men.push_back(_cpm);
     }
 
@@ -383,16 +382,16 @@ void ofApp::initGui() {
     gui.add(enable_trails.set("enable trails", true));
     gui.add(time_interval.set("export interval", 1000, 100, 50000));
 
-    feed_gui.clear();
-    feed_gui.setName("FEEDS");
-    feed_gui.add(enable_bg_feed.set("bg feed", false));
-    feed_gui.add(enable_bg_resize.set("bg resize", true));
-    feed_gui.add(bg_feed_c.set("bg feed c", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
-    feed_gui.add(enable_face_feed.set("face feed", false));
-    feed_gui.add(enable_face_resize.set("face resize", true));
-    feed_gui.add(enable_cut_feed.set("face cut feed", false));
-    feed_gui.add(p_img_feed_index.set("particle img set", 0, 0, 4));
-    gui.add(feed_gui);
+    //feed_gui.clear();
+    //feed_gui.setName("FEEDS");
+    //feed_gui.add(enable_bg_feed.set("bg feed", false));
+    //feed_gui.add(enable_bg_resize.set("bg resize", true));
+    //feed_gui.add(bg_feed_c.set("bg feed c", ofColor(255, 255, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255)));
+    //feed_gui.add(enable_face_feed.set("face feed", false));
+    //feed_gui.add(enable_face_resize.set("face resize", true));
+    //feed_gui.add(enable_cut_feed.set("face cut feed", false));
+    //feed_gui.add(p_img_feed_index.set("particle img set", 0, 0, 4));
+    //gui.add(feed_gui);
 
     gui.add(video.gui);
     gui.add(cut_man.gui);
@@ -452,11 +451,11 @@ void ofApp::updatePMenGui(int amt) {
 //--------------------------------------------------------------
 void ofApp::updatePImgGroup(int& p_img_feed_index) {
     //@TODO: eventually diff sets per pmen
-    for (auto &p : p_men) {
-        //lets only update oens that are using sets
-        //that way we can test to see if diff sets looks good
-        p.setImageSet(local_image_feeds[p_img_feed_index]->imgs->getImgCollectionPtr());
-    }
+    //for (auto &p : p_men) {
+    //    //lets only update oens that are using sets
+    //    //that way we can test to see if diff sets looks good
+    //    p.setImageSet(local_image_feeds[p_img_feed_index]->imgs->getImgCollectionPtr());
+    //}
 }
 
 //--------------------------------------------------------------
@@ -542,18 +541,18 @@ void ofApp::keyPressed(int key) {
         gui.loadFromFile("4_gui.xml");
         p_man_gui.loadFromFile("4_pmen_gui.xml");
         break;
-    case'1':
-        media_man.prevVideo(bg_feed);
-        break;
-    case '2':
-        media_man.nxtVideo(bg_feed);
-        break;    
-    case'3':
-        media_man.prevVideo(single_face_feed);
-        break;
-    case '4':
-        media_man.nxtVideo(single_face_feed);
-        break;
+    //case'1':
+    //    media_man.prevVideo(bg_feed);
+    //    break;
+    //case '2':
+    //    media_man.nxtVideo(bg_feed);
+    //    break;    
+    //case'3':
+    //    media_man.prevVideo(single_face_feed);
+    //    break;
+    //case '4':
+    //    media_man.nxtVideo(single_face_feed);
+    //    break;
     default:
         break;
     }
