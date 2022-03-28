@@ -1,0 +1,4 @@
+ofxAnimatable
+ofxGui
+ofxPoco
+ofxIpVideoGrabber
