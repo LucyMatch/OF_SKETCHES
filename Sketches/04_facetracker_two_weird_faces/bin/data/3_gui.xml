@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <P_R_I_M_A_R_Y>
-	<background>184, 0, 116, 255</background>
+	<background>46, 184, 139, 255</background>
 	<cuts_layer_alpha>255</cuts_layer_alpha>
-	<p_layer_alpha>0</p_layer_alpha>
+	<p_layer_alpha>255</p_layer_alpha>
 	<cuts_colour>255, 255, 255, 255</cuts_colour>
 	<p_colour>255, 255, 255, 255</p_colour>
 	<cuts_draw_colour>255, 255, 255, 255</cuts_draw_colour>
 	<enable_debug>0</enable_debug>
 	<enable_orig>0</enable_orig>
 	<enable_cuts_draw>1</enable_cuts_draw>
-	<enable_particle_draw>0</enable_particle_draw>
-	<enable_trails>1</enable_trails>
+	<enable_particle_draw>1</enable_particle_draw>
+	<enable_trails>0</enable_trails>
 	<export_interval>1000</export_interval>
 	<video_controls>
 		<video_colour>255, 255, 255, 255</video_colour>
@@ -18,9 +18,10 @@
 		<enable_video_bg>0</enable_video_bg>
 		<enable_resizing>0</enable_resizing>
 		<enable_mirror>0</enable_mirror>
+		<enable_info>0</enable_info>
 	</video_controls>
 	<CUT_MANAGER>
-		<face_timeout>1335.2</face_timeout>
+		<face_timeout>60.9694</face_timeout>
 		<enable_left_eye>1</enable_left_eye>
 		<enable_right_eye>1</enable_right_eye>
 		<enable_mouth>1</enable_mouth>
@@ -32,8 +33,8 @@
 		<enable_curve>1</enable_curve>
 		<enable_scale>1</enable_scale>
 		<enable_shape_mode>0</enable_shape_mode>
-		<scale_x>0.561224</scale_x>
-		<scale_y>0.637755</scale_y>
+		<scale_x>0.918367</scale_x>
+		<scale_y>0.943878</scale_y>
 		<curve_reso>200</curve_reso>
 		<cut_shape>0</cut_shape>
 		<enable_left_brow>1</enable_left_brow>
@@ -46,7 +47,7 @@
 		<enable_inner_mouth>0</enable_inner_mouth>
 		<enable_nose_bridge>0</enable_nose_bridge>
 		<enable_nose_base>0</enable_nose_base>
-		<enable_outline>1</enable_outline>
+		<enable_outline>0</enable_outline>
 		<left_brow_c>255, 255, 255, 255</left_brow_c>
 		<right_brow_c>255, 255, 255, 255</right_brow_c>
 		<left_jaw_c>255, 255, 255, 255</left_jaw_c>
