@@ -13,11 +13,12 @@ void ofApp::setup() {
     palettes.load();
     setPalette();
 
-    canvas_dims = glm::vec2(1920, 1080);
+    canvas_dims = glm::vec2(640, 420);
     
     video.setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
     video.setDims(canvas_dims);
-    video.setup("ip_cam/cams.json", VideoHandler::VIDEO_IP);
+    //video.setup("ip_cam/cams.json", VideoHandler::VIDEO_IP);
+    video.setup();
 
 
     initGui();
@@ -32,6 +33,21 @@ void ofApp::update() {
 
     if (video.isFrameNew())
         if(video.getFrameTex())shape.update(*video.getFrameTex());
+
+    //should do this in graphics.. but want to just have to testin
+    if (graphics.enable_gradient_itr_animate) {
+        if (graphics.grad_animate_dir_lr) {
+            graphics.grad_itr += graphics.grad_itr_animate_rate;
+        }
+        else {
+            graphics.grad_itr -= graphics.grad_itr_animate_rate;
+        }
+        if (graphics.grad_itr > 200 || graphics.grad_itr <= 1) {
+            graphics.grad_animate_dir_lr = !graphics.grad_animate_dir_lr;
+        }
+    }
+        
+
 }
 
 //--------------------------------------------------------------
