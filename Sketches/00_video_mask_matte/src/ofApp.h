@@ -14,6 +14,8 @@ class ofApp : public ofBaseApp{
 		void drawDebug();
 		void drawPalette();
 
+		void resetVid();
+
 		void initGui();
 		void drawGui(ofEventArgs& args);
 		void drawInfo();
@@ -30,13 +32,13 @@ class ofApp : public ofBaseApp{
 		VideoHandler matte;
 
 		ofFbo composite;
-		//ofTexture masked_tex;
+		ofTexture mask;
 
 		ofxPanel gui;
 		ofParameter<ofColor> bg_c;
 		ofParameter<bool> 
 			enable_palette_preview = false,
-			enable_debug = false,
+			enable_debug = true,
 			enable_info = false;
 		ofParameter<int> curr_palette = 0;
 

@@ -10,7 +10,7 @@ void ofApp::setup(){
     palettes.load();
 
     video.setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
-    video.setDims(glm::vec2(700,394));
+    video.setDims(glm::vec2(700, 394));
     video.setup("videos", VideoHandler::VIDEO_LOCAL);
     video.setVolume(5);
 
@@ -20,6 +20,9 @@ void ofApp::setup(){
 
     composite.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 
+
+    resetVid();
+
     //initGui();
 }
 
@@ -27,73 +30,137 @@ void ofApp::setup(){
 void ofApp::update(){
     framerate();
 
-    video.update();
-    matte.update();
+    //video.update();
+    //matte.update();
 
-    if (video.isFrameNew()) {
+    video.local_cam.update();
+    matte.local_cam.update();
+
+    //Approach one - works - but lag with matte still...
+    if (video.local_cam.isFrameNew()) {
         //update matte frame to match the original frame so they sync
-        matte.local_cam.setFrame(video.local_cam.getCurrentFrame());
+        
+        auto frame = video.local_cam.getCurrentFrame();
+        matte.local_cam.setFrame(frame);
 
         //may need to draw matte to an fbo first and do some stuff 
         ofFbo temp_fbo;
-        temp_fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
-        temp_fbo.getTexture().setSwizzle(GL_TEXTURE_SWIZZLE_A, GL_RED);
+        temp_fbo.allocate(matte.local_cam.getWidth(), matte.local_cam.getHeight(), GL_RGBA);
+        temp_fbo.getTexture().setSwizzle(GL_TEXTURE_SWIZZLE_A, GL_RED);        
 
         ofPushStyle();
-        temp_fbo.begin();
-            matte.draw( );
-        temp_fbo.end();
+            temp_fbo.begin();
+            matte.local_cam.draw(0,0);
+            temp_fbo.end();
         ofPopStyle();
 
-        //lets mask this
-        ofTexture original_texture = *video.getFrameTex();
-        ofTexture mask_texture = temp_fbo.getTexture();
-        original_texture.setAlphaMask(mask_texture);
 
-        //masked_tex = original_texture;
+        //lets mask this
+        mask = temp_fbo.getTexture();
+        ofTexture original_texture = video.local_cam.getTexture();
+        original_texture.setAlphaMask(mask);
 
         ofPushStyle();
             composite.begin();
             //add toggel for this for trails
-            //ofSetColor(bg_c);
-            //ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-
+            ofSetColor(bg_c, 150);
+            ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+            ofSetColor(255);
             original_texture.draw(0,0);
             composite.end();
         ofPopStyle();
     }
-        
+
+    //approach 2
+    //manually progressing frames
+    //works well but still lag + no sound
+    //to loop
+    //if (video.local_cam.getCurrentFrame() == video.local_cam.getTotalNumFrames()) {
+    //    resetVidPos();
+    //}
+    //else {
+    //    video.local_cam.nextFrame();
+    //    matte.local_cam.nextFrame();
+    //}
+
+    //    ofTexture original_texture = *video.getFrameTex();
+
+    //    //    //may need to draw matte to an fbo first and do some stuff 
+    //    ofFbo temp_fbo;
+    //    temp_fbo.allocate(original_texture.getWidth(), original_texture.getHeight(), GL_RGBA);
+    //    temp_fbo.getTexture().setSwizzle(GL_TEXTURE_SWIZZLE_A, GL_RED);
+
+    //    ofPushStyle();
+    //    temp_fbo.begin();
+    //    matte.draw();
+    //    temp_fbo.end();
+    //    ofPopStyle();
+
+    //    //lets mask this
+    //    ofTexture mask_texture = temp_fbo.getTexture();
+    //    original_texture.setAlphaMask(mask_texture);
+
+    //    ofPushStyle();
+    //    composite.begin();
+    //    //add toggel for this for trails
+    //    ofSetColor(bg_c, 150);
+    //    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+    //    ofSetColor(255);
+    //    original_texture.draw(0, 0);
+    //    composite.end();
+    //    ofPopStyle();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-    ofSetColor(bg_c);
-    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+    ofPushStyle();
+        ofSetColor(bg_c);
+        ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+    ofPopStyle();
 
     //video.draw();
-    ofPushMatrix();
-    ofScale(1.5, 1.5);
-    composite.draw(0,0);
-    //masked_tex.draw(0,0);
-    ofPopMatrix();
+    //ofPushMatrix();
+    //    ofScale(1.5, 1.5);
+    //    composite.draw(0,0);
+    //ofPopMatrix();
 
     if (enable_palette_preview)drawPalette();
     if (enable_debug) drawDebug();
     if (enable_info) drawInfo();
 }
 
+//@TODO:
+//--------------------------------------------------------------
+void ofApp::resetVid() {
+
+    //maybe want something other than video handler
+    //needing alot of access to the video grabber obj
+    //this is for method having it paused + 
+    //using update to progress each fraME - TO KEEP TRHEM IN SYNC
+    // works well bug lagggy + no sound
+    //video.local_cam.setPaused(true);
+    video.local_cam.firstFrame();
+    //matte.local_cam.setPaused(true);
+    matte.local_cam.firstFrame();
+
+    //having it paused + manually progressing frames do we lose the sound?
+    video.setVolume(true);
+
+}
+
 //--------------------------------------------------------------
 void ofApp::drawDebug() {
+
     ofPushMatrix();
     ofScale(0.7, 0.7);
-        video.getFrameTex()->draw(0, 0);
+    ofSetColor(255,255,255,255);
+        video.local_cam.getTexture().draw(0,0);
+        matte.local_cam.getTexture().draw(video.local_cam.getWidth(), 0);
+        mask.draw(0,video.local_cam.getHeight());
+        composite.draw(mask.getWidth(), video.local_cam.getHeight());
     ofPopMatrix();    
-    ofPushMatrix();
-    ofTranslate(ofGetWidth() /2 , 0);
-    ofScale(0.5, 0.5);
-        matte.getFrameTex()->draw(0, 0);
-    ofPopMatrix();
+
 }
 
 //--------------------------------------------------------------
@@ -146,10 +213,12 @@ void ofApp::keyPressed(int key){
         case '.':
             video.nxtFeed();
             matte.nxtFeed();
+            resetVid();
             break;
         case ',':
             video.prevFeed();
             matte.prevFeed();
+            resetVid();
             break;
         case '0':
             gui.saveToFile("1_gui.xml");
