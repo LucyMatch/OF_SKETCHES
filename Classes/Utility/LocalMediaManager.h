@@ -77,8 +77,8 @@ public:
 				else if (f.media_type == 2) {
 					//video based types
 					VideoHandler* vh = new VideoHandler(glm::vec2(1920, 1080));
-					vh->setup(f.path, VideoHandler::VIDEO_LOCAL);
 					vh->setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
+					vh->setup(f.path, VideoHandler::VIDEO_LOCAL);
 					videos.push_back(vh);
 					f.vids = videos[videos.size()-1];
 					created = true;

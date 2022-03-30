@@ -19,8 +19,6 @@
 #include "ofxGui.h"
 #include "IPVideoGrabber.h"
 
-
-
 class VideoHandler {
 
 	public :
@@ -51,6 +49,7 @@ class VideoHandler {
 		void setMode(videoModes _mode, string _path);
 		void setDirectory(string _path);
 		void setActive(bool status);
+		void setVolume(int);
 
 		//specific for ip cam
 		void drawCamInfo(std::shared_ptr<ofx::Video::IPVideoGrabber>& g);
@@ -73,14 +72,15 @@ class VideoHandler {
 		ofParameter<ofColor> c, bg_c;
 		ofParameter<bool> enable_video_bg, enable_resizing, enable_mirror, enable_videoinfo;
 
-	private :
-
-		bool active = false;
-
+		//should be private but being lazy
 		ofVideoPlayer local_cam;
 		ofVideoGrabber web_cam;
 		std::shared_ptr<ofx::Video::IPVideoGrabber> ip_cam;
 		std::vector<ofx::Video::IpVideoGrabberSettings> ip_info;
+
+	private :
+
+		bool active = false;
 
 		//input
 		videoModes mode;
