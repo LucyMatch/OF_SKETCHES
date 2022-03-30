@@ -61,6 +61,15 @@ vector<ofColor>* ColourPalette::getPalette(int palette_index){
 }
 
 //--------------------------------------------------------------
+vector<ofColor> ColourPalette::getPaletteEdited(int palette_index, int excluded_index) {
+	vector<ofColor> temp;
+	for (int i = 0; i < palettes[palette_index].size(); i++)
+		if (i != excluded_index)temp.push_back(palettes[palette_index][i]);
+
+	return temp;
+}
+
+//--------------------------------------------------------------
 vector<vector<ofColor>>* ColourPalette::getPalettes(){
 	return &palettes;
 }

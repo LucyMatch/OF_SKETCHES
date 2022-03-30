@@ -20,10 +20,12 @@ public:
 
 	ofColor* getColour( int palette_index, int colour_index);
 	vector<ofColor>* getPalette( int palette_index);
+	vector<ofColor> getPaletteEdited( int palette_index, int excluded_index);
 	vector<vector<ofColor>>* getPalettes();
 
 	int getNPalettes();
 	int getNColours( int palette_index );
+
 
 private:
 	vector<vector<ofColor>> palettes;
