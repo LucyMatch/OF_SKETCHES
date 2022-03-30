@@ -203,6 +203,11 @@ void VideoHandler::setActive( bool status) {
 }
 
 //--------------------------------------------------------------
+void VideoHandler::setVolume(int vol) {
+	local_cam.setVolume(vol);
+}
+
+//--------------------------------------------------------------
 glm::vec2& VideoHandler::getDims() {
 	return dims;
 }
