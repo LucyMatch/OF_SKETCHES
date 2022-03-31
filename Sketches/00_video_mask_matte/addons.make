@@ -1,4 +1,0 @@
-ofxAnimatable
-ofxGui
-ofxPoco
-ofxIpVideoGrabber
