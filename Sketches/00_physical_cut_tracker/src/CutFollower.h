@@ -27,4 +27,6 @@ public:
 	void kill();
 	void draw();
 	void drawDebug();
+	ofPolyline getShape();
+	ofPolyline getHistory();
 };

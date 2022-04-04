@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 <P_R_I_M_A_R_Y>
-	<background>123, 224, 173, 255</background>
+	<background>247, 237, 226, 255</background>
 	<enable_debug>0</enable_debug>
 	<enable_info>0</enable_info>
 	<enable_bg_vid>1</enable_bg_vid>
-	<enable_shape_data>0</enable_shape_data>
+	<enable_shape_data>1</enable_shape_data>
 	<enable_palette_preview>0</enable_palette_preview>
-	<current_palette>3</current_palette>
+	<enable_poly_graphics>0</enable_poly_graphics>
+	<current_palette>0</current_palette>
 	<video_controls>
 		<video_colour>255, 255, 255, 255</video_colour>
 		<video_bg_colour>255, 255, 255, 255</video_bg_colour>
@@ -17,50 +18,49 @@
 	</video_controls>
 	<group>
 		<method>
-			<enable_BG_Learning>0</enable_BG_Learning>
-			<bg_learning_time>0</bg_learning_time>
+			<enable_BG_Learning>1</enable_BG_Learning>
+			<bg_learning_time>2.19908</bg_learning_time>
 			<bg_ignore_learning_time>1</bg_ignore_learning_time>
-			<bg_threshold>10</bg_threshold>
-			<enable_colour_tracking>1</enable_colour_tracking>
+			<bg_threshold>20.0198</bg_threshold>
+			<enable_colour_tracking>0</enable_colour_tracking>
 			<c_track_mode_hue___sat>0</c_track_mode_hue___sat>
 		</method>
 		<contours>
-			<contour_threshold>24</contour_threshold>
-			<contour_min>0</contour_min>
-			<contour_max>1112800</contour_max>
+			<contour_threshold>80</contour_threshold>
+			<contour_min>54</contour_min>
+			<contour_max>10000</contour_max>
 			<contour_holes>1</contour_holes>
-			<contour_invert>1</contour_invert>
+			<contour_invert>0</contour_invert>
 			<contour_simplify>0</contour_simplify>
 		</contours>
 		<output>
-			<enable_FOV>1</enable_FOV>
+			<enable_FOV>0</enable_FOV>
 			<fullscreen>0</fullscreen>
-			<enable_manual_Scaling>1</enable_manual_Scaling>
-			<manual_scale>1.79561</manual_scale>
+			<enable_manual_Scaling>0</enable_manual_Scaling>
+			<manual_scale>1</manual_scale>
 		</output>
 	</group>
-	<enable_poly_graphics>1</enable_poly_graphics>
 	<Poly_Graphics>
 		<enbale_outline>1</enbale_outline>
-		<outline>2.29592</outline>
+		<outline>5</outline>
 		<outline_colour>0, 0, 0, 255</outline_colour>
-		<enbale_thick>0</enbale_thick>
-		<outline_thick>1.02041</outline_thick>
+		<enbale_thick>1</enbale_thick>
+		<outline_thick>1</outline_thick>
 		<thick_outline_colour>0, 0, 0, 255</thick_outline_colour>
 		<enable_drop_shadow>0</enable_drop_shadow>
 		<drop_dshadow_colour>0, 0, 0, 255</drop_dshadow_colour>
 		<enable_simplify>0</enable_simplify>
-		<simplify>0</simplify>
+		<simplify>0.5</simplify>
 		<Path>
-			<enable_paths>1</enable_paths>
-			<enable_path_simplify>1</enable_path_simplify>
+			<enable_paths>0</enable_paths>
+			<enable_path_simplify>0</enable_path_simplify>
 			<path_simplify>0.5</path_simplify>
 		</Path>
 		<Shape>
 			<enable_shapes>0</enable_shapes>
 		</Shape>
 		<Gradient>
-			<enable_grad>0</enable_grad>
+			<enable_grad>1</enable_grad>
 			<grad_iteration_amt>25</grad_iteration_amt>
 			<grad_iteration_aanimate>0</grad_iteration_aanimate>
 			<iteration_aanimate_rate>0.25</iteration_aanimate_rate>

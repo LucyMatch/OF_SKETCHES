@@ -10,6 +10,7 @@ void ofApp::setup(){
     palettes.load();
     bg_c = *palettes.getColour(curr_palette, bg_c_index);
     shape_detector.setPalette(palettes.getPaletteEdited(curr_palette, bg_c_index));
+    graphics.setPalette(palettes.getPaletteEdited(curr_palette, bg_c_index));
 
     video_input.setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
     video_input.setDims(glm::vec2(1920/2,1080/2));
@@ -20,7 +21,7 @@ void ofApp::setup(){
     //may want a manager - or goes in shape man?
 
     // wait for half a frame before forgetting something
-    tracker.setPersistence(15);
+    tracker.setPersistence(60);
     // an object can move up to 50 pixels per frame
     tracker.setMaximumDistance(100);
 
@@ -33,19 +34,19 @@ void ofApp::update(){
 
     video_input.update();
 
-    if (video_input.isFrameNew())
-        if (video_input.getFrameTex()) {
+    if (video_input.isFrameNew()) {
+        if (video_input.isFrameAllocated()) {
 
             shape_detector.update(*video_input.getFrameTex());
 
             //update tracker
-            tracker.track( shape_detector.finder.getBoundingRects());
+            tracker.track( shape_detector.finder.getBoundingRects() );
 
 
-
-            ////untested the following but is the general flow i think
-
-            ////for colours..
+            //untested the following but is the general flow i think
+             //i keep getting out of bounds :(((( 
+        
+            //for colours..
             int colour_option = 0;
             auto palette = palettes.getPaletteEdited( curr_palette, bg_c_index );
 
@@ -63,12 +64,13 @@ void ofApp::update(){
 
                 //update it's poly
                 // //i dont think these line up???
-                // //i keep getting out of bounds :(((( 
+                
                 if (i < polys.size())
                     followers[i].update(polys[i]);
             }
 
         }
+    }
 }
 
 //--------------------------------------------------------------
@@ -85,10 +87,13 @@ void ofApp::draw(){
 
         if (enable_bg_video)shape_detector.drawInput();
         if (enable_shape_data)shape_detector.drawData();
+        if (enable_poly_graphics) graphics.counter = 0;
 
         vector<CutFollower>& followers = tracker.getFollowers();
         for (int i = 0; i < followers.size(); i++) {
             followers[i].draw();
+            //testing w/ polygraphics
+            if (enable_poly_graphics)  graphics.draw(followers[i].getShape());
         }
 
     ofPopStyle();
@@ -119,10 +124,12 @@ void ofApp::initGui() {
     gui.add(enable_bg_video.set("enable bg vid", true));
     gui.add(enable_shape_data.set("enable shape data", false));
     gui.add(enable_palette_preview.set("enable palette preview", false));
+    gui.add(enable_poly_graphics.set("enable poly graphics", false));
     gui.add(curr_palette.set("current palette", 0, 0, palettes.getNPalettes() - 1));
 
     gui.add(video_input.gui);
     gui.add(shape_detector.gui);
+    gui.add(graphics.gui);
 }
 
 //--------------------------------------------------------------
@@ -149,6 +156,7 @@ void ofApp::keyPressed(int key) {
         bg_c_index = ++bg_c_index % palettes.getNColours(curr_palette);
         bg_c = *palettes.getColour(curr_palette, bg_c_index);
         shape_detector.setPalette(palettes.getPaletteEdited(curr_palette, bg_c_index));
+        graphics.setPalette(palettes.getPaletteEdited(curr_palette, bg_c_index));
         break;
     case '0':
         gui.saveToFile("1_gui.xml");

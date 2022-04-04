@@ -7,6 +7,7 @@
 #include "ColourPalette.h"
 #include "VideoHandler.h"
 #include "ShapeDetector.h"
+#include "PolyGraphics.h"
 
 
 class ofApp : public ofBaseApp{
@@ -30,6 +31,7 @@ class ofApp : public ofBaseApp{
 
 		VideoHandler video_input;	//primary video input source that we track contours on
 		ShapeDetector shape_detector;
+		PolyGraphics graphics;
 
 		ofxCv::RectTrackerFollower<CutFollower> tracker;
 
@@ -42,6 +44,7 @@ class ofApp : public ofBaseApp{
 			enable_info = false,
 			enable_shape_data = false,
 			enable_bg_video = false,
+			enable_poly_graphics = false,
 			enable_palette_preview = false;
 		ofParameter<int> curr_palette;
 		

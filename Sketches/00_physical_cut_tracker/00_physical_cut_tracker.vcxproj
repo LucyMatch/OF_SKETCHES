@@ -229,6 +229,7 @@
     <ClInclude Include="..\..\Classes\Utility\LocalMediaManager.h" />
     <ClInclude Include="..\..\Classes\Utility\VideoHandler.h" />
     <ClInclude Include="src\CutFollower.h" />
+    <ClInclude Include="src\PolyGraphics.h" />
     <ClInclude Include="src\ShapeDetector.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\of_v0.10.1_vs2017_release\addons\ofxGui\src\ofxBaseGui.h" />

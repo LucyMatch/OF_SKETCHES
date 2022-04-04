@@ -64,3 +64,11 @@ void CutFollower::drawDebug() {
 bool CutFollower::isColorSet() {
 	return color_set;
 }
+//--------------------------------------------------------------
+ofPolyline CutFollower::getShape() {
+	return shape;
+}
+//--------------------------------------------------------------
+ofPolyline CutFollower::getHistory() {
+	return history;
+}
