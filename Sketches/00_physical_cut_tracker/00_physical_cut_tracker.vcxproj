@@ -226,7 +226,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\Classes\Utility\ColourPalette.h" />
     <ClInclude Include="..\..\Classes\Utility\ImageHandler.h" />
-    <ClInclude Include="..\..\Classes\Utility\LocalMediaManager.h" />
     <ClInclude Include="..\..\Classes\Utility\VideoHandler.h" />
     <ClInclude Include="src\CutFollower.h" />
     <ClInclude Include="src\PolyGraphics.h" />
@@ -601,6 +600,7 @@
     <ClInclude Include="..\..\of_v0.10.1_vs2017_release\addons\ofxCv\libs\ofxCv\include\ofxCv\Utilities.h" />
     <ClInclude Include="..\..\of_v0.10.1_vs2017_release\addons\ofxCv\libs\ofxCv\include\ofxCv\Wrappers.h" />
     <ClInclude Include="..\..\of_v0.10.1_vs2017_release\addons\ofxIpVideoGrabber\src\IPVideoGrabber.h" />
+    <ClInclude Include="src\TextureUtilities.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

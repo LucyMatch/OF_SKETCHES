@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <P_R_I_M_A_R_Y>
-	<background>123, 224, 173, 255</background>
+	<background>223, 247, 192, 255</background>
 	<enable_debug>0</enable_debug>
 	<enable_info>0</enable_info>
 	<enable_bg_vid>1</enable_bg_vid>
-	<enable_shape_data>0</enable_shape_data>
+	<enable_shape_data>1</enable_shape_data>
 	<enable_palette_preview>0</enable_palette_preview>
-	<current_palette>3</current_palette>
+	<current_palette>0</current_palette>
 	<video_controls>
 		<video_colour>255, 255, 255, 255</video_colour>
 		<video_bg_colour>255, 255, 255, 255</video_bg_colour>
@@ -25,35 +25,35 @@
 			<c_track_mode_hue___sat>0</c_track_mode_hue___sat>
 		</method>
 		<contours>
-			<contour_threshold>24</contour_threshold>
-			<contour_min>0</contour_min>
-			<contour_max>1112800</contour_max>
+			<contour_threshold>80</contour_threshold>
+			<contour_min>100</contour_min>
+			<contour_max>10000</contour_max>
 			<contour_holes>1</contour_holes>
-			<contour_invert>1</contour_invert>
+			<contour_invert>0</contour_invert>
 			<contour_simplify>0</contour_simplify>
 		</contours>
 		<output>
-			<enable_FOV>1</enable_FOV>
+			<enable_FOV>0</enable_FOV>
 			<fullscreen>0</fullscreen>
-			<enable_manual_Scaling>1</enable_manual_Scaling>
-			<manual_scale>1.79561</manual_scale>
+			<enable_manual_Scaling>0</enable_manual_Scaling>
+			<manual_scale>1</manual_scale>
 		</output>
 	</group>
-	<enable_poly_graphics>1</enable_poly_graphics>
+	<enable_poly_graphics>0</enable_poly_graphics>
 	<Poly_Graphics>
 		<enbale_outline>1</enbale_outline>
-		<outline>2.29592</outline>
+		<outline>5</outline>
 		<outline_colour>0, 0, 0, 255</outline_colour>
-		<enbale_thick>0</enbale_thick>
-		<outline_thick>1.02041</outline_thick>
+		<enbale_thick>1</enbale_thick>
+		<outline_thick>1</outline_thick>
 		<thick_outline_colour>0, 0, 0, 255</thick_outline_colour>
 		<enable_drop_shadow>0</enable_drop_shadow>
 		<drop_dshadow_colour>0, 0, 0, 255</drop_dshadow_colour>
 		<enable_simplify>0</enable_simplify>
-		<simplify>0</simplify>
+		<simplify>0.5</simplify>
 		<Path>
 			<enable_paths>1</enable_paths>
-			<enable_path_simplify>1</enable_path_simplify>
+			<enable_path_simplify>0</enable_path_simplify>
 			<path_simplify>0.5</path_simplify>
 		</Path>
 		<Shape>
@@ -67,4 +67,8 @@
 			<grad_stops>2</grad_stops>
 		</Gradient>
 	</Poly_Graphics>
+	<enable_cut_textures>0</enable_cut_textures>
+	<cut_manager>
+		<save_padding>5</save_padding>
+	</cut_manager>
 </P_R_I_M_A_R_Y>

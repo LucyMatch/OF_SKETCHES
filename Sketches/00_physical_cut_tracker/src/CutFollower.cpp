@@ -21,6 +21,8 @@ void CutFollower::update(const cv::Rect& track) {
 //--------------------------------------------------------------
 void CutFollower::update(ofPolyline poly) {
 	shape = poly;
+	auto bounding = shape.getBoundingBox();
+	size.set(bounding.getWidth(), bounding.getHeight());
 }
 //--------------------------------------------------------------
 void CutFollower::setColor(ofColor c) {
@@ -71,4 +73,16 @@ ofPolyline CutFollower::getShape() {
 //--------------------------------------------------------------
 ofPolyline CutFollower::getHistory() {
 	return history;
+}
+//--------------------------------------------------------------
+glm::vec2 CutFollower::getSize() {
+	return glm::vec2(size.x, size.y);
+}
+//--------------------------------------------------------------
+glm::vec2 CutFollower::getPosition() {
+	return glm::vec2(cur.x, cur.y);
+}
+//--------------------------------------------------------------
+ofColor CutFollower::getColor() {
+	return color;
 }

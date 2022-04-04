@@ -1454,9 +1454,6 @@
     <ClInclude Include="..\..\Classes\Utility\ImageHandler.h">
       <Filter>src\external</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Classes\Utility\LocalMediaManager.h">
-      <Filter>src\external</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Classes\Utility\VideoHandler.h">
       <Filter>src\external</Filter>
     </ClInclude>
@@ -1467,6 +1464,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\PolyGraphics.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureUtilities.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

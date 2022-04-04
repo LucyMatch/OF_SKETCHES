@@ -9,7 +9,7 @@ class CutFollower : public ofxCv::RectFollower {
 protected:
 	ofColor color;
 	bool color_set = false;
-	ofVec3f cur, smooth;
+	ofVec3f cur, smooth, size;
 	float startedDying;
 	ofPolyline history;	
 	ofPolyline shape;
@@ -29,4 +29,7 @@ public:
 	void drawDebug();
 	ofPolyline getShape();
 	ofPolyline getHistory();
+	glm::vec2 getPosition();
+	glm::vec2 getSize();
+	ofColor getColor();
 };

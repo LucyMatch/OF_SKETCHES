@@ -19,18 +19,18 @@ public:
 	}
 
     //--------------------------------------------------------------
-	void draw(ofPolyline poly) {
+	void draw(ofPolyline poly, ofColor fill = ofColor(255,255,255,255)) {
         if (enable_draw_shapes)
-            drawShapes(poly);
+            drawShapes(poly, fill);
         if (enable_draw_paths)
-            drawPaths(poly);
+            drawPaths(poly, fill);
         if (enable_gradient)
             drawGradient(poly);
         counter = ++counter % std::size(palette);
 	}
      
     //--------------------------------------------------------------
-	void drawShapes(ofPolyline& poly) {
+	void drawShapes(ofPolyline& poly, ofColor fill) {
 
         ofPushStyle();
 
@@ -40,7 +40,7 @@ public:
             if (enable_thick_outline)drawThickOutline(poly, true, thick_outline_colour);
 
             //fill
-            ofSetColor(palette[counter]);
+            ofSetColor(fill);
             ofFill();
             ofSetLineWidth(0);
             ofSetPolyMode(OF_POLY_WINDING_NONZERO);
@@ -66,7 +66,7 @@ public:
 	}	
     
     //--------------------------------------------------------------
-	void drawPaths(ofPolyline& poly) {
+	void drawPaths(ofPolyline& poly, ofColor fill) {
         ofPushStyle();
 
             if (enable_poly_simplify)poly.simplify(poly_simplify);
@@ -74,7 +74,7 @@ public:
 
             ofPath path;
             path.setCurveResolution(200);
-            path.setFillColor(palette[counter]);
+            path.setFillColor(fill);
 
             for (auto p : poly) {
                 path.curveTo(p.x, p.y);
@@ -206,7 +206,7 @@ public:
 
         ofParameterGroup _grad;
         _grad.setName("Gradient");
-        _grad.add(enable_gradient.set("enable grad",  true));
+        _grad.add(enable_gradient.set("enable grad",  false));
         _grad.add(grad_itr.set("grad iteration amt", 25, 1, 200));
         _grad.add(enable_gradient_itr_animate.set("grad iteration aanimate", false));
         _grad.add(grad_itr_animate_rate.set("iteration aanimate rate", 0.25, 0.01, 5));
@@ -218,7 +218,7 @@ public:
 
         ofParameterGroup _path;
         _path.setName("Path");
-        _path.add(enable_draw_paths.set("enable paths", false));
+        _path.add(enable_draw_paths.set("enable paths", true));
         _path.add(enable_path_simplify.set("enable path simplify", false));
         _path.add(path_simplify.set("path simplify", 0.5, 0.0, 10.0));
 
