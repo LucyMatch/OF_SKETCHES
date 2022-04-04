@@ -305,6 +305,11 @@ bool VideoHandler::isActive() {
 }
 
 //--------------------------------------------------------------
+bool VideoHandler::isFrameAllocated() {
+	return frame.isAllocated();
+}
+
+//--------------------------------------------------------------
 void VideoHandler::drawCamInfo(std::shared_ptr<ofx::Video::IPVideoGrabber>& g) {
 	float kbps = g->getBitRate() / 1000.0f; // kilobits / second, not kibibits / second
 	float fps = g->getFrameRate();

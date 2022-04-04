@@ -67,6 +67,7 @@ class VideoHandler {
 		string getVideoTitle();
 		bool isFrameNew(); 
 		bool isActive();
+		bool isFrameAllocated();
 
 		ofParameterGroup gui;
 		ofParameter<ofColor> c, bg_c;
