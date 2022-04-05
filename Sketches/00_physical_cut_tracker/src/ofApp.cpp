@@ -19,23 +19,28 @@ void ofApp::setup(){
     initGui();
 
     //fuck media  man lets do it like this
-    int feed_amount = 1;
-    for (int i = 0; i < feed_amount; i++) {
-        VideoHandler* vh = new VideoHandler(glm::vec2(1920, 1080));
-        vh->setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
-        vh->setMode(VideoHandler::VIDEO_LOCAL, "videos", false);
-        vh->setFeed(0, false);
-        vh->setup("videos", VideoHandler::VIDEO_LOCAL);
+    //int feed_amount = 1;
+    //for (int i = 0; i < feed_amount; i++) {
+    //    VideoHandler* vh = new VideoHandler(glm::vec2(1920, 1080));
+    //    vh->setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
+    //    vh->setMode(VideoHandler::VIDEO_LOCAL, "videos", false);
+    //    vh->setFeed(0, false);
+    //    vh->setup("videos", VideoHandler::VIDEO_LOCAL);
 
-        videos.push_back(vh);
-    }
+    //    videos.push_back(vh);
+    //}
+
+    video.setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
+    video.setMode(VideoHandler::VIDEO_LOCAL, "videos", false);
+    video.setFeed(0, false);
+    video.setup("videos", VideoHandler::VIDEO_LOCAL);
 
 
     //@TODO: review tracker settings 
     //+ add to a gui
     //may want a manager - or goes in shape man?
     // wait for half a frame before forgetting something
-    tracker.setPersistence(60);
+    tracker.setPersistence(0);
     // an object can move up to 50 pixels per frame
     tracker.setMaximumDistance(100);
 
@@ -46,9 +51,11 @@ void ofApp::setup(){
 void ofApp::update(){
     framerate();
 
-    for (auto& v : videos) {
-        v->update();
-    }
+    //for (auto& v : videos) {
+    //    v->update();
+    //}
+
+    video.update();
 
     //update video input
     video_input.update();
@@ -95,68 +102,98 @@ void ofApp::draw(){
     ofPopStyle();
 
 
-    ofPushMatrix();
-    ofPushStyle();
-    auto temp = shape_detector.getCurrentDims();
-    ofTranslate((ofGetWidth() / 2) - (temp.x / 2), (ofGetHeight() / 2) - (temp.y / 2));
+    //ofPushMatrix();
+    //ofPushStyle();
+    //auto temp = shape_detector.getCurrentDims();
+    //ofTranslate((ofGetWidth() / 2) - (temp.x / 2), (ofGetHeight() / 2) - (temp.y / 2));
 
     if (enable_bg_video)shape_detector.drawInput();
     if (enable_shape_data)shape_detector.drawData();
 
-    ofPopStyle();
-    ofPopMatrix();
+    //ofPopStyle();
+    //ofPopMatrix();
 
     
     //now for our masking 
-        if (videos[0]->isFrameAllocated()) {
-
-            
-            ofTexture orig_tex = *videos[0]->getFrameTex();
+        //if (videos[0]->isFrameAllocated()) {
+        if (video.isFrameAllocated()) {
 
             vector<CutFollower> followers = tracker.getFollowers();
             for (int i = 0; i < followers.size(); i++) {
 
-                auto pos = followers[i].getPosition();
-                auto size = followers[i].getSize();
+                if (!followers[i].getDead()) {
 
-                if (enable_texture_masking) {
-                    ofFbo temp_fbo;
-                    temp_fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
-                    temp_fbo.getTexture().setSwizzle(GL_TEXTURE_SWIZZLE_A, GL_RED);
+                    //trying to debug
+                    bool no_size = false;
 
-                    temp_fbo.begin();
-                    ofSetColor(0, 0, 0, 255);
-                    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-                    graphics.draw(followers[i].getShape(), ofColor(255, 255, 255, 255));
-                    temp_fbo.end();
 
-                    pos.x -= size.x / 2;
-                    pos.y -= size.y / 2;
+                    auto pos = followers[i].getPosition();
+                    auto size = followers[i].getSize();
 
-                    ofTexture orig_copy = orig_tex;
-                    orig_copy.setAlphaMask(temp_fbo.getTexture());
+                    if (enable_texture_masking) {
+                        ofFbo temp_fbo;
+                        temp_fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
+                        temp_fbo.getTexture().setSwizzle(GL_TEXTURE_SWIZZLE_A, GL_RED);
 
-                    save_fbo.allocate(size.x, size.y, GL_RGBA);
-                    save_fbo.begin();
-                    orig_copy.drawSubsection(0, 0, size.x, size.y, pos.x, pos.y);
-                    save_fbo.end();
+                        temp_fbo.begin();
+                        ofSetColor(0, 0, 0, 255);
+                        ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+                        graphics.draw(followers[i].getShape(), ofColor(255, 255, 255, 255));
+                        temp_fbo.end();
+
+                        pos.x -= size.x / 2;
+                        pos.y -= size.y / 2;
+
+                        //*videos[0]->getFrameTex();
+                        ofTexture orig_copy = *video.getFrameTex();
+                        orig_copy.setAlphaMask(temp_fbo.getTexture());
+
+                        if (size.x < 2 || size.y < 2) {
+                            std::cout << size.x << " x " << size.y << std::endl;
+                            no_size = true;
+                        }
+                        else {
+                            save_fbo.clear();
+                            save_fbo.allocate(size.x, size.y, GL_RGBA);
+                            save_fbo.begin();
+                            orig_copy.drawSubsection(0, 0, size.x, size.y, pos.x, pos.y); //position mostly works
+                            save_fbo.end();
+                        }
+
+                        //debugging
+                        //ofPushStyle();
+                        ////temp_fbo.getTexture().draw(i * 200, 0, 200, 200);
+                        //video.getFrameTex()->draw(i * 200, 0, 100, 100);
+                        //orig_copy.draw((i * 200) + 100, 0, 100, 100);
+
+                        //ofNoFill();
+                        //ofSetColor(255,0,0);
+                        //ofDrawRectangle(i * 200, 0, 200, 200);
+                        //ofPopStyle();
+
+                    }
+
+
+                    //ofPushMatrix();
+                    //ofPushStyle();
+                    //auto temp = shape_detector.getCurrentDims();
+                    //ofTranslate((ofGetWidth() / 2) - (temp.x / 2), (ofGetHeight() / 2) - (temp.y / 2));
+
+                    if (enable_poly_graphics) {
+                        ofColor c = no_size ? ofColor(255, 0, 0, 255) : followers[i].getColor();
+                        graphics.draw(followers[i].getShape(), c);
+                    }
+                    if (enable_texture_masking) {
+                        if (!no_size)save_fbo.draw(pos);
+                        //orig_copy.draw(0, 0);
+                        //ofSetColor(255, 0, 0);
+                        //ofNoFill();
+                        //ofDrawRectangle(pos.x, pos.y, size.x, size.y);
+                    }
+
+                    //ofPopStyle();
+                    //ofPopMatrix();
                 }
-
-
-                ofPushMatrix();
-                ofPushStyle();
-                auto temp = shape_detector.getCurrentDims();
-                ofTranslate((ofGetWidth() / 2) - (temp.x / 2), (ofGetHeight() / 2) - (temp.y / 2));
-                if (enable_poly_graphics)  graphics.draw(followers[i].getShape(), followers[i].getColor());
-                if (enable_texture_masking) {
-                    save_fbo.draw(pos);
-                    //orig_copy.draw(0, 0);
-                    ofSetColor(255, 0, 0);
-                    ofNoFill();
-                    ofDrawRectangle(pos.x, pos.y, size.x, size.y);
-                }
-                ofPopStyle();
-                ofPopMatrix();
         }
      }
 
@@ -169,7 +206,8 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::drawDebug() {
 
-    videos[0]->getFrameTex()->draw(0, 0);
+    //videos[0]->getFrameTex()->draw(0, 0);
+    video.getFrameTex()->draw(0, 0);
 
     shape_detector.drawDebug();
 

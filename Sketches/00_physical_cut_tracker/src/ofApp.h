@@ -36,7 +36,8 @@ class ofApp : public ofBaseApp{
 		PolyGraphics graphics;
 		TextureUtlities tex_utils;
 
-		vector<VideoHandler*> videos;
+		//vector<VideoHandler*> videos;
+		VideoHandler video;
 		ofFbo save_fbo;
 
 		ColourPalette palettes;
