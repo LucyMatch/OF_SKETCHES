@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<palettes>
+        <palette>
+            <c rgb="86 3 173" /> 
+            <c rgb="131 103 199" /> 
+            <c rgb="179 233 199" />  
+            <c rgb="194 248 203" /> 
+            <c rgb="240 255 241" />  
+    </palette>
+        <palette> 
+            <c rgb= "53 53 53" />
+            <c rgb= "60 110 113" />
+            <c rgb= "255 255 255" />
+            <c rgb= "217 217 217" />
+            <c rgb= "40 75 99" />
+    </palette>
+        <palette> 
+            <c rgb= "239 71 111" />
+            <c rgb= "255 209 102" />
+            <c rgb= "6 214 160" />
+            <c rgb= "17 138 178" />
+            <c rgb= "7 59 76" />
+    </palette>
+    <palette>
+            <c rgb= "142 202 230" />
+            <c rgb= "33 158 188" />
+            <c rgb= "2 48 71" />
+            <c rgb= "255 183 3" />
+            <c rgb= "251 133 0" />
+    </palette>
+        <palette> 
+            <c rgb= "123 224 173" />
+            <c rgb= "174 229 216" />
+            <c rgb= "231 229 229" />
+            <c rgb= "229 208 227" />
+            <c rgb= "224 176 213" />
+    </palette>
+        <palette>
+            <c rgb= " 242 5 25" />
+            <c rgb= "217 26 42" />
+            <c rgb= "242 27 66" />
+            <c rgb= "73 211 242" />
+            <c rgb= "242 220 201" />
+    </palette>
+    <palette>
+            <c rgb="0 8 20" /> 
+            <c rgb="0 29 61" /> 
+            <c rgb="0 53 102" />  
+            <c rgb="255 195 0" /> 
+            <c rgb="255 214 10" />  
+    </palette>
+        <palette>
+            <c rgb= "90 169 230" />
+            <c rgb= "127 200 248" />
+            <c rgb= "249 249 249" />
+            <c rgb= "255 228 94" />
+            <c rgb= "255 99 146" />
+    </palette>
+</palettes>

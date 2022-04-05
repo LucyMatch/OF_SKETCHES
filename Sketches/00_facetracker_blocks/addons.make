@@ -1,0 +1,6 @@
+ofxGui
+ofxPoco
+ofxIpVideoGrabber
+ofxOpenCv
+ofxCv
+ofxFaceTracker2

@@ -1,0 +1,29 @@
+[
+    { 
+        "url": "http://192.168.0.194/axis-cgi/mjpg/video.cgi?streamprofile=top_down",
+        "auth-type" : "BASIC",
+        "username" : "root",
+        "password" : "boobs",
+        "name" : "Bullet 01",
+        "w" : "800",
+        "h" : "450"
+    },
+    { 
+        "url": "http://192.168.0.195/axis-cgi/mjpg/video.cgi?resolution=800x450",
+        "auth-type" : "BASIC",
+        "username" : "root",
+        "password" : "boobs",
+        "name" : "Bullet 02",
+        "w" : "800",
+        "h" : "450"
+    },
+    { 
+        "url": "http://192.168.0.196/axis-cgi/mjpg/video.cgi?resolution=800x450",
+        "auth-type" : "BASIC",
+        "username" : "root",
+        "password" : "boobs",
+        "name" : "baby cam",
+        "w" : "800",
+        "h" : "450"
+    }
+]
