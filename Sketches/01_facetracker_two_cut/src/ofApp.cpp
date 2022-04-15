@@ -34,8 +34,8 @@ void ofApp::update(){
     video.update();
     
     // Update tracker when there are new frames
-    if (video.cam.isFrameNew()) {
-        tracker.update(video.cam); 
+    if (video.isFrameNew()) {
+        tracker.update(video.getFrameImg()); 
         auto t = tracker.getInstances();
         cut_man.update(t);
     }
