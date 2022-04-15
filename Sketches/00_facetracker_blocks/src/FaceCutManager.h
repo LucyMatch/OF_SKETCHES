@@ -68,7 +68,7 @@ public:
 	}
 
 	int initNewFace(int _label, ofRectangle new_bounding) {
-		FaceBlockCut cut;
+		FaceBlockCut cut(_label);
 		struct Face new_face {cut, true, _label};
 		//new_face.cut.update(new_bounding);
 		faces.push_back(new_face);

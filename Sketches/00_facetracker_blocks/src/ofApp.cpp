@@ -7,6 +7,8 @@ void ofApp::setup(){
     ofEnableSmoothing();
     ofEnableAlphaBlending();
 
+    ofRectMode(CENTER);
+
     /*palettes.load();*/    //load in main.cpp - so we can load prior to initGui
     bg_c = *palettes.getColour(curr_palette, bg_c_index);
 
@@ -44,65 +46,66 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-
-    ofPushMatrix();
-    //center all our elements 
-    //just for drawing - calc everything in origin vals
-    auto temp = video_input.getDims();
-    ofTranslate((ofGetWidth() / 2) - (temp.x / 2), (ofGetHeight() / 2) - (temp.y / 2));
-
         auto palette = palettes.getPaletteEdited(curr_palette, bg_c_index);
         int ci = 0;
 
+        auto temp = video_input.getDims();
+
         ofPushStyle();
         foreground_canvas.begin();
-            ofSetColor(255, 255, 255, foreground_alpha);
-            ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+                ofSetColor(255, 255, 255, foreground_alpha);
+                ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 
-            ofSetColor(255, 255, 255, 255);
-            for (auto& f : cut_man.faces) {
+                ofSetColor(255, 255, 255, 255);
+                for (auto& f : cut_man.faces) {
 
-                auto bounding = f.cut.getBounding();
-                auto pos = bounding.getTopLeft();
+                    auto bounding = f.cut.getBounding();
+                    auto pos = bounding.getTopLeft();
 
-                video_input.getFrameTex()->drawSubsection(pos.x, pos.y, bounding.getWidth(), bounding.getHeight(), pos.x, pos.y);
+                    ofPushMatrix();
+                    ofTranslate((ofGetWidth() / 2) - (temp.x / 2), (ofGetHeight() / 2) - (temp.y / 2));
+                        video_input.getFrameTex()->drawSubsection(pos.x, pos.y, bounding.getWidth(), bounding.getHeight(), pos.x, pos.y);
+                    
 
-                //////add toggle for this - cool effect...
-                // //
-                //ofSetColor(palette[ci]);
-                //ofNoFill();
-                //ofSetLineWidth(4);
-                ////f.cut.draw();
-                //ofDrawRectangle(bounding);
+                    //////add toggle for this - cool effect...
+                    // //
+                    //ofSetColor(palette[ci]);
+                    //ofNoFill();
+                    //ofSetLineWidth(4);
+                    ////f.cut.draw();
+                    //ofDrawRectangle(bounding);
 
-                //ci = ++ci % (int)palette.size();
-                //
-
-            }
+                    //ci = ++ci % (int)palette.size();
+                    //
+                    ofPopMatrix();
+                }
         foreground_canvas.end();
         ofPopStyle();
 
         ofPushStyle();
         main_canvas.begin();
-
             ofEnableAlphaBlending();
 
             ofSetColor(bg_c);
             ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+            ofSetColor(255, 255, 255, 255);
 
-            if (enable_original_video)video_input.draw();
+            ofPushMatrix();
+            ofTranslate((ofGetWidth() / 2) - (temp.x / 2), (ofGetHeight() / 2) - (temp.y / 2));
+                
+                if (enable_original_video)video_input.getFrameTex()->draw(0,0);
+            ofPopMatrix();
 
             glEnable(GL_BLEND);
             glBlendFunc(GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
 
-            ofSetColor(255, 255, 255, 255);
             foreground_canvas.draw(0,0);
 
             ofDisableAlphaBlending();
         main_canvas.end();
         ofPopStyle();
 
-    ofPopMatrix();
+
 
     //render to screen
     main_canvas.draw(0, 0);
@@ -118,6 +121,8 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::drawDebug() {
 
+    video_input.getFrameTex()->draw(0, 0);
+
     video_input.draw();
 
     // Draw tracker landmarks
@@ -129,6 +134,19 @@ void ofApp::drawDebug() {
     cut_man.drawDebug();
 
     cut_man.draw();
+
+    //ofPushView(); 
+    //ofPushStyle();
+    //    for (auto& i : tracker.getInstances()) {
+    //        auto matrix = i.getPoseMatrix();
+    //        ofLoadMatrix(matrix);
+    //        auto b = i.getBoundingBox();
+    //        ofSetColor(255,0,0);
+    //        ofDrawRectangle(b.position, b.width, b.height);
+    //        auto quat = matrix.getRotate();
+    //    }
+    //ofPopStyle();
+    //ofPopView();
 
 }
 
@@ -275,4 +293,6 @@ void ofApp::mouseReleased(int x, int y, int button){
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
     video_input.setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
+    main_canvas.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
+    foreground_canvas.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 }

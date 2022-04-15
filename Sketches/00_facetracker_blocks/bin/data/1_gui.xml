@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<P_R_I_M_A_R_Y>
+	<background>179, 233, 199, 255</background>
+	<foreground_alpha>8.925</foreground_alpha>
+	<enable_debug>0</enable_debug>
+	<enable_info>0</enable_info>
+	<enable_orig_video>0</enable_orig_video>
+	<enable_palette_preview>0</enable_palette_preview>
+	<current_palette>0</current_palette>
+	<video_controls>
+		<video_colour>255, 255, 255, 255</video_colour>
+		<video_bg_colour>255, 255, 255, 255</video_bg_colour>
+		<enable_video_bg>0</enable_video_bg>
+		<enable_resizing>0</enable_resizing>
+		<enable_mirror>0</enable_mirror>
+		<enable_info>0</enable_info>
+	</video_controls>
+	<CUT_MANAGER>
+		<face_timeout>10000</face_timeout>
+	</CUT_MANAGER>
+</P_R_I_M_A_R_Y>
