@@ -42,6 +42,7 @@ struct Feed {
 	glm::vec2 output_size;							/// \output dimensions same as above
 	glm::vec2 o_size;								/// \original content dimensions
 	bool dims_set = false;
+	int curr_video_index = 0;						/// \index of the video within it's directory
 };
 
 class LocalMediaManager {
@@ -78,17 +79,23 @@ public:
 					//video based types
 					VideoHandler* vh = new VideoHandler(glm::vec2(1920, 1080));
 					vh->setOutputDims(glm::vec2(ofGetWidth(), ofGetHeight()));
+
+					vh->setMode(VideoHandler::VIDEO_LOCAL, f.path, false);
+					f.curr_video_index = vh->setFeed(f.curr_video_index, false);
 					vh->setup(f.path, VideoHandler::VIDEO_LOCAL);
+
 					videos.push_back(vh);
 					f.vids = videos[videos.size()-1];
 					created = true;
 				}
 
 				if (created) {
+					std::cout << "error" << std::endl;
 					//set the feed to active!
 					f.active = true;
 					getOutputDims(&f);
 					getOutputPos(&f);
+					std::cout << "error" << std::endl;
 					return &f;	//check what we are returning here is correct....
 				}
 
@@ -203,13 +210,14 @@ public:
 
 	void nxtVideo(Feed* _feed) {
 		if (_feed->vids)
-			_feed->vids->nxtFeed();
+			_feed->curr_video_index = _feed->vids->nxtFeed();
 		_feed->dims_set = false;
+		
 	}
 
 	void prevVideo(Feed* _feed) {
 		if (_feed->vids)
-			_feed->vids->prevFeed();
+			_feed->curr_video_index = _feed->vids->nxtFeed();
 		_feed->dims_set = false;
 	}
 
@@ -224,7 +232,7 @@ public:
 				return &_feed->imgs->getImages()[_feed->curr_image];
 				break;
 			case VIDEO:
-				return _feed->vids->getFrameTex();
+				return _feed->vids->isFrameAllocated() ? _feed->vids->getFrameTex() : NULL;
 				break;
 			default:
 				break;
@@ -342,7 +350,7 @@ public:
 		if (_feed->media_type < 2)
 			_feed->o_size = glm::vec2(_feed->imgs->getImages()[_feed->curr_image].getWidth(), _feed->imgs->getImages()[_feed->curr_image].getHeight());
 		else
-			_feed->o_size = glm::vec2(_feed->vids->getFrameTex()->getWidth(), _feed->vids->getFrameTex()->getHeight());
+			if(_feed->vids->isFrameAllocated())_feed->o_size = glm::vec2(_feed->vids->getFrameTex()->getWidth(), _feed->vids->getFrameTex()->getHeight());
 
 		new_dim.y = ofGetHeight();
 		new_dim.x = (_feed->o_size.x / _feed->o_size.y) * new_dim.y;

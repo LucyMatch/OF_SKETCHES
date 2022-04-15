@@ -18,7 +18,7 @@ void VideoHandler::setup(string _path, videoModes _mode) {
 	
 	switch (mode) {
 		case VIDEO_LOCAL :
-			
+
 			loadVideo();
 
 			break;
@@ -60,16 +60,22 @@ void VideoHandler::setup(string _path, videoModes _mode) {
 
 //--------------------------------------------------------------
 void VideoHandler::loadVideo() {
-	dir.listDir(path);
-	dir.sort();
-	feed_count = (int)dir.size();
+	loadDirectory();
 
 	local_cam.stop();
 	local_cam.close();
 	local_cam.load(dir.getPath(curr_feed));
-	local_cam.setVolume(0);
+	//local_cam.setVolume(0);
 	local_cam.play();
+	setDims(glm::vec2(local_cam.getWidth(), local_cam.getHeight()));
 
+}
+
+//--------------------------------------------------------------
+void VideoHandler::loadDirectory() {
+	dir.listDir(path);
+	dir.sort();
+	feed_count = (int)dir.size();
 	cout << feed_count << endl;
 	cout << path << endl;
 }
@@ -143,18 +149,35 @@ void VideoHandler::draw() {
 }
 
 //--------------------------------------------------------------
-void VideoHandler::nxtFeed() {
+int VideoHandler::nxtFeed() {
 	curr_feed = (curr_feed + 1) % feed_count;
 	cout << "curr feed = " << curr_feed << " - "<< getVideoTitle() << endl;
 	setup(path, mode);
+	return curr_feed;
 }
 
 //--------------------------------------------------------------
-void VideoHandler::prevFeed() {
+int VideoHandler::prevFeed() {
 	curr_feed = curr_feed -1 % feed_count;
 	if (curr_feed < 0)curr_feed = feed_count -1;
 	cout << "curr feed = " << curr_feed << " - " << getVideoTitle() << endl;
 	setup(path, mode);
+	return curr_feed;
+}
+
+//--------------------------------------------------------------
+int VideoHandler::setFeed( int index, bool reload ) {
+	if (!feed_count)loadDirectory();
+	if (index < feed_count) {
+		curr_feed = index;
+		cout << "curr feed = " << curr_feed << " - " << getVideoTitle() << endl;
+		if(reload)setup(path, mode);
+	}
+	else {
+		cout << "couldn't update curr feed. file index provided out of bounds : provided -> " << index << " directory total -> " << feed_count << endl;
+		cout << "curr feed = " << curr_feed << " - " << getVideoTitle() << endl;
+	}
+	return curr_feed;
 }
 
 //--------------------------------------------------------------
@@ -179,22 +202,22 @@ void VideoHandler::setOutputDims(glm::vec2 _dims) {
 }
 
 //--------------------------------------------------------------
-void VideoHandler::setMode(videoModes _mode) {
+void VideoHandler::setMode(videoModes _mode, bool reload) {
 	mode = _mode;
-	setup(path, mode);
+	if (reload)setup(path, mode);
 }
 
 //--------------------------------------------------------------
-void VideoHandler::setMode(videoModes _mode, string _path) {
+void VideoHandler::setMode(videoModes _mode, string _path, bool reload) {
 	mode = _mode;
 	path = _path;
-	setup(path, mode);
+	if (reload)setup(path, mode);
 }
 
 //--------------------------------------------------------------
-void VideoHandler::setDirectory(string _path) {
+void VideoHandler::setDirectory(string _path, bool reload) {
 	path = _path;
-	setup(path, mode);
+	if(reload)setup(path, mode);
 }
 
 //--------------------------------------------------------------

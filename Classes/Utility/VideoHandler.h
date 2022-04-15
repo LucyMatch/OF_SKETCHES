@@ -36,20 +36,23 @@ class VideoHandler {
 
 		void setup(string _path = "videos", videoModes _mode = VIDEO_WEBCAM );
 		void loadVideo();
+		void loadDirectory();
 		void update();
 		void draw();
 
 		void initGui();
-		void nxtFeed();
-		void prevFeed();
+		int nxtFeed();
+		int prevFeed();
 
+		int setFeed( int index, bool reload = true);
 		void setOutputDims(glm::vec2 _dims);
 		void setDims(glm::vec2 _dims);
-		void setMode(videoModes _mode);
-		void setMode(videoModes _mode, string _path);
-		void setDirectory(string _path);
+		void setMode(videoModes _mode, bool reload = true);
+		void setMode(videoModes _mode, string _path, bool reload = true);
+		void setDirectory(string _path, bool reload = true);
 		void setActive(bool status);
 		void setVolume(int);
+		
 
 		//specific for ip cam
 		void drawCamInfo(std::shared_ptr<ofx::Video::IPVideoGrabber>& g);
@@ -85,7 +88,7 @@ class VideoHandler {
 
 		//input
 		videoModes mode;
-		int curr_feed = 0, feed_count;
+		int curr_feed = 0, feed_count = NULL;
 
 		//local input
 		string path;
