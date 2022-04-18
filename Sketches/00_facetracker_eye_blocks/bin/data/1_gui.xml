@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<P_R_I_M_A_R_Y>
+	<background>232, 234, 242, 255</background>
+	<foreground_alpha>104.55</foreground_alpha>
+	<enable_debug>0</enable_debug>
+	<enable_info>0</enable_info>
+	<enable_orig_video>0</enable_orig_video>
+	<enable_palette_preview>0</enable_palette_preview>
+	<current_palette>5</current_palette>
+	<video_controls>
+		<video_colour>255, 255, 255, 255</video_colour>
+		<video_bg_colour>255, 255, 255, 255</video_bg_colour>
+		<enable_video_bg>0</enable_video_bg>
+		<enable_resizing>0</enable_resizing>
+		<enable_mirror>0</enable_mirror>
+		<enable_info>0</enable_info>
+	</video_controls>
+	<CUT_MANAGER>
+		<face_timeout>10000</face_timeout>
+		<enable_eye_squares>1</enable_eye_squares>
+		<enable_unifrom_eye_scaling>1</enable_unifrom_eye_scaling>
+		<eye_position_variant_range>30.6122</eye_position_variant_range>
+		<eye_scale_variant_range>2.375</eye_scale_variant_range>
+		<eye_scale_original>1.05</eye_scale_original>
+	</CUT_MANAGER>
+	<canvas_scale>0.59</canvas_scale>
+	<enable_eye_grid>1</enable_eye_grid>
+	<grid_resolution_cols>31.69</grid_resolution_cols>
+	<grid_resolution_rows>9.91</grid_resolution_rows>
+	<enable_mod_cut>0</enable_mod_cut>
+	<enable_sin_grid>1</enable_sin_grid>
+	<enable_cell_grid>0</enable_cell_grid>
+	<enable_pos_grid>0</enable_pos_grid>
+</P_R_I_M_A_R_Y>
