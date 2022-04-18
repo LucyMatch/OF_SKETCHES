@@ -19,6 +19,7 @@ void VideoHandler::setup(string _path, videoModes _mode) {
 	switch (mode) {
 		case VIDEO_LOCAL :
 
+			std::cout << "in video setup" << std::endl;
 			loadVideo();
 
 			break;
@@ -60,6 +61,7 @@ void VideoHandler::setup(string _path, videoModes _mode) {
 
 //--------------------------------------------------------------
 void VideoHandler::loadVideo() {
+	std::cout << "in load video" << std::endl;
 	loadDirectory();
 
 	local_cam.stop();
@@ -67,12 +69,14 @@ void VideoHandler::loadVideo() {
 	local_cam.load(dir.getPath(curr_feed));
 	//local_cam.setVolume(0);
 	local_cam.play();
-	setDims(glm::vec2(local_cam.getWidth(), local_cam.getHeight()));
+	dims = glm::vec2(local_cam.getWidth(), local_cam.getHeight());
+	std::cout << "end load video" << std::endl;
 
 }
 
 //--------------------------------------------------------------
 void VideoHandler::loadDirectory() {
+	std::cout << "in load directory" << std::endl;
 	dir.listDir(path);
 	dir.sort();
 	feed_count = (int)dir.size();
@@ -152,8 +156,9 @@ void VideoHandler::draw() {
 int VideoHandler::nxtFeed() {
 	curr_feed = (curr_feed + 1) % feed_count;
 	cout << "curr feed = " << curr_feed << " - "<< getVideoTitle() << endl;
-	setup(path, mode);
-	return curr_feed;
+	//setup(path, mode);
+	//return curr_feed;
+	return setFeed(curr_feed, true);
 }
 
 //--------------------------------------------------------------
@@ -161,8 +166,8 @@ int VideoHandler::prevFeed() {
 	curr_feed = curr_feed -1 % feed_count;
 	if (curr_feed < 0)curr_feed = feed_count -1;
 	cout << "curr feed = " << curr_feed << " - " << getVideoTitle() << endl;
-	setup(path, mode);
-	return curr_feed;
+	//setup(path, mode);
+	return setFeed(curr_feed, true);
 }
 
 //--------------------------------------------------------------
